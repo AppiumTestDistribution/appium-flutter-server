@@ -1,12 +1,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:appium_flutter_server/src/server.dart';
+import 'package:integration_test/integration_test.dart';
 
 void initializeTest(Widget app) async {
-  testWidgets('tap on the floating action button, verify counter',
-      (tester) async {
-    // tester.view.physicalSize = Size(tester.view.physicalConstraints.maxWidth,
-    //     tester.view.physicalConstraints.maxHeight);
+  IntegrationTestWidgetsFlutterBinding binding =
+      IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  testWidgets('appium flutter server', (tester) async {
     await tester.binding.setSurfaceSize(Size(
       tester.view.physicalConstraints.maxWidth *
           tester.view.physicalSize.aspectRatio,
@@ -16,6 +17,9 @@ void initializeTest(Widget app) async {
 
     await tester.pumpWidget(app);
 
-    await startServer(tester);
+    await startServer(tester, binding);
   }, timeout: const Timeout(Duration(seconds: 600)));
 }
+
+   // tester.view.physicalSize = Size(tester.view.physicalConstraints.maxWidth,
+    //     tester.view.physicalConstraints.maxHeight);
