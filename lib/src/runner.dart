@@ -26,14 +26,9 @@ void initializeTest({required Widget app}) async {
     /* Initialize network tools */
     final appDocDirectory = await getApplicationDocumentsDirectory();
     await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
-    await FlutterDriver.getInstance().initialize(tester: tester);
-
-    //int freePort = await getFreePort();
-    //log("Free port is: $freePort");
-
+    FlutterDriver.instance.initialize(tester: tester, app: app);
     await tester.pumpWidget(app);
-    await startServer(tester, port: 8888);
-
+    FlutterServer.instance.startServer(port: 8888);
     // To block the test from ending
     await Completer<void>().future;
   }, timeout: const Timeout(Duration(seconds: MAX_TEST_DURATION)));
