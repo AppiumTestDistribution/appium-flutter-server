@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:appium_flutter_server/src/logger.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -7,14 +10,15 @@ import 'package:shelf/shelf_io.dart' as io;
 import "dart:async";
 import 'dart:convert';
 
-Future<void> startServer(
-    WidgetTester tester, IntegrationTestWidgetsFlutterBinding binding) async {
+Future<void> startServer(WidgetTester tester, {required int port}) async {
   var app = shelf.Router();
   final fab = find.byKey(const ValueKey('increment'));
+  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   app.get('/tap', (Request request) async {
     await tester.tap(fab);
-    return Response.ok('hello-world');
+    tester.element(fab);
+    return Response.ok('Success');
   });
 
   app.get('/screenshot', (Request request) async {
@@ -28,6 +32,11 @@ Future<void> startServer(
     }
   });
 
-  await io.serve(app, 'localhost', 8080);
-  return Completer<void>().future;
+  await io.serve(app, 'localhost', port);
+  log('Flutter driver started on port $port');
 }
+
+// class FlutterServer {
+//    _isStarted = false;
+
+// }
