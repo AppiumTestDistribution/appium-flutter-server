@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:appium_flutter_server/appium_flutter_server.dart';
 
 void main() {
   test('adds one to input values', () {

@@ -1,10 +1,8 @@
-import 'package:uuid/uuid.dart';
-
 class Session {
-  static final String _NO_ID = "None";
+  static const String _NO_ID = "None";
 
   late String _sessionId;
-  late Map<String, Object> _capabilities = Map();
+  late Map<String, Object> _capabilities = {};
 
   Session(String id, Map<String, Object> capabilities) {
     _sessionId = id;

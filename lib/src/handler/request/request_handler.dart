@@ -14,9 +14,13 @@ abstract class RequestHandler {
   Function getHandler() {
     return (Request request) async {
       log('New Request [${request.method}] ${request.requestedUri.toString()}');
-      AppiumResponse response = await handle(request);
-      log('response: ${response.value}');
-      return response.toHttpResponse();
+      try {
+        AppiumResponse response = await handle(request);
+        log('response ${response.value}');
+        return response.toHttpResponse();
+      } catch (e) {
+        log(e);
+      }
     };
   }
 
