@@ -22,6 +22,7 @@ void initializeTest({required Widget app}) async {
     await tester.pumpWidget(app);
     FlutterServer.instance.startServer(port: 8888);
     // To block the test from ending
+
     await Completer<void>().future;
   }, timeout: const Timeout(Duration(seconds: MAX_TEST_DURATION_SECS)));
 }

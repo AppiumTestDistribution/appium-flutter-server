@@ -5,4 +5,4 @@ targets:
       source_gen:combining_builder:
         options:
           build_extensions:
-            "^lib/src/models/{{}}.dart": "lib/src/models/generated/{{}}.g.dart"
+            "^lib/src/models/api/{{}}.dart": "lib/src/models/api/generated/{{}}.g.dart"

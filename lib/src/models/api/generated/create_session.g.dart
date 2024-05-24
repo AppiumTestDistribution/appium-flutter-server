@@ -6,12 +6,12 @@ part of '../create_session.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CreateSession _$CreateSessionFromJson(Map<String, dynamic> json) =>
-    CreateSession(
+CreateSessionModel _$CreateSessionModelFromJson(Map<String, dynamic> json) =>
+    CreateSessionModel(
       capabilities: json['capabilities'] as Map<String, dynamic>,
     );
 
-Map<String, dynamic> _$CreateSessionToJson(CreateSession instance) =>
+Map<String, dynamic> _$CreateSessionModelToJson(CreateSessionModel instance) =>
     <String, dynamic>{
       'capabilities': instance.capabilities,
     };

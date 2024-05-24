@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:appium_flutter_server/src/logger.dart';
-import 'package:appium_flutter_server/src/models/appium_response.dart';
+import 'package:appium_flutter_server/src/models/api/appium_response.dart';
 import 'package:shelf_plus/shelf_plus.dart';
 
 enum HttpMethod { GET, POST, DELETE, PUT, PATCH }

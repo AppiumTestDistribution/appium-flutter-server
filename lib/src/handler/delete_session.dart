@@ -2,7 +2,7 @@ import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/exceptions/no_driver_exception.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
 import 'package:appium_flutter_server/src/logger.dart';
-import 'package:appium_flutter_server/src/models/appium_response.dart';
+import 'package:appium_flutter_server/src/models/api/appium_response.dart';
 
 import 'package:shelf_plus/shelf_plus.dart';
 
