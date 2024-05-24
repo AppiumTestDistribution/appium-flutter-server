@@ -4,8 +4,8 @@ part 'generated/create_session.g.dart';
 
 @JsonSerializable()
 class CreateSession {
-  Map<String, Object> capabilities;
-  CreateSession(this.capabilities);
+  Map<String, dynamic> capabilities;
+  CreateSession({required this.capabilities});
 
   factory CreateSession.fromJson(Map<String, dynamic> json) =>
       _$CreateSessionFromJson(json);

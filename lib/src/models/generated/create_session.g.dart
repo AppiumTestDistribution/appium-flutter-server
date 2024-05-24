@@ -8,9 +8,7 @@ part of '../create_session.dart';
 
 CreateSession _$CreateSessionFromJson(Map<String, dynamic> json) =>
     CreateSession(
-      (json['capabilities'] as Map<String, dynamic>).map(
-        (k, e) => MapEntry(k, e as Object),
-      ),
+      capabilities: json['capabilities'] as Map<String, dynamic>,
     );
 
 Map<String, dynamic> _$CreateSessionToJson(CreateSession instance) =>

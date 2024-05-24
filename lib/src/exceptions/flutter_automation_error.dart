@@ -1,9 +1,16 @@
+import 'dart:io';
+
 class FlutterAutomationException implements Exception {
-  String message =
+  String _message =
       "An unknown server-side error occurred while processing the command";
-  static const int DEFAULT_ERROR_STATUS = 500;
 
-  get statusCode => DEFAULT_ERROR_STATUS;
+  FlutterAutomationException(this._message);
 
-  FlutterAutomationException(this.message);
+  String getMessage() {
+    return _message;
+  }
+
+  int getStatusCode() {
+    return HttpStatus.internalServerError;
+  }
 }

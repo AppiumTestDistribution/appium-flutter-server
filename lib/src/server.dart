@@ -1,3 +1,4 @@
+import 'package:appium_flutter_server/src/handler/delete_session.dart';
 import 'package:appium_flutter_server/src/handler/new_session.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
 import 'package:appium_flutter_server/src/handler/sample/screenshot.dart';
@@ -32,6 +33,9 @@ class FlutterServer {
 
     //POST ROUTES
     _addRoute(HttpMethod.POST, NewSessionHandler("/session"));
+
+    //DELETE
+    _addRoute(HttpMethod.DELETE, DeleteSessionHandler("/session/<sessionId>"));
   }
 
   void startServer({int? port}) async {

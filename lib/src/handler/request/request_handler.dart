@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:appium_flutter_server/src/logger.dart';
 import 'package:appium_flutter_server/src/models/appium_response.dart';
-import 'package:shelf/shelf.dart';
+import 'package:shelf_plus/shelf_plus.dart';
 
 enum HttpMethod { GET, POST, DELETE, PUT, PATCH }
 
@@ -22,6 +22,10 @@ abstract class RequestHandler {
         log(e);
       }
     };
+  }
+
+  String getSessionId(Request request) {
+    return request.routeParameter("sessionId");
   }
 
   FutureOr<AppiumResponse> handle(Request request);

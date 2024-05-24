@@ -1,15 +1,18 @@
 class Session {
-  static const String _NO_ID = "None";
+  static const String NO_ID = "None";
 
   late String _sessionId;
-  late Map<String, Object> _capabilities = {};
+  late Map<String, dynamic> _capabilities = {};
 
-  Session(String id, Map<String, Object> capabilities) {
+  String get sessionId => _sessionId;
+  Map<String, dynamic> get capabilities => _capabilities;
+
+  Session(String id, Map<String, dynamic> capabilities) {
     _sessionId = id;
     _updateCapabilities(capabilities);
   }
 
-  void _updateCapabilities(Map<String, Object> capabilities) {
+  void _updateCapabilities(Map<String, dynamic> capabilities) {
     _capabilities = capabilities;
   }
 }
