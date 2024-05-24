@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
 class FlutterElement {
-  Finder _by;
-  String _id;
+  final Finder _by;
+  final String _id;
   String? _contextId;
 
   FlutterElement(this._by, this._id);

@@ -4,7 +4,7 @@ import 'package:synchronized/extension.dart';
 import 'package:uuid/uuid.dart';
 
 class ElementsCache {
-  Map<String, FlutterElement> cache = new Map();
+  Map<String, FlutterElement> cache = {};
 
   Future<FlutterElement> get(String id) {
     return synchronized(() {
@@ -16,7 +16,7 @@ class ElementsCache {
       {bool isSingle = true, String? contextId}) {
     return synchronized(() {
       FlutterElement flutterElement =
-          FlutterElement.childElement(by, Uuid().v4(), contextId);
+          FlutterElement.childElement(by, const Uuid().v4(), contextId);
       cache.putIfAbsent(flutterElement.id, () => flutterElement);
       return flutterElement;
     });

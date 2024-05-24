@@ -5,7 +5,7 @@ class Session {
 
   late String _sessionId;
   late Map<String, dynamic> _capabilities = {};
-  ElementsCache _elementCache = ElementsCache();
+  final ElementsCache _elementCache = ElementsCache();
 
   String get sessionId => _sessionId;
   Map<String, dynamic> get capabilities => _capabilities;

@@ -13,7 +13,7 @@ class DeleteSessionHandler extends RequestHandler {
   Future<AppiumResponse> handle(Request request) async {
     var sessionId = getSessionId(request);
     var session = FlutterDriver.instance.getSessionOrThrow();
-    log("Session id : ${sessionId}");
+    log("Session id : $sessionId");
     if (session == null || sessionId != session.sessionId) {
       throw NoSuchDriverException("The session $sessionId cannot be found");
     }

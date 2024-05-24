@@ -1,4 +1,3 @@
-import 'package:appium_flutter_server/src/exceptions/no_driver_exception.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';

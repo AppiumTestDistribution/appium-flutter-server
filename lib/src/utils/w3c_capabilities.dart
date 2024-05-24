@@ -1,8 +1,8 @@
 import 'package:appium_flutter_server/src/exceptions/invalid_argument_exception.dart';
 import 'package:appium_flutter_server/src/logger.dart';
 
-final String JWP_ELEMENT_ID_KEY_NAME = "ELEMENT";
-final String W3C_ELEMENT_ID_KEY_NAME = "element-6066-11e4-a52e-4f735466cecf";
+const String JWP_ELEMENT_ID_KEY_NAME = "ELEMENT";
+const String W3C_ELEMENT_ID_KEY_NAME = "element-6066-11e4-a52e-4f735466cecf";
 
 class W3CCapsUtils {
   static const String FIRST_MATCH_KEY = "firstMatch";

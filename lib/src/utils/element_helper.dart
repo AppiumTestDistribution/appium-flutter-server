@@ -15,9 +15,9 @@ class ElementHelper {
       FlutterElement? parent = await FlutterDriver.instance
           .getSessionOrThrow()!
           .elementsCache
-          .get(contextId!);
+          .get(contextId);
 
-      finder = find.descendant(of: parent!.by, matching: by);
+      finder = find.descendant(of: parent.by, matching: by);
     }
 
     final Iterable<Element> element = finder.evaluate();

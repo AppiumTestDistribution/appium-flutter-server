@@ -1,5 +1,4 @@
 import 'package:appium_flutter_server/src/exceptions/no_driver_exception.dart';
-import 'package:appium_flutter_server/src/internal/element_cache.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';

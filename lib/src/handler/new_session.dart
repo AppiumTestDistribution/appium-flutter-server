@@ -7,7 +7,7 @@ import 'package:appium_flutter_server/src/utils/w3c_capabilities.dart';
 import 'package:shelf_plus/shelf_plus.dart';
 
 class NewSessionHandler extends RequestHandler {
-  static final String _CAPABILITIES_KEY = "capabilities";
+  static const String _CAPABILITIES_KEY = "capabilities";
   NewSessionHandler(super.route);
 
   @override
@@ -18,10 +18,10 @@ class NewSessionHandler extends RequestHandler {
           "'$_CAPABILITIES_KEY' are mandatory for session creation");
     }
     Map<String, dynamic> parsedCaps =
-        W3CCapsUtils.parseCapabilities(session.capabilities);
+        W3CCapsUtils.parseCapabilities(session.capabilities!);
 
     String sessionId =
-        FlutterDriver.instance.initializeSession(session.capabilities);
+        FlutterDriver.instance.initializeSession(session.capabilities!);
     return AppiumResponse(sessionId, session);
   }
 }
