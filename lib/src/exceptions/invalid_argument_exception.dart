@@ -9,4 +9,9 @@ class InvalidArgumentException extends FlutterAutomationException {
   int getStatusCode() {
     return HttpStatus.badRequest;
   }
+
+  @override
+  String getError() {
+    return "invalid argument";
+  }
 }

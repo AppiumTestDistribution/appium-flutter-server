@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 class FlutterDriver {
   late WidgetTester _tester;
   late Widget _app;
-  late Session? _session;
+  Session? _session;
 
   FlutterDriver._();
 

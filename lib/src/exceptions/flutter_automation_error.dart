@@ -13,4 +13,8 @@ class FlutterAutomationException implements Exception {
   int getStatusCode() {
     return HttpStatus.internalServerError;
   }
+
+  String getError() {
+    return "unknown error";
+  }
 }

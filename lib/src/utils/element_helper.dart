@@ -1,5 +1,5 @@
 import 'package:appium_flutter_server/src/driver.dart';
-import 'package:appium_flutter_server/src/exceptions/no_driver_exception.dart';
+import 'package:appium_flutter_server/src/exceptions/element_not_found_exception.dart';
 import 'package:appium_flutter_server/src/internal/flutter_element.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
 import 'package:flutter/widgets.dart';
@@ -22,7 +22,7 @@ class ElementHelper {
 
     final Iterable<Element> element = finder.evaluate();
     if (element.isEmpty) {
-      throw NoSuchDriverException("");
+      throw ElementNotFoundException("Unable to locate element");
     }
 
     return finder.at(0);

@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:appium_flutter_server/src/exceptions/flutter_automation_error.dart';
 
-class NoSuchDriverException extends FlutterAutomationException {
-  NoSuchDriverException(super.message);
+class ElementNotFoundException extends FlutterAutomationException {
+  ElementNotFoundException(super.message);
 
   @override
   int getStatusCode() {
@@ -12,6 +12,6 @@ class NoSuchDriverException extends FlutterAutomationException {
 
   @override
   String getError() {
-    return "invalid session id";
+    return "no such element";
   }
 }
