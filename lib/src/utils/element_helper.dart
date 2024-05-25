@@ -39,4 +39,14 @@ class ElementHelper {
     }
     return elementList;
   }
+
+  static Future<void> click(FlutterElement element) async {
+    WidgetTester tester = _getTester();
+    await tester.tap(element.by);
+    await tester.pumpAndSettle();
+  }
+
+  static WidgetTester _getTester() {
+    return FlutterDriver.instance.tester;
+  }
 }

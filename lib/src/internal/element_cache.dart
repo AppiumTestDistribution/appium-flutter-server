@@ -1,4 +1,7 @@
+import 'package:appium_flutter_server/src/exceptions/stale_element_reference_exception.dart';
 import 'package:appium_flutter_server/src/internal/flutter_element.dart';
+import 'package:appium_flutter_server/src/logger.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:synchronized/extension.dart';
 import 'package:uuid/uuid.dart';
@@ -6,9 +9,22 @@ import 'package:uuid/uuid.dart';
 class ElementsCache {
   Map<String, FlutterElement> cache = {};
 
-  Future<FlutterElement> get(String id) {
+  Future<FlutterElement> get(String id) async {
     return synchronized(() {
-      return cache[id]!;
+      FlutterElement? element = cache[id];
+      if (element == null) {
+        log("Element $id not found in cache");
+        throw StaleElementReferenceException(
+            "The element '$id' does not exist in DOM anymore");
+      } else {
+        Iterable<Element> foundElement = element.by.evaluate();
+        log("Element $id is not found in DOM");
+        if (foundElement.isEmpty) {
+          throw StaleElementReferenceException(
+              "The element '$id' does not exist in DOM anymore");
+        }
+        return element;
+      }
     });
   }
 
@@ -17,7 +33,7 @@ class ElementsCache {
     return synchronized(() {
       FlutterElement flutterElement =
           FlutterElement.childElement(by, const Uuid().v4(), contextId);
-      cache.putIfAbsent(flutterElement.id, () => flutterElement);
+      cache[flutterElement.id] = flutterElement;
       return flutterElement;
     });
   }

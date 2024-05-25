@@ -27,11 +27,11 @@ abstract class RequestHandler {
   }
 
   String getSessionId(Request request) {
-    try {
-      return request.routeParameter("sessionId");
-    } catch (e) {
-      return Session.NO_ID;
-    }
+    return request.routeParameter("sessionId");
+  }
+
+  String getElementId(Request request) {
+    return request.routeParameter("id");
   }
 
   FutureOr<AppiumResponse> handle(Request request);

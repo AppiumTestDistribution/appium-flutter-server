@@ -1,3 +1,4 @@
+import 'package:appium_flutter_server/src/handler/click.dart';
 import 'package:appium_flutter_server/src/handler/delete_session.dart';
 import 'package:appium_flutter_server/src/handler/find_element.dart';
 import 'package:appium_flutter_server/src/handler/find_elements.dart';
@@ -39,6 +40,7 @@ class FlutterServer {
     _registerPost(NewSessionHandler("/session"));
     _registerPost(FindElementHandler("/session/<sessionId>/element"));
     _registerPost(FindElementstHandler("/session/<sessionId>/elements"));
+    _registerPost(ClickHandler("/session/<sessionId>/element/<id>/click"));
 
     //DELETE ROUTES
     _registerDelete(DeleteSessionHandler("/session/<sessionId>"));
