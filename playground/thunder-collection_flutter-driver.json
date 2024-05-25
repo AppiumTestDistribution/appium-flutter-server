@@ -1,0 +1,99 @@
+{
+  "clientName": "Thunder Client",
+  "collectionName": "flutter-driver",
+  "collectionId": "c4d10610-953f-4927-a503-a96ee030cbb8",
+  "dateExported": "2024-05-25T14:37:47.447Z",
+  "version": "1.2",
+  "folders": [],
+  "requests": [
+    {
+      "_id": "be33912d-6cd8-4503-aefd-8f0ff2ff7ccd",
+      "colId": "c4d10610-953f-4927-a503-a96ee030cbb8",
+      "containerId": "",
+      "name": "android create session",
+      "url": "http://127.0.0.1:4723/wd/hub/session/",
+      "method": "POST",
+      "sortNum": 10000,
+      "created": "2024-05-25T14:35:27.368Z",
+      "modified": "2024-05-25T14:35:27.368Z",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json;  charset=utf-8"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"capabilities\": {\n    \"alwaysMatch\": {\n      \"platformName\": \"Android\",\n      \"appium:orientation\": \"PORTRAIT\",\n      \"appium:automationName\": \"uiautomator2\",\n      \"appium:app\": \"/Users/sselvarj/Documents/git/personal/flutter-learnings/counter_app/build/app/outputs/apk/debug/app-debug.apk\",\n      \"appium:newCommandTimeout\": 1200,\n      \"appium:intercept\": true,\n      \"appium:noReset\": false,\n      \"appium:fullReset\": true,\n      \"appium:udid\": \"emulator-5556\"\n    },\n    \"firstMatch\": [\n      {}\n    ]\n  },\n  \"desiredCapabilities\": {\n    \"platformName\": \"Android\",\n    \"appium:orientation\": \"PORTRAIT\",\n    \"appium:automationName\": \"uiautomator2\",\n    \"appium:app\": \"/Users/sselvarj/Documents/git/personal/flutter-learnings/counter_app/build/app/outputs/apk/debug/app-debug.apk\",\n    \"appium:newCommandTimeout\": 1200,\n    \"appium:intercept\": true,\n    \"appium:noReset\": false,\n    \"appium:fullReset\": true,\n    \"appium:udid\": \"emulator-5556\"\n  }\n}",
+        "form": []
+      }
+    },
+    {
+      "_id": "7ac00e83-e36c-4ead-8def-df4a2c70a2a1",
+      "colId": "c4d10610-953f-4927-a503-a96ee030cbb8",
+      "containerId": "",
+      "name": "flutter create session ",
+      "url": "http://127.0.0.1:8001/session",
+      "method": "POST",
+      "sortNum": 20000,
+      "created": "2024-05-25T14:35:39.855Z",
+      "modified": "2024-05-25T14:35:39.855Z",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json;  charset=utf-8"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"capabilities\": {\n    \"alwaysMatch\": {\n      \"platformName\": \"Android\",\n      \"appium:orientation\": \"PORTRAIT\",\n      \"appium:automationName\": \"uiautomator2\",\n      \"appium:app\": \"/Users/sselvarj/Documents/git/personal/flutter-learnings/counter_app/build/app/outputs/apk/debug/app-debug.apk\",\n      \"appium:newCommandTimeout\": 240,\n      \"appium:intercept\": true,\n      \"appium:noReset\": false,\n      \"appium:fullReset\": true\n    },\n    \"firstMatch\": [\n      {}\n    ]\n  },\n  \"desiredCapabilities\": {\n   \"platformName\": \"Android\",\n      \"appium:orientation\": \"PORTRAIT\",\n      \"appium:automationName\": \"uiautomator2\",\n      \"appium:app\": \"/Users/sselvarj/Documents/git/personal/flutter-learnings/counter_app/build/app/outputs/apk/debug/app-debug.apk\",\n      \"appium:newCommandTimeout\": 240,\n      \"appium:intercept\": true,\n       \"appium:noReset\": false,\n      \"appium:fullReset\": true\n  }\n}",
+        "form": []
+      }
+    },
+    {
+      "_id": "06419b87-77bb-4a62-8663-510dff224f5c",
+      "colId": "c4d10610-953f-4927-a503-a96ee030cbb8",
+      "containerId": "",
+      "name": "find element",
+      "url": "http://127.0.0.1:8001/session/43d54d95-bc07-47dd-8ec5-d1490fae2fb2/elements",
+      "method": "POST",
+      "sortNum": 30000,
+      "created": "2024-05-25T14:35:55.491Z",
+      "modified": "2024-05-25T14:35:55.491Z",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json;  charset=utf-8"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"strategy\": \"key\",\n  \"selector\": \"increment\"\n}",
+        "form": []
+      }
+    },
+    {
+      "_id": "2d3fa15e-56b1-49ac-89e9-d2fd4b889369",
+      "colId": "c4d10610-953f-4927-a503-a96ee030cbb8",
+      "containerId": "",
+      "name": "Click Element",
+      "url": "http://127.0.0.1:8001/session/123/element/301315a6-8274-465f-8ad4-9b964742f84e/click",
+      "method": "POST",
+      "sortNum": 40000,
+      "created": "2024-05-25T14:36:14.164Z",
+      "modified": "2024-05-25T14:36:14.164Z",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json;  charset=utf-8"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"origin\": {\n      \"ELEMENT\": \"b1df27e5-5096-420f-94d2-8255d6cd0b0b\",\n      \"element-6066-11e4-a52e-4f735466cecf\": \"b1df27e5-5096-420f-94d2-8255d6cd0b0b\"\n    },\n  \"offset\": {\n    \"x\": 10,\n    \"y\": -200\n  }\n}",
+        "form": []
+      }
+    }
+  ],
+  "ref": "0EXoyZWp6ZMvPJIgOoNcT4T92mZe4GG2LdVQCkCxRaPjClk6W3CDM0LPurohGub2-7KBDNjqY8UxfzwmWc03VQ"
+}

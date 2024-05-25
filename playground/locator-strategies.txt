@@ -1,0 +1,19 @@
+{
+  "strategy": "key",
+  "selector": "increment"
+}
+
+{
+  "strategy": "text",
+  "selector": "Text on the element"
+}
+
+{
+  "strategy": "text containting",
+  "selector": "Text on the element contains"
+}
+
+{
+  "strategy": "widget name",
+  "selector": "FloatingActionButton" //Name of the widget from app code
+}
