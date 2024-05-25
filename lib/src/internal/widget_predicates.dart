@@ -21,7 +21,6 @@ WidgetPredicate filterByIconCode(int iconCode) {
       return false;
     }
     Icon iconWidget = widget as Icon;
-    log('$WidgetName.Icon.name => ${iconWidget.icon!.codePoint} => ${iconCode}');
     return iconWidget.icon!.codePoint == iconCode;
   };
 }

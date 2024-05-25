@@ -5,8 +5,6 @@ import 'package:appium_flutter_server/src/models/api/appium_response.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
 import 'package:shelf_plus/shelf_plus.dart';
 
-enum HttpMethod { GET, POST, DELETE, PUT, PATCH }
-
 abstract class RequestHandler {
   final String route;
 

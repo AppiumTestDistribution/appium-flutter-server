@@ -1,5 +1,6 @@
 import 'package:appium_flutter_server/src/handler/delete_session.dart';
 import 'package:appium_flutter_server/src/handler/find_element.dart';
+import 'package:appium_flutter_server/src/handler/find_elements.dart';
 import 'package:appium_flutter_server/src/handler/new_session.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
 import 'package:appium_flutter_server/src/handler/sample/screenshot.dart';
@@ -8,6 +9,8 @@ import 'package:appium_flutter_server/src/handler/status.dart';
 import 'package:appium_flutter_server/src/logger.dart';
 import 'package:appium_flutter_server/src/utils.dart';
 import 'package:shelf_plus/shelf_plus.dart' as shelf_plus;
+
+enum HttpMethod { GET, POST, DELETE, PUT, PATCH }
 
 class FlutterServer {
   final bool _isStarted = false;
@@ -28,17 +31,29 @@ class FlutterServer {
 
   void _registerRoutes() {
     //GET ROUTES
-    _addRoute(HttpMethod.GET, StatusHandler("/status"));
-    _addRoute(HttpMethod.GET, ScreenshotHandler("/screenshot"));
-    _addRoute(HttpMethod.GET, TapHandler("/tap"));
+    _registerGet(StatusHandler("/status"));
+    _registerGet(ScreenshotHandler("/screenshot"));
+    _registerGet(TapHandler("/tap"));
 
     //POST ROUTES
-    _addRoute(HttpMethod.POST, NewSessionHandler("/session"));
-    _addRoute(
-        HttpMethod.POST, FindElementHandler("/session/<sessionId>/element"));
+    _registerPost(NewSessionHandler("/session"));
+    _registerPost(FindElementHandler("/session/<sessionId>/element"));
+    _registerPost(FindElementstHandler("/session/<sessionId>/elements"));
 
-    //DELETE
-    _addRoute(HttpMethod.DELETE, DeleteSessionHandler("/session/<sessionId>"));
+    //DELETE ROUTES
+    _registerDelete(DeleteSessionHandler("/session/<sessionId>"));
+  }
+
+  void _registerGet(RequestHandler handler) {
+    _addRoute(HttpMethod.GET, handler);
+  }
+
+  void _registerPost(RequestHandler handler) {
+    _addRoute(HttpMethod.POST, handler);
+  }
+
+  void _registerDelete(RequestHandler handler) {
+    _addRoute(HttpMethod.DELETE, handler);
   }
 
   void startServer({int? port}) async {
