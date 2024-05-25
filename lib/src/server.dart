@@ -2,6 +2,7 @@ import 'package:appium_flutter_server/src/handler/click.dart';
 import 'package:appium_flutter_server/src/handler/delete_session.dart';
 import 'package:appium_flutter_server/src/handler/find_element.dart';
 import 'package:appium_flutter_server/src/handler/find_elements.dart';
+import 'package:appium_flutter_server/src/handler/gesture/double_click.dart';
 import 'package:appium_flutter_server/src/handler/new_session.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
 import 'package:appium_flutter_server/src/handler/sample/screenshot.dart';
@@ -41,6 +42,9 @@ class FlutterServer {
     _registerPost(FindElementHandler("/session/<sessionId>/element"));
     _registerPost(FindElementstHandler("/session/<sessionId>/elements"));
     _registerPost(ClickHandler("/session/<sessionId>/element/<id>/click"));
+
+    _registerPost(DoubleClickHandler(
+        "/session/<sessionId>/appium/gestures/double_click"));
 
     //DELETE ROUTES
     _registerDelete(DeleteSessionHandler("/session/<sessionId>"));

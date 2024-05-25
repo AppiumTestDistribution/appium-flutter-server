@@ -5,16 +5,20 @@ part 'generated/element.g.dart';
 @JsonSerializable()
 class ElementModel {
   @JsonKey(name: "ELEMENT")
-  late String jwpElementId;
+  String? jwpElementId;
 
   @JsonKey(name: "element-6066-11e4-a52e-4f735466cecf")
-  late String w3cElementId;
+  String? w3cElementId;
 
-  ElementModel(this.jwpElementId, this.w3cElementId);
+  ElementModel({required this.jwpElementId, required this.w3cElementId});
 
   ElementModel.fromElement(String elementId) {
     jwpElementId = elementId;
     w3cElementId = elementId;
+  }
+
+  String get id {
+    return jwpElementId == null ? w3cElementId! : jwpElementId!;
   }
 
   factory ElementModel.fromJson(Map<String, dynamic> json) =>

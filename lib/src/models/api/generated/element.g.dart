@@ -7,8 +7,8 @@ part of '../element.dart';
 // **************************************************************************
 
 ElementModel _$ElementModelFromJson(Map<String, dynamic> json) => ElementModel(
-      json['ELEMENT'] as String,
-      json['element-6066-11e4-a52e-4f735466cecf'] as String,
+      jwpElementId: json['ELEMENT'] as String?,
+      w3cElementId: json['element-6066-11e4-a52e-4f735466cecf'] as String?,
     );
 
 Map<String, dynamic> _$ElementModelToJson(ElementModel instance) =>
