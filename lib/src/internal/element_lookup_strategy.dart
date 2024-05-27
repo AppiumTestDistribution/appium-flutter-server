@@ -31,7 +31,7 @@ extension ElementLookupStrategyExtension on ElementLookupStrategy {
   Finder toFinder(dynamic selector) {
     switch (this) {
       case ElementLookupStrategy.BY_KEY:
-        return find.byKey(Key(selector));
+        return find.byKey(ValueKey(selector));
       case ElementLookupStrategy.BY_SEMANTICS_LABEL:
         return find.bySemanticsLabel(selector);
       case ElementLookupStrategy.BY_TOOLTIP:
