@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/exceptions/element_not_found_exception.dart';
 import 'package:appium_flutter_server/src/internal/element_lookup_strategy.dart';
@@ -98,19 +96,39 @@ class ElementHelper {
   }
 
   static Future<String> getText(FlutterElement element) async {
-    Finder by = element.by;
-    Widget widget = by.evaluate().first.widget;
+    String getElementTextRecursively(Element element, {Set<Element>? visited}) {
+      visited ??= <Element>{};
 
-    if (widget is Text) {
-      if (widget.data != null) {
-        return widget.data.toString();
-      } else if (widget.textSpan != null) {
-        return widget.textSpan!.toPlainText();
+      if (visited.contains(element)) {
+        return '';
       }
-    } else if (widget is RichText) {
-      return widget.text.toPlainText();
+      visited.add(element);
+      final StringBuffer buffer = StringBuffer();
+
+      final widget = element.widget;
+      if (widget is Text) {
+        if (widget.data != null) {
+          buffer.write(widget.data);
+        } else if (widget.textSpan != null) {
+          buffer.write(widget.textSpan!.toPlainText());
+        }
+      } else if (widget is RichText) {
+        buffer.write(widget.text.toPlainText());
+      } else if (widget is EditableText) {
+        buffer.write(widget.controller.text);
+      }
+
+      if (element is RenderObjectElement) {
+        element.visitChildren((child) {
+          final childText = getElementTextRecursively(child, visited: visited);
+          buffer.write(childText);
+        });
+      }
+
+      return buffer.toString();
     }
-    return "";
+
+    return getElementTextRecursively(element.by.evaluate().first);
   }
 
   static WidgetTester _getTester() {
