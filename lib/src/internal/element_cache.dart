@@ -23,7 +23,7 @@ class ElementsCache {
         }
       } else {
         Iterable<Element> foundElement = element.by.evaluate();
-        log("Element $id is not found in DOM");
+
         if (foundElement.isEmpty) {
           throw StaleElementReferenceException(
               "The element '$id' does not exist in DOM anymore");

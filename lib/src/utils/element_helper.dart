@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/exceptions/element_not_found_exception.dart';
 import 'package:appium_flutter_server/src/internal/element_lookup_strategy.dart';
@@ -31,7 +33,6 @@ class ElementHelper {
 
       finder = find.descendant(of: parent.by, matching: by);
     }
-
     final Iterable<Element> elements = finder.evaluate();
     if (elements.isEmpty) {
       throw ElementNotFoundException("Unable to locate element");
@@ -94,6 +95,22 @@ class ElementHelper {
     await tester.pump(kDoubleTapMinTime);
     await tester.tap(element.by);
     await tester.pumpAndSettle();
+  }
+
+  static Future<String> getText(FlutterElement element) async {
+    Finder by = element.by;
+    Widget widget = by.evaluate().first.widget;
+
+    if (widget is Text) {
+      if (widget.data != null) {
+        return widget.data.toString();
+      } else if (widget.textSpan != null) {
+        return widget.textSpan!.toPlainText();
+      }
+    } else if (widget is RichText) {
+      return widget.text.toPlainText();
+    }
+    return "";
   }
 
   static WidgetTester _getTester() {

@@ -15,6 +15,8 @@ class FlutterFinderStrategy {
       Map<String, dynamic> strategy = _decodeElementStrategy(elementId);
       return _locateElement(strategy);
     } catch (e) {
+      log(e.toString());
+      log(e);
       throw ElementNotFoundException("Element not found");
     }
   }
@@ -51,7 +53,7 @@ class FlutterFinderStrategy {
         break;
     }
 
-    log("Found finder By ${by}");
+    log("Finder By ${by}");
     if (by == null || (ensureElementPresent && by.evaluate().isEmpty)) {
       throw ElementNotFoundException(
           "Unable to locate element with strategy: ${strategy['finderType']}");

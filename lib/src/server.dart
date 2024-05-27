@@ -5,6 +5,7 @@ import 'package:appium_flutter_server/src/handler/find_element.dart';
 import 'package:appium_flutter_server/src/handler/find_elements.dart';
 import 'package:appium_flutter_server/src/handler/gesture/double_click.dart'
     as gesture_double_click;
+import 'package:appium_flutter_server/src/handler/get_text.dart';
 import 'package:appium_flutter_server/src/handler/new_session.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
 import 'package:appium_flutter_server/src/handler/sample/screenshot.dart';
@@ -38,6 +39,7 @@ class FlutterServer {
     _registerGet(StatusHandler("/status"));
     _registerGet(ScreenshotHandler("/screenshot"));
     _registerGet(TapHandler("/tap"));
+    _registerGet(GetTextHandler("/session/<sessionId>/element/<id>/text"));
 
     //POST ROUTES
     _registerPost(NewSessionHandler("/session"));
@@ -69,7 +71,7 @@ class FlutterServer {
   void startServer({int? port}) async {
     port ??= await getFreePort();
     await shelf_plus.shelfRun(() => _app.call,
-        defaultBindAddress: "localhost",
+        defaultBindAddress: "0.0.0.0",
         defaultBindPort: port,
         defaultEnableHotReload: false);
     log("[Appium flutter server is listening on port $port]");

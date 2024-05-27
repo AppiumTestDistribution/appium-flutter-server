@@ -5,7 +5,6 @@ import 'package:appium_flutter_server/src/appium_test_bindings.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:appium_flutter_server/src/server.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:network_tools/network_tools.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -21,8 +20,8 @@ void initializeTest({required Widget app}) async {
     FlutterDriver.instance.initialize(tester: tester, app: app);
     await tester.pumpWidget(app);
     FlutterServer.instance.startServer(port: 8888);
-    // To block the test from ending
 
+    // To block the test from ending
     await Completer<void>().future;
   }, timeout: const Timeout(Duration(seconds: MAX_TEST_DURATION_SECS)));
 }
