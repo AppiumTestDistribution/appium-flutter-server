@@ -61,3 +61,9 @@ void main() async {
 9. adb forward tcp:8080 tcp:8888
 10. From the browser hit `http://localhost:8080/tap` and it should click the counter (+) icon from the app
 11. From the browser hit `http://localhost:8080/screenshot` and it will return base64 screenshot image
+
+## Ios simulator
+
+1. flutter build ios integration_test/appium_server.dart --simulator
+2. App path `flutter-learnings/counter_app/build/ios/iphonesimulator/Runner.app`
+3. Simulator logs `xcrun simctl spawn booted log stream | grep flutter`
