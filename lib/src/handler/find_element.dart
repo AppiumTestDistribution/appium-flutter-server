@@ -17,6 +17,9 @@ class FindElementHandler extends RequestHandler {
         FindElementModel.fromJson(await request.body.asJson);
 
     Finder matchedBy = await ElementHelper.locateElement(model);
+
+    //await FlutterDriver.instance.tester.tap(matchedBy);
+
     FlutterElement flutterElement = await FlutterDriver.instance
         .getSessionOrThrow()!
         .elementsCache

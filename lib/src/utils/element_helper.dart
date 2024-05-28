@@ -32,6 +32,7 @@ class ElementHelper {
 
       finder = find.descendant(of: parent.by, matching: by);
     }
+    await waitFor(finder);
     final Iterable<Element> elements = finder.evaluate();
     if (elements.isEmpty) {
       throw ElementNotFoundException("Unable to locate element");
@@ -191,5 +192,22 @@ class ElementHelper {
     } catch (e) {
       return null;
     }
+  }
+
+  static Future<void> waitFor(
+    Finder finder, {
+    Duration timeout = const Duration(seconds: 5),
+  }) async {
+    WidgetTester tester = _getTester();
+    final end = tester.binding.clock.now().add(timeout);
+
+    do {
+      if (tester.binding.clock.now().isAfter(end)) {
+        break;
+      }
+
+      await tester.pumpAndSettle();
+      await Future.delayed(const Duration(milliseconds: 100));
+    } while (finder.evaluate().isEmpty);
   }
 }
