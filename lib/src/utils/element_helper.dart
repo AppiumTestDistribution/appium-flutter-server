@@ -14,6 +14,7 @@ import 'package:uuid/uuid.dart';
 class ElementHelper {
   static Future<Finder> findElement(Finder by, {String? contextId}) async {
     List<Finder> elementList = await findElements(by, contextId: contextId);
+    log("Element found ${elementList.first}");
     return elementList.first;
   }
 
@@ -94,7 +95,6 @@ class ElementHelper {
     await tester.tap(element.by);
     await tester.pumpAndSettle();
   }
-
   static Future<String> getText(FlutterElement element) async {
     String getElementTextRecursively(Element element, {Set<Element>? visited}) {
       visited ??= <Element>{};

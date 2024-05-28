@@ -13,7 +13,6 @@ class TapHandler extends RequestHandler {
   @override
   FutureOr<AppiumResponse> handle(Request request) async {
     WidgetTester tester = FlutterDriver.instance.tester;
-    await tester.tap(find.byKey(const ValueKey('increment')));
     return AppiumResponse("NO_ID", {"success": "true"});
   }
 }
