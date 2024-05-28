@@ -26,11 +26,15 @@ abstract class RequestHandler {
   }
 
   String getSessionId(Request request) {
-    return request.routeParameter("sessionId");
+    return getRouteParam(request, "sessionId");
   }
 
   String getElementId(Request request) {
-    return request.routeParameter("id");
+    return getRouteParam(request, "id");
+  }
+
+  String getRouteParam(Request request, String param) {
+    return request.routeParameter(param);
   }
 
   FutureOr<AppiumResponse> handle(Request request);

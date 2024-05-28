@@ -131,6 +131,29 @@ class ElementHelper {
     return getElementTextRecursively(element.by.evaluate().first);
   }
 
+  static Future<String?> getAttribute(
+      FlutterElement element, String attribute) async {
+    if (attribute == "enabled") {
+      // for text elements, enabled property will be available in property list
+      DiagnosticsNode? enabledProperty =
+          _getElementPropertyNode(element.by, attribute);
+      if (enabledProperty == null) {
+        //For Button type elements, onPressed will be null if the element is disabled
+        DiagnosticsNode? onPressed =
+            _getElementPropertyNode(element.by, "onPressed");
+        return (onPressed == null || onPressed.value == null)
+            ? "false"
+            : "true";
+      } else {
+        return enabledProperty.value.toString();
+      }
+    } else {
+      DiagnosticsNode? property =
+          _getElementPropertyNode(element.by, attribute);
+      return property?.value.toString();
+    }
+  }
+
   static WidgetTester _getTester() {
     return FlutterDriver.instance.tester;
   }
@@ -155,5 +178,18 @@ class ElementHelper {
   static Rect getElementBounds(Finder by) {
     var tester = _getTester();
     return Rect.fromPoints(tester.getTopLeft(by), tester.getBottomRight(by));
+  }
+
+  static DiagnosticsNode? _getElementPropertyNode(Finder by, String propertry) {
+    try {
+      return FlutterDriver.instance.tester
+          .widget(by)
+          .toDiagnosticsNode()
+          .getProperties()
+          .where((node) => node.name == propertry)
+          .first;
+    } catch (e) {
+      return null;
+    }
   }
 }

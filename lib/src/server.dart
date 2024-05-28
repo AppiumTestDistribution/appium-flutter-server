@@ -5,6 +5,7 @@ import 'package:appium_flutter_server/src/handler/find_element.dart';
 import 'package:appium_flutter_server/src/handler/find_elements.dart';
 import 'package:appium_flutter_server/src/handler/gesture/double_click.dart'
     as gesture_double_click;
+import 'package:appium_flutter_server/src/handler/get_attribute.dart';
 import 'package:appium_flutter_server/src/handler/get_text.dart';
 import 'package:appium_flutter_server/src/handler/new_session.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
@@ -40,6 +41,8 @@ class FlutterServer {
     _registerGet(ScreenshotHandler("/screenshot"));
     _registerGet(TapHandler("/tap"));
     _registerGet(GetTextHandler("/session/<sessionId>/element/<id>/text"));
+    _registerGet(GetAttributeHandler(
+        "/session/<sessionId>/element/<id>/attribute/<name>"));
 
     //POST ROUTES
     _registerPost(NewSessionHandler("/session"));
