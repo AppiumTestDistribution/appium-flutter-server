@@ -53,13 +53,14 @@ class FlutterFinderStrategy {
         break;
     }
 
-    log("Finder By ${by}");
+    log("Finder By $by");
     if (by == null || (ensureElementPresent && by.evaluate().isEmpty)) {
       throw ElementNotFoundException(
           "Unable to locate element with strategy: ${strategy['finderType']}");
     }
 
-    return FlutterElement(ensureElementPresent ? by.at(0) : by, Uuid().v4());
+    return FlutterElement(
+        ensureElementPresent ? by.at(0) : by, const Uuid().v4());
   }
 
   static Finder? _byValueKey(Map<String, dynamic> strategy) {

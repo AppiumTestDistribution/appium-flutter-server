@@ -15,7 +15,6 @@ import 'package:appium_flutter_server/src/handler/status.dart';
 import 'package:appium_flutter_server/src/logger.dart';
 import 'package:appium_flutter_server/src/utils.dart';
 import 'package:shelf_plus/shelf_plus.dart' as shelf_plus;
-import 'package:appium_flutter_server/src/handler/get_attribute.dart';
 
 enum HttpMethod { GET, POST, DELETE, PUT, PATCH }
 

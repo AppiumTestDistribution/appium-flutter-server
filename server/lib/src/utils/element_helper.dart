@@ -59,7 +59,7 @@ class ElementHelper {
     FlutterElement? element;
     if (elementId == null && doubleClickModel.locator != null) {
       element = FlutterElement(
-          await locateElement(doubleClickModel.locator!), Uuid().v4());
+          await locateElement(doubleClickModel.locator!), const Uuid().v4());
     } else if (elementId != null) {
       Session session = FlutterDriver.instance.getSessionOrThrow()!;
       element = await session.elementsCache.get(elementId);
@@ -78,7 +78,7 @@ class ElementHelper {
         await doubleClick(element);
       } else {
         Rect bounds = getElementBounds(element.by);
-        log("Click by offset ${bounds}");
+        log("Click by offset $bounds");
         await tester.tapAt(Offset(bounds.left + doubleClickModel.offset!.x,
             bounds.top + doubleClickModel.offset!.y));
         await tester.pump(kDoubleTapMinTime);
@@ -96,6 +96,7 @@ class ElementHelper {
     await tester.tap(element.by);
     await tester.pumpAndSettle();
   }
+
   static Future<String> getText(FlutterElement element) async {
     String getElementTextRecursively(Element element, {Set<Element>? visited}) {
       visited ??= <Element>{};

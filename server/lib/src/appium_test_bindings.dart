@@ -7,14 +7,10 @@ class AppiumTestWidgetsFlutterBinding
   static WidgetsBinding ensureInitialized() {
     AppiumTestWidgetsFlutterBinding();
     assert(WidgetsBinding.instance is AppiumTestWidgetsFlutterBinding);
-    return WidgetsBinding.instance!;
+    return WidgetsBinding.instance;
   }
 
   @override
   TestBindingEventSource get pointerEventSource => TestBindingEventSource.test;
 
-  @override
-  void handlePointerEvent(PointerEvent event) {
-    super.handlePointerEvent(event);
-  }
 }

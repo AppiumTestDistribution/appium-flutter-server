@@ -3,8 +3,6 @@ import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
 import 'package:appium_flutter_server/src/internal/flutter_element.dart';
 import 'package:appium_flutter_server/src/models/api/appium_response.dart';
 import 'package:appium_flutter_server/src/utils/element_helper.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shelf_plus/shelf_plus.dart';
 
