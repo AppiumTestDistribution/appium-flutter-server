@@ -17,7 +17,7 @@ class ClickHandler extends RequestHandler {
     var session = FlutterDriver.instance.getSessionOrThrow();
 
     FlutterElement element = await session!.elementsCache.get(elementId);
-    ElementHelper.click(element);
+    await ElementHelper.click(element);
     return AppiumResponse(sessionId, null);
   }
 }

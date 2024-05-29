@@ -17,7 +17,7 @@ class DoubleClickHandler extends RequestHandler {
     var session = FlutterDriver.instance.getSessionOrThrow();
 
     FlutterElement element = await session!.elementsCache.get(elementId);
-    ElementHelper.doubleClick(element);
+    await ElementHelper.doubleClick(element);
     return AppiumResponse(sessionId, null);
   }
 }
