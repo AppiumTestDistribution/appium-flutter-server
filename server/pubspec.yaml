@@ -1,20 +1,20 @@
 name: appium_flutter_server
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+homepage: ""
 
 environment:
-  sdk: '>=3.4.0 <4.0.0'
+  sdk: ">=3.4.0 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
   integration_test:
-      sdk: flutter
+    sdk: flutter
   flutter_test:
     sdk: flutter
-    
+
   shelf_router: ^1.1.4
   shelf: ^1.4.1
   uuid: ^4.4.0
@@ -25,14 +25,12 @@ dependencies:
   synchronized: ^3.1.0+1
 
 dev_dependencies:
-  
-
   build_runner: ^2.4.10
   flutter_lints: ^3.0.0
   json_serializable: ^6.8.0
 
 integration_test:
-    sdk: flutter
+  sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -5,8 +5,6 @@ import 'package:appium_flutter_server/src/appium_test_bindings.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:appium_flutter_server/src/server.dart';
-import 'package:network_tools/network_tools.dart';
-import 'package:path_provider/path_provider.dart';
 
 const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
 
@@ -19,6 +17,10 @@ void initializeTest({required Widget app}) async {
     // await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
     FlutterDriver.instance.initialize(tester: tester, app: app);
     await tester.pumpWidget(app);
+    // await tester.tap(find.text("Form widgets"));
+    // await tester.pumpAndSettle();
+    // await tester.tap(find.byKey(Key("brushed_check_box")));
+    // await tester.pumpAndSettle();
     FlutterServer.instance.startServer(port: 8888);
 
     // To block the test from ending
