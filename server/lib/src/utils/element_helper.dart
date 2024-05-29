@@ -11,6 +11,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uuid/uuid.dart';
 
+enum NATIVE_ELEMENT_ATTRIBUTES { enabled, displayed }
+
 class ElementHelper {
   static Future<Finder> findElement(Finder by, {String? contextId}) async {
     List<Finder> elementList = await findElements(by, contextId: contextId);
@@ -135,8 +137,9 @@ class ElementHelper {
 
   static Future<String?> getAttribute(
       FlutterElement element, String attribute) async {
-    if (attribute == "enabled") {
-      // for text elements, enabled property will be available in property list
+    if (NATIVE_ELEMENT_ATTRIBUTES.displayed.name == attribute) {
+      return element.by.evaluate().isNotEmpty.toString();
+    } else if (NATIVE_ELEMENT_ATTRIBUTES.enabled.name == attribute) {
       DiagnosticsNode? enabledProperty =
           _getElementPropertyNode(element.by, attribute);
       if (enabledProperty == null) {
