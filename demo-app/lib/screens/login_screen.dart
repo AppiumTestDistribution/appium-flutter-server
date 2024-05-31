@@ -63,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               explicitChildNodes: true,
               container: true,
               child: TextField(
+                key: const Key("password"),
                 decoration:
                     const InputDecoration.collapsed(hintText: "Password"),
                 obscureText: true,
