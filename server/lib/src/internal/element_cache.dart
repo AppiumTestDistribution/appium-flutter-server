@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 class ElementsCache {
   Map<String, FlutterElement> cache = {};
 
-  Future<FlutterElement> get(String id) async {
+  Future<FlutterElement> get(String id, {bool evaluatePresence = true}) async {
     return synchronized(() async {
       FlutterElement? element = cache[id];
       if (element == null) {
@@ -21,7 +21,9 @@ class ElementsCache {
           throw StaleElementReferenceException(
               "The element '$id' does not exist in DOM anymore");
         }
-      } else {
+      }
+
+      if (evaluatePresence) {
         Iterable<Element> foundElement = element.by.evaluate();
 
         if (foundElement.isEmpty) {

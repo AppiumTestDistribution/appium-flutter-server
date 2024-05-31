@@ -17,6 +17,8 @@ import 'package:appium_flutter_server/src/handler/sample/screenshot.dart';
 import 'package:appium_flutter_server/src/handler/sample/tap_handler.dart';
 import 'package:appium_flutter_server/src/handler/set_text.dart';
 import 'package:appium_flutter_server/src/handler/status.dart';
+import 'package:appium_flutter_server/src/handler/wait/wait_for_absent.dart';
+import 'package:appium_flutter_server/src/handler/wait/wait_for_visible.dart';
 import 'package:appium_flutter_server/src/logger.dart';
 import 'package:appium_flutter_server/src/utils.dart';
 import 'package:shelf_plus/shelf_plus.dart' as shelf_plus;
@@ -68,6 +70,12 @@ class FlutterServer {
     /* Gesture handler */
     _registerPost(gesture_double_click.DoubleClickHandler(
         "/session/<sessionId>/appium/gestures/double_click"));
+
+    /* Wait handlers */
+    _registerPost(
+        WaitForVisibleHandler("/session/<sessionId>/element/wait/visible"));
+    _registerPost(
+        WaitForAbsentHandler("/session/<sessionId>/element/wait/absent"));
 
     //DELETE ROUTES
     _registerDelete(DeleteSessionHandler("/session/<sessionId>"));

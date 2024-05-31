@@ -15,6 +15,10 @@ import 'package:uuid/uuid.dart';
 
 enum NATIVE_ELEMENT_ATTRIBUTES { enabled, displayed, clickable }
 
+typedef WaitPredicate = Future<bool> Function();
+
+const Duration defaultWaitTimeout = Duration(seconds: 5);
+
 class ElementHelper {
   static Future<Finder> findElement(Finder by, {String? contextId}) async {
     List<Finder> elementList = await findElements(by, contextId: contextId);
@@ -36,7 +40,7 @@ class ElementHelper {
 
       finder = find.descendant(of: parent.by, matching: by);
     }
-    await waitForElementExists(finder);
+    await waitForVisibility(finder);
     final Iterable<Element> elements = finder.evaluate();
     if (elements.isEmpty) {
       throw ElementNotFoundException("Unable to locate element");
@@ -163,7 +167,8 @@ class ElementHelper {
     return FlutterDriver.instance.tester;
   }
 
-  static Future<Finder> locateElement(FindElementModel model) async {
+  static Future<Finder> locateElement(FindElementModel model,
+      {bool evaluatePresence = true}) async {
     final String method = model.strategy;
     final String selector = model.selector;
     final String? contextId = model.context == "" ? null : model.context;
@@ -177,7 +182,11 @@ class ElementHelper {
     final Finder by = ElementLookupStrategy.values
         .firstWhere((val) => val.name == method)
         .toFinder(selector);
-    return findElement(by, contextId: contextId);
+    if (evaluatePresence) {
+      return findElement(by, contextId: contextId);
+    } else {
+      return by;
+    }
   }
 
   static Rect getElementBounds(Finder by) {
@@ -269,7 +278,7 @@ class ElementHelper {
 
   static Future<void> waitForVisibility(
     Finder finder, {
-    Duration timeout = const Duration(seconds: 5),
+    Duration timeout = defaultWaitTimeout,
   }) async {
     return TestAsyncUtils.guard(() async {
       WidgetTester tester = _getTester();
@@ -285,20 +294,71 @@ class ElementHelper {
     });
   }
 
-  static Future<void> waitForElementExists(
-    Finder finder, {
-    Duration timeout = const Duration(seconds: 5),
+  static Future<void> waitForElementVisible(FlutterElement element,
+      {required Duration timeout}) async {
+    await waitFor(() async {
+      try {
+        return element.by.evaluate().isNotEmpty;
+      } catch (e) {
+        return false;
+      }
+    },
+        timeout: timeout,
+        errorMessage:
+            "Element with locator ${element.by.describeMatch(Plurality.one)} not visible");
+  }
+
+  static Future<void> waitForElementAbsent(FlutterElement element,
+      {required Duration timeout}) async {
+    await waitFor(
+      () async {
+        try {
+          return element.by.evaluate().isEmpty;
+        } catch (e) {
+          return true;
+        }
+      },
+      timeout: timeout,
+      errorMessage:
+          "Element with locator ${element.by.describeMatch(Plurality.one)} not visible",
+    );
+  }
+
+  static Future<void> waitForElementEnable(FlutterElement element) async {
+    await waitFor(() async {
+      return bool.parse(await ElementHelper.getAttribute(
+          element, NATIVE_ELEMENT_ATTRIBUTES.enabled.name));
+    },
+        errorMessage:
+            "Element with locator ${element.by.describeMatch(Plurality.one)} not enabled");
+  }
+
+  static Future<void> waitForElementClickable(FlutterElement element) async {
+    await waitFor(() async {
+      return bool.parse(await ElementHelper.getAttribute(
+          element, NATIVE_ELEMENT_ATTRIBUTES.clickable.name));
+    },
+        errorMessage:
+            "Element with locator ${element.by.describeMatch(Plurality.one)} not clickable");
+  }
+
+  static Future<void> waitFor(
+    WaitPredicate predicate, {
+    String? errorMessage,
+    Duration timeout = const Duration(seconds: 20),
   }) async {
-    WidgetTester tester = _getTester();
+    WidgetTester tester = FlutterDriver.instance.tester;
     final end = tester.binding.clock.now().add(timeout);
 
     do {
       if (tester.binding.clock.now().isAfter(end)) {
-        break;
+        throw Exception(errorMessage != null
+            ? '$errorMessage with ${timeout.inSeconds} seconds'
+            : 'Timed out waiting for condition');
       }
 
       await tester.pumpAndSettle();
       await Future.delayed(const Duration(milliseconds: 100));
-    } while (finder.evaluate().isEmpty);
+    } while (!(await predicate()));
   }
 }
