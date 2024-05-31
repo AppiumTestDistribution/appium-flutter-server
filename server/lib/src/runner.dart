@@ -5,17 +5,20 @@ import 'package:appium_flutter_server/src/appium_test_bindings.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:appium_flutter_server/src/server.dart';
+import 'package:integration_test/integration_test.dart';
 
 const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
 
 void initializeTest({required Widget app}) async {
-  AppiumTestWidgetsFlutterBinding.ensureInitialized();
+  IntegrationTestWidgetsFlutterBinding binding =
+      AppiumTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('appium flutter server', (tester) async {
     /* Initialize network tools */
     // final appDocDirectory = await getApplicationDocumentsDirectory();
     // await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
-    FlutterDriver.instance.initialize(tester: tester, app: app);
+    FlutterDriver.instance
+        .initialize(tester: tester, app: app, binding: binding);
     await tester.pumpWidget(app);
     // await tester.tap(find.text("Form widgets"));
     // await tester.pumpAndSettle();

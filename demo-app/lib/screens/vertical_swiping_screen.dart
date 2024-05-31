@@ -32,10 +32,12 @@ class VerticalSwipingScreen extends StatelessWidget {
               children: List.generate(
                   _languages.length,
                   (index) => Padding(
-                    padding: const EdgeInsets.only(bottom: 10, left: 20, right: 20),
-                    child: Container(
+                        padding: const EdgeInsets.only(
+                            bottom: 10, left: 20, right: 20),
+                        child: Container(
                           height: 80,
-                          decoration: BoxDecoration(color: Colors.blue.shade800),
+                          decoration:
+                              BoxDecoration(color: Colors.blue.shade800),
                           child: Center(
                             child: Text(
                               _languages[index],
@@ -43,7 +45,7 @@ class VerticalSwipingScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                  ))),
+                      ))),
         ),
       ),
     );

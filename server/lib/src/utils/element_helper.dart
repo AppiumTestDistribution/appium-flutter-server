@@ -7,11 +7,13 @@ import 'package:appium_flutter_server/src/models/api/double_click.dart';
 import 'package:appium_flutter_server/src/models/api/find_element.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 import 'package:uuid/uuid.dart';
 
-enum NATIVE_ELEMENT_ATTRIBUTES { enabled, displayed }
+enum NATIVE_ELEMENT_ATTRIBUTES { enabled, displayed, clickable }
 
 class ElementHelper {
   static Future<Finder> findElement(Finder by, {String? contextId}) async {
@@ -139,34 +141,20 @@ class ElementHelper {
       return buffer.toString();
     }
 
-    return getElementTextRecursively(element.by
-        .evaluate()
-        .first);
+    return getElementTextRecursively(element.by.evaluate().first);
   }
 
-  static Future<String?> getAttribute(FlutterElement element,
-      String attribute) async {
+  static Future<dynamic> getAttribute(
+      FlutterElement element, String attribute) async {
     if (NATIVE_ELEMENT_ATTRIBUTES.displayed.name == attribute) {
-      return element.by
-          .evaluate()
-          .isNotEmpty
-          .toString();
+      return element.by.evaluate().isNotEmpty;
     } else if (NATIVE_ELEMENT_ATTRIBUTES.enabled.name == attribute) {
-      DiagnosticsNode? enabledProperty =
-      _getElementPropertyNode(element.by, attribute);
-      if (enabledProperty == null) {
-        //For Button type elements, onPressed will be null if the element is disabled
-        DiagnosticsNode? onPressed =
-        _getElementPropertyNode(element.by, "onPressed");
-        return (onPressed == null || onPressed.value == null)
-            ? "false"
-            : "true";
-      } else {
-        return enabledProperty.value.toString();
-      }
+      return _isElementEnabled(element);
+    } else if (NATIVE_ELEMENT_ATTRIBUTES.clickable.name == attribute) {
+      return _isElementClickable(element);
     } else {
       DiagnosticsNode? property =
-      _getElementPropertyNode(element.by, attribute);
+          _getElementPropertyNode(element.by, attribute);
       return property?.value.toString();
     }
   }
@@ -210,16 +198,66 @@ class ElementHelper {
     }
   }
 
-  static Future<void> waitForVisibility(Finder finder, {
+  static dynamic _isElementEnabled(FlutterElement element) {
+    String attribute = NATIVE_ELEMENT_ATTRIBUTES.enabled.name;
+    DiagnosticsNode? enabledProperty =
+        _getElementPropertyNode(element.by, attribute);
+    if (enabledProperty == null) {
+      //For Button type elements, onPressed will be null if the element is disabled
+      DiagnosticsNode? onPressed =
+          _getElementPropertyNode(element.by, "onPressed");
+      return (onPressed == null || onPressed.value == null) ? "false" : "true";
+    } else {
+      return enabledProperty.value.toString();
+    }
+  }
+
+  static bool _isElementClickable(FlutterElement flutterElement) {
+    /* 
+     * Reference taken from https://github.com/flutter/flutter/blob/master/packages/flutter_test/lib/src/controller.dart#L1880
+     * Method: _getElementPoint
+     */
+    TestAsyncUtils.guardSync();
+    Finder finder = flutterElement.by;
+    WidgetTester tester = _getTester();
+    IntegrationTestWidgetsFlutterBinding binding =
+        FlutterDriver.instance.binding;
+
+    final Iterable<Element> elements = finder.evaluate();
+    final Element element = elements.single;
+    final RenderObject? renderObject = element.renderObject;
+    if (renderObject == null) {
+      log('The finder "$finder"  found an element, but it does not have a corresponding render object. '
+          'Maybe the element has not yet been rendered?');
+      return false;
+    }
+    if (renderObject is! RenderBox) {
+      log('The finder "$finder"  found an element whose corresponding render object is not a RenderBox (it is a ${renderObject.runtimeType}: "$renderObject"). '
+          'Unfortunately it only supports targeting widgets that correspond to RenderBox objects in the rendering.');
+      return false;
+    }
+    final RenderBox box = element.renderObject! as RenderBox;
+    final Offset location = box.localToGlobal(box.size.center(Offset.zero));
+    final FlutterView view = tester.viewOf(finder);
+    final HitTestResult result = HitTestResult();
+    binding.hitTestInView(result, location, view.viewId);
+    final bool found =
+        result.path.any((HitTestEntry entry) => entry.target == box);
+    if (!found) {
+      return false;
+    }
+    return true;
+  }
+
+  static Future<void> waitForVisibility(
+    Finder finder, {
     Duration timeout = const Duration(seconds: 5),
   }) async {
     return TestAsyncUtils.guard(() async {
       WidgetTester tester = _getTester();
       final end = tester.binding.clock.now().add(timeout);
       final hitTestableFinder = finder.hitTestable();
-      while (hitTestableFinder
-          .evaluate()
-          .isEmpty) {
+      while (hitTestableFinder.evaluate().isEmpty) {
         final now = tester.binding.clock.now();
         if (now.isAfter(end)) {
           break;
@@ -228,10 +266,11 @@ class ElementHelper {
       }
     });
   }
+
   static Future<void> waitForElementExists(
-      Finder finder, {
-        Duration timeout = const Duration(seconds: 5),
-      }) async {
+    Finder finder, {
+    Duration timeout = const Duration(seconds: 5),
+  }) async {
     WidgetTester tester = _getTester();
     final end = tester.binding.clock.now().add(timeout);
 

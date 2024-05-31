@@ -31,19 +31,21 @@ extension ElementLookupStrategyExtension on ElementLookupStrategy {
   Finder toFinder(dynamic selector) {
     switch (this) {
       case ElementLookupStrategy.BY_KEY:
-        return find.byKey(Key(selector));
+        return find.byKey(Key(selector), skipOffstage: false);
       case ElementLookupStrategy.BY_SEMANTICS_LABEL:
-        return find.bySemanticsLabel(selector);
+        return find.bySemanticsLabel(selector, skipOffstage: false);
       case ElementLookupStrategy.BY_TOOLTIP:
-        return find.byTooltip(selector);
+        return find.byTooltip(selector, skipOffstage: false);
       case ElementLookupStrategy.BY_TEXT:
-        return find.text(selector);
+        return find.text(selector, skipOffstage: false);
       case ElementLookupStrategy.BY_TEXT_CONTAINING:
-        return find.textContaining(selector);
+        return find.textContaining(selector, skipOffstage: false);
       case ElementLookupStrategy.BY_WIDGET_NAME:
-        return find.byWidgetPredicate(filterByWidgetName(selector));
+        return find.byWidgetPredicate(filterByWidgetName(selector),
+            skipOffstage: false);
       case ElementLookupStrategy.BY_ICON_POINT:
-        return find.byWidgetPredicate(filterByIconCode(int.parse(selector)));
+        return find.byWidgetPredicate(filterByIconCode(int.parse(selector)),
+            skipOffstage: false);
       // return find.byIcon(const IconData(0xe0c4));
       // case ElementLookupStrategy.BY_ELEMENT_PREDICATE:
       //   return find.byElementPredicate(Key(selector));
