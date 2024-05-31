@@ -52,7 +52,8 @@ class FindElementstHandler extends RequestHandler {
     List<ElementModel> result = [];
     for (Finder by in matchedByList) {
       FlutterElement flutterElement = await session!.elementsCache.add(by);
-      result.add(ElementModel.fromElement(flutterElement.id));
+      result.add(ElementModel.fromElement(
+          flutterElement.id, flutterElement.by.evaluate().first.hashCode));
     }
 
     return AppiumResponse(getSessionId(request), result);

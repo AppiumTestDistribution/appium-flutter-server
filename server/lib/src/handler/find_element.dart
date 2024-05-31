@@ -26,6 +26,8 @@ class FindElementHandler extends RequestHandler {
         .add(matchedBy);
 
     return AppiumResponse(
-        getSessionId(request), ElementModel.fromElement(flutterElement.id));
+        getSessionId(request),
+        ElementModel.fromElement(
+            flutterElement.id, flutterElement.by.evaluate().first.hashCode));
   }
 }

@@ -10,11 +10,17 @@ class ElementModel {
   @JsonKey(name: "element-6066-11e4-a52e-4f735466cecf")
   String? w3cElementId;
 
-  ElementModel({required this.jwpElementId, required this.w3cElementId});
+  int? elementHashCode;
 
-  ElementModel.fromElement(String elementId) {
+  ElementModel(
+      {required this.jwpElementId,
+      required this.w3cElementId,
+      this.elementHashCode});
+
+  ElementModel.fromElement(String elementId, int _hashCode) {
     jwpElementId = elementId;
     w3cElementId = elementId;
+    elementHashCode = _hashCode;
   }
 
   String get id {

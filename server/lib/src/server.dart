@@ -6,8 +6,12 @@ import 'package:appium_flutter_server/src/handler/find_elements.dart';
 import 'package:appium_flutter_server/src/handler/gesture/double_click.dart'
     as gesture_double_click;
 import 'package:appium_flutter_server/src/handler/get_attribute.dart';
+import 'package:appium_flutter_server/src/handler/get_name.dart';
+import 'package:appium_flutter_server/src/handler/get_rect.dart';
+import 'package:appium_flutter_server/src/handler/get_size.dart';
 import 'package:appium_flutter_server/src/handler/get_text.dart';
 import 'package:appium_flutter_server/src/handler/new_session.dart';
+import 'package:appium_flutter_server/src/handler/pageback.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
 import 'package:appium_flutter_server/src/handler/sample/screenshot.dart';
 import 'package:appium_flutter_server/src/handler/sample/tap_handler.dart';
@@ -46,6 +50,9 @@ class FlutterServer {
     _registerGet(GetTextHandler("/session/<sessionId>/element/<id>/text"));
     _registerGet(GetAttributeHandler(
         "/session/<sessionId>/element/<id>/attribute/<name>"));
+    _registerGet(GetRectHandler("/session/<sessionId>/element/<id>/rect"));
+    _registerGet(GetSizeHandler("/session/<sessionId>/element/<id>/size"));
+    _registerGet(GetNameHandler("/session/<sessionId>/element/<id>/name"));
 
     //POST ROUTES
     _registerPost(SetTextHandler("/session/<sessionId>/element/<id>/value"));
@@ -56,7 +63,9 @@ class FlutterServer {
     _registerPost(ClickHandler("/session/<sessionId>/element/<id>/click"));
     _registerPost(
         DoubleClickHandler("/session/<sessionId>/element/<id>/double_click"));
+    _registerPost(PressBackHandler("/session/<sessionId>/back"));
 
+    /* Gesture handler */
     _registerPost(gesture_double_click.DoubleClickHandler(
         "/session/<sessionId>/appium/gestures/double_click"));
 

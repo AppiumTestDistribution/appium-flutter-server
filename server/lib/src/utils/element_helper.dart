@@ -185,6 +185,24 @@ class ElementHelper {
     return Rect.fromPoints(tester.getTopLeft(by), tester.getBottomRight(by));
   }
 
+  static Size getElementSize(Finder by) {
+    var tester = _getTester();
+    return tester.getSize(by);
+  }
+
+  static String getElementName(Finder by) {
+    var tester = _getTester();
+    Element element = tester.element(by);
+    if (element is RenderObjectElement &&
+        element.renderObject.debugSemantics?.label != null) {
+      final String? semanticsLabel = element.renderObject.debugSemantics?.label;
+      if (semanticsLabel != null) {
+        return semanticsLabel.toString();
+      }
+    }
+    return element.widget.runtimeType.toString();
+  }
+
   static DiagnosticsNode? _getElementPropertyNode(Finder by, String propertry) {
     try {
       return FlutterDriver.instance.tester
