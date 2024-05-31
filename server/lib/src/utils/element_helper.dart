@@ -34,7 +34,7 @@ class ElementHelper {
 
       finder = find.descendant(of: parent.by, matching: by);
     }
-    await waitFor(finder);
+    await waitForElementExists(finder);
     final Iterable<Element> elements = finder.evaluate();
     if (elements.isEmpty) {
       throw ElementNotFoundException("Unable to locate element");
@@ -51,6 +51,13 @@ class ElementHelper {
     WidgetTester tester = _getTester();
     await tester.tap(element.by);
     await tester.pumpAndSettle();
+  }
+
+  static Future<void> setText(FlutterElement element, String text) async {
+    WidgetTester tester = _getTester();
+    tester.testTextInput.register();
+    await tester.enterText(element.by, text);
+    await tester.pump(const Duration(milliseconds: 400));
   }
 
   static Future<void> gestureDoubleClick(
@@ -132,20 +139,25 @@ class ElementHelper {
       return buffer.toString();
     }
 
-    return getElementTextRecursively(element.by.evaluate().first);
+    return getElementTextRecursively(element.by
+        .evaluate()
+        .first);
   }
 
-  static Future<String?> getAttribute(
-      FlutterElement element, String attribute) async {
+  static Future<String?> getAttribute(FlutterElement element,
+      String attribute) async {
     if (NATIVE_ELEMENT_ATTRIBUTES.displayed.name == attribute) {
-      return element.by.evaluate().isNotEmpty.toString();
+      return element.by
+          .evaluate()
+          .isNotEmpty
+          .toString();
     } else if (NATIVE_ELEMENT_ATTRIBUTES.enabled.name == attribute) {
       DiagnosticsNode? enabledProperty =
-          _getElementPropertyNode(element.by, attribute);
+      _getElementPropertyNode(element.by, attribute);
       if (enabledProperty == null) {
         //For Button type elements, onPressed will be null if the element is disabled
         DiagnosticsNode? onPressed =
-            _getElementPropertyNode(element.by, "onPressed");
+        _getElementPropertyNode(element.by, "onPressed");
         return (onPressed == null || onPressed.value == null)
             ? "false"
             : "true";
@@ -154,7 +166,7 @@ class ElementHelper {
       }
     } else {
       DiagnosticsNode? property =
-          _getElementPropertyNode(element.by, attribute);
+      _getElementPropertyNode(element.by, attribute);
       return property?.value.toString();
     }
   }
@@ -198,10 +210,28 @@ class ElementHelper {
     }
   }
 
-  static Future<void> waitFor(
-    Finder finder, {
+  static Future<void> waitForVisibility(Finder finder, {
     Duration timeout = const Duration(seconds: 5),
   }) async {
+    return TestAsyncUtils.guard(() async {
+      WidgetTester tester = _getTester();
+      final end = tester.binding.clock.now().add(timeout);
+      final hitTestableFinder = finder.hitTestable();
+      while (hitTestableFinder
+          .evaluate()
+          .isEmpty) {
+        final now = tester.binding.clock.now();
+        if (now.isAfter(end)) {
+          break;
+        }
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+    });
+  }
+  static Future<void> waitForElementExists(
+      Finder finder, {
+        Duration timeout = const Duration(seconds: 5),
+      }) async {
     WidgetTester tester = _getTester();
     final end = tester.binding.clock.now().add(timeout);
 

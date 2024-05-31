@@ -11,10 +11,13 @@ import 'package:appium_flutter_server/src/handler/new_session.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
 import 'package:appium_flutter_server/src/handler/sample/screenshot.dart';
 import 'package:appium_flutter_server/src/handler/sample/tap_handler.dart';
+import 'package:appium_flutter_server/src/handler/set_text.dart';
 import 'package:appium_flutter_server/src/handler/status.dart';
 import 'package:appium_flutter_server/src/logger.dart';
 import 'package:appium_flutter_server/src/utils.dart';
 import 'package:shelf_plus/shelf_plus.dart' as shelf_plus;
+
+import 'package:appium_flutter_server/src/handler/clear.dart';
 
 enum HttpMethod { GET, POST, DELETE, PUT, PATCH }
 
@@ -45,6 +48,8 @@ class FlutterServer {
         "/session/<sessionId>/element/<id>/attribute/<name>"));
 
     //POST ROUTES
+    _registerPost(SetTextHandler("/session/<sessionId>/element/<id>/value"));
+    _registerPost(ClearHandler("/session/<sessionId>/element/<id>/clear"));
     _registerPost(NewSessionHandler("/session"));
     _registerPost(FindElementHandler("/session/<sessionId>/element"));
     _registerPost(FindElementstHandler("/session/<sessionId>/elements"));
