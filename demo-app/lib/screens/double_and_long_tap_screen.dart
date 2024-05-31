@@ -26,6 +26,7 @@ class _DoubleTapScreenState extends State<DoubleTapScreen> {
             padding: const EdgeInsets.all(18.0),
             child: Semantics(
               label: "double_tap_button",
+              key: const ValueKey("double_tap_button"),
               explicitChildNodes: true,
               container: true,
               child: InkWell(

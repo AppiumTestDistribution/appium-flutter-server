@@ -1,16 +1,16 @@
 name: appium_testing_app
 description: A new Flutter project.
 
-publish_to: 'none'
+publish_to: "none"
 
 scripts:
-  android: "cd android && ./gradlew app:assembleDebug -Ptarget=`pwd`/../integration_test/appium.dart && adb uninstall com.example.appium_testing_app && adb install -r `pwd`/../build/app/outputs/apk/debug/app-debug.apk"
+  android: "cd android && ./gradlew app:assembleDebug -Ptarget=`pwd`/../integration_test/appium.dart && (adb uninstall com.example.appium_testing_app | exit 0) && adb install -r `pwd`/../build/app/outputs/apk/debug/app-debug.apk"
   simulator: "flutter build ios integration_test/appium.dart  --simulator && xcrun simctl install booted ./build/ios/iphonesimulator/Runner.app && xcrun simctl spawn booted log stream | grep flutter"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.1 <4.0.0'
+  sdk: ">=3.1.1 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -23,7 +23,6 @@ dependencies:
   carousel_slider: ^4.2.1
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -47,7 +46,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

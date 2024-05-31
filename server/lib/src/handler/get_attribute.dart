@@ -31,7 +31,7 @@ class GetAttributeHandler extends RequestHandler {
         log("${node.name} -> ${node.value}");
       }
 
-      String? result = await ElementHelper.getAttribute(element, attribute);
+      dynamic result = await ElementHelper.getAttribute(element, attribute);
 
       return AppiumResponse(getSessionId(request), result);
     } catch (e) {

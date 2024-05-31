@@ -2,6 +2,7 @@ import 'package:appium_testing_app/components/custom_app_bar.dart';
 import 'package:appium_testing_app/models/feature_model.dart';
 import 'package:appium_testing_app/screens/native_screen.dart';
 import 'package:appium_testing_app/screens/slider_screen.dart';
+import 'package:appium_testing_app/screens/ui_elements_screen.dart';
 import 'package:appium_testing_app/screens/vertical_swiping_screen.dart';
 import 'package:appium_testing_app/screens/web_view_screen.dart';
 import 'package:appium_testing_app/screens/wheel_picker_screen.dart';
@@ -46,6 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
     featureModels.add(FeatureModel(
         title: "Wheel Picker", subtitle: "Demos wheel picker color"));
     featureModels.add(FeatureModel(title: "Form", subtitle: "Demos for forms"));
+    featureModels.add(FeatureModel(
+        title: "UI Elements",
+        subtitle: "Demos different ui elements with different states"));
   }
 
   @override
@@ -112,6 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 9:
         page = FormsScreen(
+          title: featureModels[index].title,
+        );
+        break;
+      case 10:
+        page = UiElementsScreen(
           title: featureModels[index].title,
         );
         break;
