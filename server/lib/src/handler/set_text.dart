@@ -22,7 +22,6 @@ class SetTextHandler extends RequestHandler {
         .get(getElementId(request));
     log('@@@@@@@@');
     log(setTextModal.text);
-    String setText = setTextModal.text != null ? setTextModal.text : '';
     await ElementHelper.setText(element, setTextModal.text);
 
     return AppiumResponse(getSessionId(request), null);
