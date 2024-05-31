@@ -13,6 +13,8 @@ class DoubleTapScreen extends StatefulWidget {
 }
 
 class _DoubleTapScreenState extends State<DoubleTapScreen> {
+  Offset? tapCoordinates;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,9 +31,12 @@ class _DoubleTapScreenState extends State<DoubleTapScreen> {
               key: const ValueKey("double_tap_button"),
               explicitChildNodes: true,
               container: true,
-              child: InkWell(
+              child: GestureDetector(
                 onDoubleTap: () async {
                   await _showDoubleTapPopup();
+                },
+                onDoubleTapDown: (TapDownDetails? details) => {
+                  if (details != null) {tapCoordinates = details.globalPosition}
                 },
                 child: Container(
                   height: 50,
@@ -54,12 +59,29 @@ class _DoubleTapScreenState extends State<DoubleTapScreen> {
   }
 
   Future _showDoubleTapPopup() async {
+    String tapDetails = tapCoordinates != null
+        ? 'X: ${tapCoordinates!.dx.toStringAsFixed(0)}, Y: ${tapCoordinates!.dy.toStringAsFixed(0)}'
+        : "";
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Double Tap"),
-          content: const Text("Double Tap Successful"),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Semantics(
+                label: "double_tap_message",
+                child: const Text("Double Tap Successful"),
+              ),
+              Semantics(
+                label: "double_tap_details",
+                child: Text(tapDetails),
+              )
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () {
