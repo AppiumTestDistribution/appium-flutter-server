@@ -2,10 +2,10 @@ import 'package:appium_flutter_server/src/exceptions/stale_element_reference_exc
 import 'package:appium_flutter_server/src/internal/flutter_element.dart';
 import 'package:appium_flutter_server/src/internal/flutter_finder_strategy.dart';
 import 'package:appium_flutter_server/src/logger.dart';
+import 'package:appium_flutter_server/src/utils/element_helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:synchronized/extension.dart';
-import 'package:uuid/uuid.dart';
 
 class ElementsCache {
   Map<String, FlutterElement> cache = {};
@@ -38,8 +38,8 @@ class ElementsCache {
   Future<FlutterElement> add(Finder by,
       {bool isSingle = true, String? contextId}) {
     return synchronized(() {
-      FlutterElement flutterElement =
-          FlutterElement.childElement(by, const Uuid().v4(), contextId);
+      FlutterElement flutterElement = FlutterElement.childElement(
+          by, ElementHelper.generateUuid(by), contextId);
       cache[flutterElement.id] = flutterElement;
       return flutterElement;
     });

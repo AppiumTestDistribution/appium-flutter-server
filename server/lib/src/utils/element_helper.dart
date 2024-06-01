@@ -73,8 +73,9 @@ class ElementHelper {
 
     FlutterElement? element;
     if (elementId == null && doubleClickModel.locator != null) {
+      Finder by = await locateElement(doubleClickModel.locator!);
       element = FlutterElement(
-          await locateElement(doubleClickModel.locator!), const Uuid().v4());
+          await locateElement(doubleClickModel.locator!), generateUuid(by));
     } else if (elementId != null) {
       Session session = FlutterDriver.instance.getSessionOrThrow()!;
       element = await session.elementsCache.get(elementId);
@@ -360,5 +361,27 @@ class ElementHelper {
       await tester.pumpAndSettle();
       await Future.delayed(const Duration(milliseconds: 100));
     } while (!(await predicate()));
+  }
+
+  static String generateUuid(Finder by) {
+    try {
+      int hashCode = by.evaluate().first.widget.hashCode;
+      String hexString = hashCode.toRadixString(16);
+
+      while (hexString.length < 32) {
+        hexString += hashCode.toRadixString(16);
+      }
+      hexString = hexString.substring(0, 32);
+
+      String uuid = '${hexString.substring(0, 8)}-'
+          '${hexString.substring(8, 12)}-'
+          '${hexString.substring(12, 16)}-'
+          '${hexString.substring(16, 20)}-'
+          '${hexString.substring(20, 32)}';
+
+      return uuid;
+    } catch (e) {
+      return const Uuid().v4();
+    }
   }
 }
