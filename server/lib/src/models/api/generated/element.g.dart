@@ -9,12 +9,10 @@ part of '../element.dart';
 ElementModel _$ElementModelFromJson(Map<String, dynamic> json) => ElementModel(
       jwpElementId: json['ELEMENT'] as String?,
       w3cElementId: json['element-6066-11e4-a52e-4f735466cecf'] as String?,
-      elementHashCode: (json['elementHashCode'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ElementModelToJson(ElementModel instance) =>
     <String, dynamic>{
       'ELEMENT': instance.jwpElementId,
       'element-6066-11e4-a52e-4f735466cecf': instance.w3cElementId,
-      'elementHashCode': instance.elementHashCode,
     };

@@ -5,6 +5,7 @@ import 'package:appium_flutter_server/src/handler/find_element.dart';
 import 'package:appium_flutter_server/src/handler/find_elements.dart';
 import 'package:appium_flutter_server/src/handler/gesture/double_click.dart'
     as gesture_double_click;
+import 'package:appium_flutter_server/src/handler/gesture/scroll_till_visible.dart';
 import 'package:appium_flutter_server/src/handler/get_attribute.dart';
 import 'package:appium_flutter_server/src/handler/get_name.dart';
 import 'package:appium_flutter_server/src/handler/get_rect.dart';
@@ -70,6 +71,8 @@ class FlutterServer {
     /* Gesture handler */
     _registerPost(gesture_double_click.DoubleClickHandler(
         "/session/<sessionId>/appium/gestures/double_click"));
+    _registerPost(ScrollTillVisibleHandler(
+        "/session/<sessionId>/appium/gestures/scroll_till_visible"));
 
     /* Wait handlers */
     _registerPost(

@@ -1,5 +1,6 @@
 import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/exceptions/element_not_found_exception.dart';
+import 'package:appium_flutter_server/src/exceptions/flutter_automation_error.dart';
 import 'package:appium_flutter_server/src/internal/element_lookup_strategy.dart';
 import 'package:appium_flutter_server/src/internal/flutter_element.dart';
 import 'package:appium_flutter_server/src/logger.dart';
@@ -17,17 +18,24 @@ enum NATIVE_ELEMENT_ATTRIBUTES { enabled, displayed, clickable }
 
 typedef WaitPredicate = Future<bool> Function();
 
+/// Default amount to drag by when scrolling.
+const defaultScrollDelta = 64.0;
+
+/// Default maximum number of drags during scrolling.
+const defaultScrollMaxIteration = 15;
+
 const Duration defaultWaitTimeout = Duration(seconds: 5);
 
 class ElementHelper {
   static Future<Finder> findElement(Finder by, {String? contextId}) async {
-    List<Finder> elementList = await findElements(by, contextId: contextId);
+    List<Finder> elementList =
+        await findElements(by, contextId: contextId, evaluatePresence: true);
     log("Element found ${elementList.first}");
     return elementList.first;
   }
 
   static Future<List<Finder>> findElements(Finder by,
-      {String? contextId}) async {
+      {String? contextId, bool evaluatePresence = false}) async {
     Session? session = FlutterDriver.instance.getSessionOrThrow();
     WidgetTester tester = FlutterDriver.instance.tester;
     Finder finder = by;
@@ -40,10 +48,14 @@ class ElementHelper {
 
       finder = find.descendant(of: parent.by, matching: by);
     }
-    await waitForVisibility(finder);
     final Iterable<Element> elements = finder.evaluate();
-    if (elements.isEmpty) {
-      throw ElementNotFoundException("Unable to locate element");
+    if (evaluatePresence) {
+      await waitForElementExist(FlutterElement.fromBy(by: finder),
+          timeout: defaultWaitTimeout);
+
+      if (elements.isEmpty) {
+        throw ElementNotFoundException("Unable to locate element");
+      }
     }
 
     List<Finder> elementList = [];
@@ -277,25 +289,7 @@ class ElementHelper {
     return true;
   }
 
-  static Future<void> waitForVisibility(
-    Finder finder, {
-    Duration timeout = defaultWaitTimeout,
-  }) async {
-    return TestAsyncUtils.guard(() async {
-      WidgetTester tester = _getTester();
-      final end = tester.binding.clock.now().add(timeout);
-      final hitTestableFinder = finder.hitTestable();
-      while (hitTestableFinder.evaluate().isEmpty) {
-        final now = tester.binding.clock.now();
-        if (now.isAfter(end)) {
-          break;
-        }
-        await tester.pump(const Duration(milliseconds: 100));
-      }
-    });
-  }
-
-  static Future<void> waitForElementVisible(FlutterElement element,
+  static Future<void> waitForElementExist(FlutterElement element,
       {required Duration timeout}) async {
     await waitFor(() async {
       try {
@@ -306,7 +300,21 @@ class ElementHelper {
     },
         timeout: timeout,
         errorMessage:
-            "Element with locator ${element.by.describeMatch(Plurality.one)} not visible");
+            "Element with locator ${element.by.describeMatch(Plurality.one)} is not present in DOM");
+  }
+
+  static Future<void> waitForElementVisible(FlutterElement element,
+      {required Duration timeout}) async {
+    await waitFor(() async {
+      try {
+        return element.by.hitTestable().evaluate().isNotEmpty;
+      } catch (e) {
+        return false;
+      }
+    },
+        timeout: timeout,
+        errorMessage:
+            "Element with locator ${element.by.describeMatch(Plurality.one)} is not visible");
   }
 
   static Future<void> waitForElementAbsent(FlutterElement element,
@@ -361,6 +369,75 @@ class ElementHelper {
       await tester.pumpAndSettle();
       await Future.delayed(const Duration(milliseconds: 100));
     } while (!(await predicate()));
+  }
+
+  static Future<Finder> scrollUntilVisible({
+    required FindElementModel finder,
+    FindElementModel? scrollView,
+    double? delta,
+    AxisDirection? scrollDirection,
+    int? maxScrolls,
+    Duration? settleBetweenScrollsTimeout,
+    Duration? dragDuration,
+  }) async {
+    delta ??= defaultScrollDelta;
+    maxScrolls ??= defaultScrollMaxIteration;
+    WidgetTester tester = _getTester();
+    Finder scrollViewElement = scrollView != null
+        ? await locateElement(scrollView)
+        : find.byType(Scrollable);
+    Finder elementToFind = await locateElement(finder, evaluatePresence: false);
+
+    await waitForElementExist(FlutterElement.fromBy(by: scrollViewElement),
+        timeout: defaultWaitTimeout);
+    AxisDirection direction;
+    if (scrollDirection == null) {
+      if (scrollViewElement.evaluate().first.widget is Scrollable) {
+        direction =
+            tester.firstWidget<Scrollable>(scrollViewElement).axisDirection;
+      } else {
+        direction = AxisDirection.down;
+      }
+    } else {
+      direction = scrollDirection;
+    }
+
+    return TestAsyncUtils.guard<Finder>(() async {
+      Offset moveStep;
+      switch (direction) {
+        case AxisDirection.up:
+          moveStep = Offset(0, delta!);
+        case AxisDirection.down:
+          moveStep = Offset(0, -delta!);
+        case AxisDirection.left:
+          moveStep = Offset(delta!, 0);
+        case AxisDirection.right:
+          moveStep = Offset(-delta!, 0);
+      }
+
+      scrollViewElement = scrollViewElement.hitTestable().first;
+      dragDuration ??= const Duration(milliseconds: 100);
+      settleBetweenScrollsTimeout ??= const Duration(seconds: 5);
+
+      var iterationsLeft = maxScrolls!;
+      while (iterationsLeft > 0 &&
+          elementToFind.hitTestable().evaluate().isEmpty) {
+        await tester.timedDrag(
+          scrollViewElement,
+          moveStep,
+          dragDuration!,
+        );
+        await tester.pumpAndSettle(const Duration(milliseconds: 100),
+            EnginePhase.sendSemanticsUpdate, settleBetweenScrollsTimeout!);
+        iterationsLeft -= 1;
+      }
+
+      if (iterationsLeft <= 0) {
+        throw FlutterAutomationException("Wait timeout");
+      }
+
+      return elementToFind;
+    });
   }
 
   static String generateUuid(Finder by) {

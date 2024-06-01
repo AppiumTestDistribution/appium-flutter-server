@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:uuid/uuid.dart';
 
 class FlutterElement {
   final Finder _by;
@@ -6,6 +7,8 @@ class FlutterElement {
   String? _contextId;
 
   FlutterElement(this._by, this._id);
+
+  FlutterElement.fromBy({required Finder by}) : this(by, Uuid().v4());
 
   FlutterElement.childElement(
     this._by,

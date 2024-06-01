@@ -1,5 +1,6 @@
 import 'package:appium_testing_app/components/custom_app_bar.dart';
 import 'package:appium_testing_app/models/feature_model.dart';
+import 'package:appium_testing_app/screens/lazy_loading.dart';
 import 'package:appium_testing_app/screens/native_screen.dart';
 import 'package:appium_testing_app/screens/slider_screen.dart';
 import 'package:appium_testing_app/screens/ui_elements_screen.dart';
@@ -50,6 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
     featureModels.add(FeatureModel(
         title: "UI Elements",
         subtitle: "Demos different ui elements with different states"));
+    featureModels.add(FeatureModel(
+        title: "Lazy Loading", subtitle: "Demos dynamic fields appearence"));
   }
 
   @override
@@ -121,6 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 10:
         page = UiElementsScreen(
+          title: featureModels[index].title,
+        );
+        break;
+      case 11:
+        page = LazyLoadingScreen(
           title: featureModels[index].title,
         );
         break;

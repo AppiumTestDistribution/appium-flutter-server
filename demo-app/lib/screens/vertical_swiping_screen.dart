@@ -17,7 +17,15 @@ class VerticalSwipingScreen extends StatelessWidget {
     ".net",
     "MySql",
     "Appium",
-    "Jasmine"
+    "Jasmine",
+    "Selenium",
+    "Playwright",
+    "Cyress",
+    "Device farm",
+    "Robtium",
+    "Selenoid",
+    "Wedriver IO",
+    "Protractor"
   ];
 
   @override
@@ -33,7 +41,7 @@ class VerticalSwipingScreen extends StatelessWidget {
                   _languages.length,
                   (index) => Padding(
                         padding: const EdgeInsets.only(
-                            bottom: 10, left: 20, right: 20),
+                            bottom: 50, left: 20, right: 20),
                         child: Container(
                           height: 80,
                           decoration:
