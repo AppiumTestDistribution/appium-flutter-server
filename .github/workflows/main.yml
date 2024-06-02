@@ -21,6 +21,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2.0.10
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.22.1
