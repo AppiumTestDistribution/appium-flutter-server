@@ -80,41 +80,44 @@ class ElementHelper {
 
   static Future<void> gestureDoubleClick(
       DoubleClickModel doubleClickModel) async {
-    final String? elementId = doubleClickModel.origin?.id;
-    WidgetTester tester = _getTester();
+    await TestAsyncUtils.guard(() async {
+      final String? elementId = doubleClickModel.origin?.id;
+      WidgetTester tester = _getTester();
 
-    FlutterElement? element;
-    if (elementId == null && doubleClickModel.locator != null) {
-      Finder by = await locateElement(doubleClickModel.locator!);
-      element = FlutterElement(
-          await locateElement(doubleClickModel.locator!), generateUuid(by));
-    } else if (elementId != null) {
-      Session session = FlutterDriver.instance.getSessionOrThrow()!;
-      element = await session.elementsCache.get(elementId);
-    }
-
-    if (element == null) {
-      if (doubleClickModel.offset == null) {
-        throw ArgumentError("Double click offset coordinates must be provided "
-            "if element is not set");
+      FlutterElement? element;
+      if (elementId == null && doubleClickModel.locator != null) {
+        Finder by = await locateElement(doubleClickModel.locator!);
+        element = FlutterElement(
+            await locateElement(doubleClickModel.locator!), generateUuid(by));
+      } else if (elementId != null) {
+        Session session = FlutterDriver.instance.getSessionOrThrow()!;
+        element = await session.elementsCache.get(elementId);
       }
 
-      await tester.tapAt(
-          Offset(doubleClickModel.offset!.x, doubleClickModel.offset!.y));
-    } else {
-      if (doubleClickModel.offset == null) {
-        await doubleClick(element);
+      if (element == null) {
+        if (doubleClickModel.offset == null) {
+          throw ArgumentError(
+              "Double click offset coordinates must be provided "
+              "if element is not set");
+        }
+
+        await tester.tapAt(
+            Offset(doubleClickModel.offset!.x, doubleClickModel.offset!.y));
       } else {
-        Rect bounds = getElementBounds(element.by);
-        log("Click by offset $bounds");
-        await tester.tapAt(Offset(bounds.left + doubleClickModel.offset!.x,
-            bounds.top + doubleClickModel.offset!.y));
-        await tester.pump(kDoubleTapMinTime);
-        await tester.tapAt(Offset(bounds.left + doubleClickModel.offset!.x,
-            bounds.top + doubleClickModel.offset!.y));
-        await tester.pumpAndSettle();
+        if (doubleClickModel.offset == null) {
+          await doubleClick(element);
+        } else {
+          Rect bounds = getElementBounds(element!.by);
+          log("Click by offset $bounds");
+          await tester.tapAt(Offset(bounds.left + doubleClickModel.offset!.x,
+              bounds.top + doubleClickModel.offset!.y));
+          await tester.pump(kDoubleTapMinTime);
+          await tester.tapAt(Offset(bounds.left + doubleClickModel.offset!.x,
+              bounds.top + doubleClickModel.offset!.y));
+          await tester.pumpAndSettle();
+        }
       }
-    }
+    });
   }
 
   static Future<void> doubleClick(FlutterElement element) async {

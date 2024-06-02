@@ -15,7 +15,7 @@ class DoubleClickHandler extends RequestHandler {
     DoubleClickModel doubleClick =
         DoubleClickModel.fromJson(await request.body.asJson);
 
-    ElementHelper.gestureDoubleClick(doubleClick);
+    await ElementHelper.gestureDoubleClick(doubleClick);
     return AppiumResponse(sessionId, null);
   }
 }
