@@ -28,6 +28,7 @@ jobs:
       - run: |
           cd demo-app
           dart pub global activate rps --version 0.8.0
+          flutter build apk --debug
           rps run android
       # - name: Enable KVM group perms
       #   run: |
