@@ -9,17 +9,25 @@ import 'package:integration_test/integration_test.dart';
 
 const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
 
-void initializeTest({required Widget app}) async {
+void initializeTest({Widget? app, Function? callback}) async {
   IntegrationTestWidgetsFlutterBinding binding =
-      AppiumTestWidgetsFlutterBinding.ensureInitialized();
+  AppiumTestWidgetsFlutterBinding.ensureInitialized();
+  if (app == null && callback == null) {
+    throw Exception("App and callback cannot be null");
+  }
 
   testWidgets('appium flutter server', (tester) async {
     /* Initialize network tools */
     // final appDocDirectory = await getApplicationDocumentsDirectory();
     // await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
+    if (callback != null) {
+      await callback(tester);
+    } else {
+      await tester.pumpWidget(app!);
+    }
     FlutterDriver.instance
-        .initialize(tester: tester, app: app, binding: binding);
-    await tester.pumpWidget(app);
+        .initialize(tester: tester, binding: binding);
+    //await tester.pumpWidget(app);
     // await tester.tap(find.text("Form widgets"));
     // await tester.pumpAndSettle();
     // await tester.tap(find.byKey(Key("brushed_check_box")));

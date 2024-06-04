@@ -7,7 +7,6 @@ import 'package:uuid/uuid.dart';
 
 class FlutterDriver {
   late WidgetTester _tester;
-  late Widget _app;
   late IntegrationTestWidgetsFlutterBinding _binding;
   Session? _session;
 
@@ -16,16 +15,13 @@ class FlutterDriver {
   static final FlutterDriver _instance = FlutterDriver._();
   static FlutterDriver get instance => _instance;
 
-  Widget get app => _app;
   WidgetTester get tester => _tester;
   IntegrationTestWidgetsFlutterBinding get binding => _binding;
 
   void initialize(
       {required WidgetTester tester,
-      required Widget app,
       required IntegrationTestWidgetsFlutterBinding binding}) async {
     _tester = tester;
-    _app = app;
     _binding = binding;
   }
 

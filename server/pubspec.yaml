@@ -1,6 +1,6 @@
 name: appium_flutter_server
 description: "Appium Flutter server using Integration Test package for testing Flutter apps with Appium"
-version: 0.0.2
+version: 0.0.3
 homepage: "https://github.com/AppiumTestDistribution/appium-flutter-server"
 
 environment:
