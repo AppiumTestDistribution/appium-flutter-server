@@ -48,7 +48,7 @@ class FlutterServer {
   void _registerRoutes() {
     //GET ROUTES
     _registerGet(StatusHandler("/status"));
-    _registerGet(ScreenshotHandler("/screenshot"));
+    _registerGet(ScreenshotHandler("/session/<sessionId>/screenshot"));
     _registerGet(TapHandler("/tap"));
     _registerGet(GetTextHandler("/session/<sessionId>/element/<id>/text"));
     _registerGet(GetAttributeHandler(
