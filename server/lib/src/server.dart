@@ -21,7 +21,6 @@ import 'package:appium_flutter_server/src/handler/status.dart';
 import 'package:appium_flutter_server/src/handler/wait/wait_for_absent.dart';
 import 'package:appium_flutter_server/src/handler/wait/wait_for_visible.dart';
 import 'package:appium_flutter_server/src/logger.dart';
-import 'package:appium_flutter_server/src/utils.dart';
 import 'package:shelf_plus/shelf_plus.dart' as shelf_plus;
 
 import 'package:appium_flutter_server/src/handler/clear.dart';
@@ -97,11 +96,22 @@ class FlutterServer {
   }
 
   void startServer({int? port}) async {
-    port ??= await getFreePort();
-    await shelf_plus.shelfRun(() => _app.call,
-        defaultBindAddress: "0.0.0.0",
-        defaultBindPort: port,
-        defaultEnableHotReload: false);
-    log("[Appium flutter server is listening on port $port]");
+    bool serverStarted = false;
+    int tries = 0;
+    int port = 8888;
+    do {
+      try {
+        await shelf_plus.shelfRun(() => _app.call,
+            defaultBindAddress: "0.0.0.0",
+            defaultBindPort: port,
+            defaultEnableHotReload: false);
+        log("Appium flutter server is listening on port $port");
+        serverStarted = true;
+      } catch (e) {
+        log("Unable to start server on port $port. Retrying $tries..");
+        tries++;
+        port++;
+      }
+    } while (!serverStarted && tries <= 50);
   }
 }

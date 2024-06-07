@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/exceptions/element_not_found_exception.dart';
 import 'package:appium_flutter_server/src/exceptions/flutter_automation_error.dart';
@@ -199,7 +201,7 @@ class ElementHelper {
         .firstWhere((val) => val.name == method)
         .toFinder(selector);
     if (evaluatePresence) {
-      return findElement(by, contextId: contextId);
+      return await findElement(by, contextId: contextId);
     } else {
       return by;
     }
@@ -368,7 +370,9 @@ class ElementHelper {
             ? '$errorMessage with ${timeout.inSeconds} seconds'
             : 'Timed out waiting for condition');
       }
-
+      if (Platform.isAndroid) {
+        await tester.pumpAndSettle();
+      }
       await Future.delayed(const Duration(milliseconds: 100));
     } while (!(await predicate()));
   }

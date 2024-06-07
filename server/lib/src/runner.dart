@@ -11,7 +11,7 @@ const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
 
 void initializeTest({Widget? app, Function? callback}) async {
   IntegrationTestWidgetsFlutterBinding binding =
-  AppiumTestWidgetsFlutterBinding.ensureInitialized();
+      AppiumTestWidgetsFlutterBinding.ensureInitialized();
   if (app == null && callback == null) {
     throw Exception("App and callback cannot be null");
   }
@@ -25,8 +25,7 @@ void initializeTest({Widget? app, Function? callback}) async {
     } else {
       await tester.pumpWidget(app!);
     }
-    FlutterDriver.instance
-        .initialize(tester: tester, binding: binding);
+    FlutterDriver.instance.initialize(tester: tester, binding: binding);
     //await tester.pumpWidget(app);
     // await tester.tap(find.text("Form widgets"));
     // await tester.pumpAndSettle();
