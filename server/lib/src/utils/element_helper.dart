@@ -369,7 +369,6 @@ class ElementHelper {
             : 'Timed out waiting for condition');
       }
 
-      await tester.pumpAndSettle();
       await Future.delayed(const Duration(milliseconds: 100));
     } while (!(await predicate()));
   }
