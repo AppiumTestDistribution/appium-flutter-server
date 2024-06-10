@@ -20,10 +20,11 @@ packages:
   appium_flutter_server:
     dependency: "direct dev"
     description:
-      path: "/Users/saikrishna/Downloads/git/appium-flutter-server/server"
-      relative: false
-    source: path
-    version: "0.0.4"
+      name: appium_flutter_server
+      sha256: "17849c8e05fc9e3497348f66fd4dd7085ce7d850ad51c0f4d7e6d5d5b4046a1c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   args:
     dependency: transitive
     description:
