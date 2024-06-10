@@ -3,18 +3,17 @@ import 'package:appium_flutter_server/src/models/api/find_element.dart';
 import 'package:appium_flutter_server/src/models/api/point.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'generated/double_click.g.dart';
-
+part 'generated/gesture.g.dart';
 @JsonSerializable()
-class DoubleClickModel {
+class GestureModel {
   ElementModel? origin;
   FindElementModel? locator;
   PointModel? offset;
 
-  DoubleClickModel({required this.origin, required this.locator, this.offset});
+  GestureModel({required this.origin, required this.locator, this.offset});
 
-  factory DoubleClickModel.fromJson(Map<String, dynamic> json) =>
-      _$DoubleClickModelFromJson(json);
+  factory GestureModel.fromJson(Map<String, dynamic> json) =>
+      _$GestureModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DoubleClickModelToJson(this);
+  Map<String, dynamic> toJson() => _$GestureModelToJson(this);
 }

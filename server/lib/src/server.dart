@@ -25,6 +25,8 @@ import 'package:shelf_plus/shelf_plus.dart' as shelf_plus;
 
 import 'package:appium_flutter_server/src/handler/clear.dart';
 
+import 'handler/long_press.dart';
+
 enum HttpMethod { GET, POST, DELETE, PUT, PATCH }
 
 class FlutterServer {
@@ -68,6 +70,7 @@ class FlutterServer {
     _registerPost(PressBackHandler("/session/<sessionId>/back"));
 
     /* Gesture handler */
+    _registerPost(LongPressHandler("/session/<sessionId>/appium/gestures/long_press"));
     _registerPost(gesture_double_click.DoubleClickHandler(
         "/session/<sessionId>/appium/gestures/double_click"));
     _registerPost(ScrollTillVisibleHandler(

@@ -6,7 +6,7 @@ import 'package:appium_flutter_server/src/exceptions/flutter_automation_error.da
 import 'package:appium_flutter_server/src/internal/element_lookup_strategy.dart';
 import 'package:appium_flutter_server/src/internal/flutter_element.dart';
 import 'package:appium_flutter_server/src/logger.dart';
-import 'package:appium_flutter_server/src/models/api/double_click.dart';
+import 'package:appium_flutter_server/src/models/api/gesture.dart';
 import 'package:appium_flutter_server/src/models/api/find_element.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
 import 'package:flutter/gestures.dart';
@@ -81,7 +81,7 @@ class ElementHelper {
   }
 
   static Future<void> gestureDoubleClick(
-      DoubleClickModel doubleClickModel) async {
+      GestureModel doubleClickModel) async {
     await TestAsyncUtils.guard(() async {
       final String? elementId = doubleClickModel.origin?.id;
       WidgetTester tester = _getTester();
@@ -128,6 +128,43 @@ class ElementHelper {
     await tester.pump(kDoubleTapMinTime);
     await tester.tap(element.by);
     await tester.pumpAndSettle();
+  }
+
+  static Future<void> longPress(GestureModel longPressModel) async {
+    return TestAsyncUtils.guard(() async {
+      final String? elementId = longPressModel.origin?.id;
+      WidgetTester tester = _getTester();
+
+      FlutterElement? element;
+      if (elementId == null && longPressModel.locator != null) {
+        Finder by = await locateElement(longPressModel.locator!);
+        element = FlutterElement(
+            await locateElement(longPressModel.locator!), generateUuid(by));
+      } else if (elementId != null) {
+        Session session = FlutterDriver.instance.getSessionOrThrow()!;
+        element = await session.elementsCache.get(elementId);
+      }
+      if (element == null) {
+        if (longPressModel.offset == null) {
+          throw ArgumentError(
+              "LongPress offset coordinates must be provided "
+                  "if element is not set");
+        }
+
+        await tester.longPressAt(
+            Offset(longPressModel.offset!.x, longPressModel.offset!.y));
+      } else {
+        if (longPressModel.offset == null) {
+          await tester.longPress(element.by);
+        } else {
+          Rect bounds = getElementBounds(element!.by);
+          log("Click by offset $bounds");
+          await tester.longPressAt(
+              Offset(longPressModel.offset!.x, longPressModel.offset!.y));
+          await tester.pumpAndSettle();
+        }
+      }
+    });
   }
 
   static Future<String> getText(FlutterElement element) async {
@@ -258,7 +295,7 @@ class ElementHelper {
   }
 
   static bool _isElementClickable(FlutterElement flutterElement) {
-    /* 
+    /*
      * Reference taken from https://github.com/flutter/flutter/blob/master/packages/flutter_test/lib/src/controller.dart#L1880
      * Method: _getElementPoint
      */

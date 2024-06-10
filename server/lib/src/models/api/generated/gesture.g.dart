@@ -1,13 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../double_click.dart';
+part of '../gesture.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-DoubleClickModel _$DoubleClickModelFromJson(Map<String, dynamic> json) =>
-    DoubleClickModel(
+GestureModel _$GestureModelFromJson(Map<String, dynamic> json) => GestureModel(
       origin: json['origin'] == null
           ? null
           : ElementModel.fromJson(json['origin'] as Map<String, dynamic>),
@@ -19,7 +18,7 @@ DoubleClickModel _$DoubleClickModelFromJson(Map<String, dynamic> json) =>
           : PointModel.fromJson(json['offset'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$DoubleClickModelToJson(DoubleClickModel instance) =>
+Map<String, dynamic> _$GestureModelToJson(GestureModel instance) =>
     <String, dynamic>{
       'origin': instance.origin,
       'locator': instance.locator,
