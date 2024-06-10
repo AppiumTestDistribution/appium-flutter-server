@@ -45,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Semantics(
               label: "username_text_field",
+              key: const Key("username_text_field"),
               // textField: true,
               explicitChildNodes: true,
               container: true,
@@ -59,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Semantics(
               label: "password_text_field",
+              key: const Key("password_text_field"),
               // textField: true,
               explicitChildNodes: true,
               container: true,
@@ -77,6 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
               width: double.infinity,
               child: Semantics(
                 label: "login_button",
+                key: const Key("login_button"),
                 explicitChildNodes: true,
                 container: true,
                 child: ElevatedButton(

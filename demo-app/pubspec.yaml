@@ -31,8 +31,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  appium_flutter_server: ^0.0.1
-#    path: ../server
+  appium_flutter_server:
+    path: /Users/saikrishna/Downloads/git/appium-flutter-server/server
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
