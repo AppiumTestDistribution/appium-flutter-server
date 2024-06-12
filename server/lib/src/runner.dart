@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:appium_flutter_server/src/server.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
 
@@ -25,7 +26,10 @@ void initializeTest({Widget? app, Function? callback}) async {
     } else {
       await tester.pumpWidget(app!);
     }
-    FlutterDriver.instance.initialize(tester: tester, binding: binding);
+
+    var appInfo = await PackageInfo.fromPlatform();
+    FlutterDriver.instance
+        .initialize(tester: tester, binding: binding, appInfo: appInfo);
     //await tester.pumpWidget(app);
     // await tester.tap(find.text("Form widgets"));
     // await tester.pumpAndSettle();

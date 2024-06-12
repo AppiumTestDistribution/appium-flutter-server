@@ -1,3 +1,4 @@
+import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
 import 'package:appium_flutter_server/src/models/api/appium_response.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
@@ -7,8 +8,16 @@ class StatusHandler extends RequestHandler {
   StatusHandler(super.route);
 
   @override
-  AppiumResponse handle(Request request) {
-    return AppiumResponse(
-        Session.NO_ID, "Flutter driver is ready to accept new connections");
+  Future<AppiumResponse> handle(Request request) async {
+    String? sessionId;
+    try {
+      sessionId = FlutterDriver.instance.getSessionOrThrow()!.sessionId;
+    } catch (err) {
+      sessionId = Session.NO_ID;
+    }
+    return AppiumResponse(sessionId, {
+      "message": "Flutter driver is ready to accept new connections",
+      "appInfo": FlutterDriver.instance.appInfo.data
+    });
   }
 }
