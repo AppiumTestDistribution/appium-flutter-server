@@ -11,12 +11,12 @@ enum ElementLookupStrategy {
   // BY_ICON,
   // BY_ELEMENT_PREDICATE,
   // BY_SUBTYPE,
-  // BY_TYPE,
+  BY_TYPE,
   // BY_WIDGET,
   //BY_WIDGET_PREDICATE,
 
   //Custom Selectors
-  BY_WIDGET_NAME,
+  //BY_WIDGET_NAME,
   BY_ICON_POINT,
   BY_ICON_NAME
 }
@@ -40,7 +40,7 @@ extension ElementLookupStrategyExtension on ElementLookupStrategy {
         return find.text(selector, skipOffstage: false);
       case ElementLookupStrategy.BY_TEXT_CONTAINING:
         return find.textContaining(selector, skipOffstage: false);
-      case ElementLookupStrategy.BY_WIDGET_NAME:
+      case ElementLookupStrategy.BY_TYPE:
         return find.byWidgetPredicate(filterByWidgetName(selector),
             skipOffstage: false);
       case ElementLookupStrategy.BY_ICON_POINT:
@@ -75,8 +75,8 @@ extension ElementLookupStrategyExtension on ElementLookupStrategy {
       case ElementLookupStrategy.BY_TEXT_CONTAINING:
         return 'text containting';
 
-      case ElementLookupStrategy.BY_WIDGET_NAME:
-        return 'widget name';
+      case ElementLookupStrategy.BY_TYPE:
+        return 'type';
       case ElementLookupStrategy.BY_ICON_POINT:
         return 'icon point';
       case ElementLookupStrategy.BY_ICON_NAME:
