@@ -70,7 +70,8 @@ class FlutterServer {
     _registerPost(PressBackHandler("/session/<sessionId>/back"));
 
     /* Gesture handler */
-    _registerPost(LongPressHandler("/session/<sessionId>/appium/gestures/long_press"));
+    _registerPost(
+        LongPressHandler("/session/<sessionId>/appium/gestures/long_press"));
     _registerPost(gesture_double_click.DoubleClickHandler(
         "/session/<sessionId>/appium/gestures/double_click"));
     _registerPost(ScrollTillVisibleHandler(
@@ -101,7 +102,7 @@ class FlutterServer {
   void startServer({int? port}) async {
     bool serverStarted = false;
     int tries = 0;
-    int port = 8888;
+    int port = 9000;
     do {
       try {
         await shelf_plus.shelfRun(() => _app.call,
@@ -115,6 +116,6 @@ class FlutterServer {
         tries++;
         port++;
       }
-    } while (!serverStarted && tries <= 50);
+    } while (!serverStarted && tries <= 20);
   }
 }
