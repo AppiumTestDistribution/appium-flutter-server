@@ -35,7 +35,7 @@ void initializeTest({Widget? app, Function? callback}) async {
     // await tester.pumpAndSettle();
     // await tester.tap(find.byKey(Key("brushed_check_box")));
     // await tester.pumpAndSettle();
-    FlutterServer.instance.startServer(port: 8888);
+    FlutterServer.instance.startServer();
 
     // To block the test from ending
     await Completer<void>().future;

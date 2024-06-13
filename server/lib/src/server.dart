@@ -99,7 +99,7 @@ class FlutterServer {
     _addRoute(HttpMethod.DELETE, handler);
   }
 
-  void startServer({int? port}) async {
+  void startServer() async {
     bool serverStarted = false;
     int tries = 0;
     int port = 9000;
