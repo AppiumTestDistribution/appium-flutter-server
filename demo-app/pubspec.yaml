@@ -32,9 +32,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   appium_flutter_server:
-    ^0.0.5
-    #path: /Users/saikrishna/Downloads/git/appium-flutter-server/server
-
+    path: ../server
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
