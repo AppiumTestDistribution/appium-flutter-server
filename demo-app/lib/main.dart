@@ -13,7 +13,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Appium Testing App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, ),
+        useMaterial3: true,
+        // colorSchemeSeed: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+        ),
       ),
       home: const LoginScreen(),
     );

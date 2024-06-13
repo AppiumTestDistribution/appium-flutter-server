@@ -168,13 +168,15 @@ class _FormsScreenState extends State<FormsScreen> {
               height: 30,
             ),
             SizedBox(
-                // height: 64,
                 width: double.infinity,
                 child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                    ),
                     onPressed: () {
                       _showSuccessPopUp();
                     },
-                    child: const Text("Submit")))
+                    child: const Text("Submit", style: TextStyle(color: Colors.white),)))
           ],
         ),
       ),

@@ -86,6 +86,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                     _validateCredentials();
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                  ),
                   child: const Text(
                     "Login",
                     style: TextStyle(color: Colors.white),

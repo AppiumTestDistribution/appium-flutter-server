@@ -13,6 +13,7 @@ import 'carousel_screen.dart';
 import 'double_and_long_tap_screen.dart';
 import 'drag_and_drop_screen.dart';
 import 'forms_screen.dart';
+import 'multiple_scroll_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -53,6 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
         subtitle: "Demos different ui elements with different states"));
     featureModels.add(FeatureModel(
         title: "Lazy Loading", subtitle: "Demos dynamic fields appearence"));
+    featureModels.add(FeatureModel(
+        title: "Multiple Scrollview",
+        subtitle: "Page with horizontal and vertical scroll"));
   }
 
   @override
@@ -132,7 +136,11 @@ class _HomeScreenState extends State<HomeScreen> {
           title: featureModels[index].title,
         );
         break;
-
+      case 12:
+        page = MultipleScrollViewScreen(
+          title: featureModels[index].title,
+        );
+        break;
       default:
         page = NativeScreen(title: featureModels[index].title);
         break;
