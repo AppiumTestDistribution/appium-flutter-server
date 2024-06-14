@@ -28,47 +28,53 @@ class _MultipleScrollViewScreenState extends State<MultipleScrollViewScreen> {
         children: [
           const Text("Horizontal Scroll"),
           Expanded(
-            child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: _colors.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                      decoration: BoxDecoration(color: _colors[index]),
-                      child: Center(
-                        child: Text(
-                          '$index',
-                          style: const TextStyle(
-                              fontSize: 24.0, color: Colors.white),
-                        ),
-                      ));
-                }),
+            child: Semantics(
+              label: "multiple_scroll_view_horizontal_scroll",
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _colors.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(color: _colors[index]),
+                        child: Center(
+                          child: Text(
+                            '$index',
+                            style: const TextStyle(
+                                fontSize: 24.0, color: Colors.white),
+                          ),
+                        ));
+                  }),
+            ),
           ),
           const SizedBox(
             height: 20,
           ),
           const Text("Vertical Scroll"),
           Expanded(
-            child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: _colors.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 250,
-                      margin: const EdgeInsets.symmetric(vertical: 5.0),
-                      decoration: BoxDecoration(color: _colors[index]),
-                      child: Center(
-                        child: Text(
-                          '$index',
-                          style: const TextStyle(
-                              fontSize: 24.0, color: Colors.white),
-                        ),
-                      ));
-                }),
+            child: Semantics(
+              label: "multiple_scroll_view_vertical_scroll",
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: _colors.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 250,
+                        margin: const EdgeInsets.symmetric(vertical: 5.0),
+                        decoration: BoxDecoration(color: _colors[index]),
+                        child: Center(
+                          child: Text(
+                            '$index',
+                            style: const TextStyle(
+                                fontSize: 24.0, color: Colors.white),
+                          ),
+                        ));
+                  }),
+            ),
           ),
         ],
       ),

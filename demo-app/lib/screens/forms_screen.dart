@@ -171,12 +171,15 @@ class _FormsScreenState extends State<FormsScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
                     onPressed: () {
                       _showSuccessPopUp();
                     },
-                    child: const Text("Submit", style: TextStyle(color: Colors.white),)))
+                    child: const Text(
+                      "Submit",
+                      style: TextStyle(color: Colors.white),
+                    )))
           ],
         ),
       ),
