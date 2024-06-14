@@ -35,6 +35,7 @@ class ScrollTillVisibleHandler extends RequestHandler {
         settleBetweenScrollsTimeout: settleBetweenScrollsTimeout,
         dragDuration: dragDuration,
         maxScrolls: model.maxScrolls,
+        scrollView: model.scrollView,
         delta: model.delta);
     FlutterElement element = await session.elementsCache.add(by);
     return AppiumResponse(sessionId, ElementModel.fromElement(element.id));
