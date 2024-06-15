@@ -6,9 +6,14 @@ import 'package:appium_flutter_server/src/utils/element_helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:synchronized/extension.dart';
+import 'package:quiver/collection.dart';
 
 class ElementsCache {
-  Map<String, FlutterElement> cache = {};
+  late LruMap<String, FlutterElement> cache;
+
+  ElementsCache(int cacheSize) {
+    cache = LruMap(maximumSize: cacheSize);
+  }
 
   Future<FlutterElement> get(String id, {bool evaluatePresence = true}) async {
     return synchronized(() async {

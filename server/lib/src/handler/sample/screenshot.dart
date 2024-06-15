@@ -20,7 +20,6 @@ class ScreenshotHandler extends RequestHandler {
       log("Converted to surface");
       await tester.pumpAndSettle();
       var data = await binding.takeScreenshot("screenshot");
-      log(base64Encode(data));
       return AppiumResponse("NO_ID", base64Encode(data));
     } catch (e) {
       return AppiumResponse("NO_ID", e.toString());

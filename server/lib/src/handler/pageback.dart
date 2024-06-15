@@ -11,7 +11,6 @@ class PressBackHandler extends RequestHandler {
   @override
   Future<AppiumResponse> handle(Request request) async {
     var sessionId = getSessionId(request);
-    FlutterDriver.instance.getSessionOrThrow();
 
     await FlutterDriver.instance.tester.pageBack();
     return AppiumResponse(sessionId, null);
