@@ -43,6 +43,10 @@ class FlutterDriver {
     return _session;
   }
 
+  Session? getSession() {
+    return _session;
+  }
+
   void resetSession() {
     _session = null;
   }

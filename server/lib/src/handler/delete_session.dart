@@ -17,7 +17,7 @@ class DeleteSessionHandler extends RequestHandler {
     if (session == null || sessionId != session.sessionId) {
       throw NoSuchDriverException("The session $sessionId cannot be found");
     }
-
+    FlutterDriver.instance.resetSession();
     return AppiumResponse(sessionId, null);
   }
 }

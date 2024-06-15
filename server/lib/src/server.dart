@@ -29,8 +29,9 @@ import 'handler/long_press.dart';
 
 enum HttpMethod { GET, POST, DELETE, PUT, PATCH }
 
+const PORT_RANGE = [9000, 9020];
+
 class FlutterServer {
-  final bool _isStarted = false;
   late shelf_plus.RouterPlus _app;
   static final FlutterServer _instance = FlutterServer._();
 
@@ -100,22 +101,21 @@ class FlutterServer {
   }
 
   void startServer() async {
-    bool serverStarted = false;
-    int tries = 0;
-    int port = 9000;
-    do {
+    final [startPort, endPort] = PORT_RANGE;
+    int bindingPort = startPort;
+
+    while (bindingPort <= endPort) {
       try {
         await shelf_plus.shelfRun(() => _app.call,
             defaultBindAddress: "0.0.0.0",
-            defaultBindPort: port,
+            defaultBindPort: bindingPort,
             defaultEnableHotReload: false);
-        log("Appium flutter server is listening on port $port");
-        serverStarted = true;
+        log("Appium flutter server is listening on port $bindingPort");
+        break;
       } catch (e) {
-        log("Unable to start server on port $port. Retrying $tries..");
-        tries++;
-        port++;
+        log("Unable to start server on port $bindingPort.");
       }
-    } while (!serverStarted && tries <= 20);
+      bindingPort++;
+    }
   }
 }
