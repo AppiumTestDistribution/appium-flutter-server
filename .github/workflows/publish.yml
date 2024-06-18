@@ -8,6 +8,9 @@ jobs:
   publish:
     permissions:
       id-token: write # Required for authentication using OIDC
+    defaults:
+      run:
+        working-directory: server
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
