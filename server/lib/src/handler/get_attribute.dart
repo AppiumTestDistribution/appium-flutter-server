@@ -25,11 +25,20 @@ class GetAttributeHandler extends RequestHandler {
           .widget(element.by)
           .toDiagnosticsNode()
           .getProperties();
+      // List<DiagnosticsNode> data = FlutterDriver.instance.tester
+      //       .getSemantics(element.by).toDiagnosticsNode().getChildren().first.getProperties();
 
       log("Available attributes for the element : ${element.by}");
       for (DiagnosticsNode node in nodes) {
         log("${node.name} -> ${node.value}");
       }
+      log('************');
+      log(nodes);
+      log('###########');
+      // log(data);
+      // for (DiagnosticsNode node in data) {
+      //   log("${node.name} -> ${node.value}");
+      // }
 
       dynamic result = await ElementHelper.getAttribute(element, attribute);
 

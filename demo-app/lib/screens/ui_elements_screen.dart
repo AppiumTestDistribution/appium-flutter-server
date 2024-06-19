@@ -13,7 +13,7 @@ class UiElementsScreen extends StatefulWidget {
 class _UiElementsScreenState extends State<UiElementsScreen> {
   int? _currentSelectedRadioButton;
   bool _switchButton = false;
-
+  final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,18 +26,15 @@ class _UiElementsScreenState extends State<UiElementsScreen> {
             const SizedBox(
               height: 30,
             ),
-            Semantics(
-              label: "enabled_text_field",
-              // textField: true,
-              explicitChildNodes: true,
-              container: true,
-              child: const TextField(
+            TextField(
+                key: ValueKey("enabled_text_field"),
+                enabled: true,
+                controller: controller,
                 decoration: InputDecoration(
                   hintText: "Input",
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey)),
                 ),
-              ),
             ),
             const SizedBox(
               height: 30,
@@ -59,19 +56,16 @@ class _UiElementsScreenState extends State<UiElementsScreen> {
             const SizedBox(
               height: 30,
             ),
-            Semantics(
-              label: "enabled_checkbox",
-              // textField: true,
-              explicitChildNodes: true,
-              container: true,
-              child: const CheckboxListTile(
+          const CheckboxListTile(
+                key: ValueKey("enabled_checkbox"),
                 title: Text(
                   'Remember Password',
                   style: TextStyle(color: Colors.grey),
                 ),
                 value: true,
+                enabled: true,
                 onChanged: null,
-              ),
+
             ),
             const SizedBox(
               height: 30,
@@ -101,11 +95,8 @@ class _UiElementsScreenState extends State<UiElementsScreen> {
               children: [
                 ListTile(
                   title: const Text("Yes"),
-                  leading: Semantics(
-                    container: true,
-                    explicitChildNodes: true,
-                    label: "radio_button_yes_radio",
-                    child: Radio(
+                  leading: Radio(
+                         key: const ValueKey("radio_button_yes_radio"),
                         value: 1,
                         groupValue: _currentSelectedRadioButton,
                         onChanged: (int? value) {
@@ -115,7 +106,6 @@ class _UiElementsScreenState extends State<UiElementsScreen> {
                             });
                           }
                         }),
-                  ),
                 ),
                 ListTile(
                   title: const Text("No"),
