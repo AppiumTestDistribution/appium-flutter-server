@@ -26,3 +26,20 @@ jobs:
         run: flutter pub get
       - name: Publish
         run: dart pub publish --force
+
+      - name: Update Flutter Driver with Version
+        run: |
+         TAG_NAME=$(curl -s "https://api.github.com/repos/AppiumTestDistribution/appium-flutter-server/tags" | grep -m 1 '"name"' | sed -E 's/.*"name": "([^"]+)".*/\1/') 
+         repo_owner="AppiumTestDistribution" 
+         repo_name="appium-flutter-integration-driver"  
+         event_type="server-update" 
+         service="Server to Driver"
+         version=$TAG_NAME
+          
+         curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PAT }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$repo_owner/$repo_name/dispatches \
+            -d "{\"event_type\": \"$event_type\", \"client_payload\": {\"service\": \"$service\", \"version\": \"$version\", \"unit\": false, \"integration\": true}}"
