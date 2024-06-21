@@ -18,7 +18,8 @@ class StatusHandler extends RequestHandler implements NoSessionCommandHandler {
     }
     return AppiumResponse(sessionId, {
       "message": "Flutter driver is ready to accept new connections",
-      "appInfo": FlutterDriver.instance.appInfo.data
+      "appInfo": FlutterDriver.instance.appInfo.data,
+      "serverVersion": FlutterDriver.instance.serverVersion,
     });
   }
 }

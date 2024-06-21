@@ -9,7 +9,7 @@ class FlutterDriver {
   late WidgetTester _tester;
   late IntegrationTestWidgetsFlutterBinding _binding;
   late PackageInfo _appInfo;
-
+  String? _serverVersion;
   Session? _session;
 
   FlutterDriver._();
@@ -20,14 +20,17 @@ class FlutterDriver {
   WidgetTester get tester => _tester;
   IntegrationTestWidgetsFlutterBinding get binding => _binding;
   PackageInfo get appInfo => _appInfo;
+  String? get serverVersion => _serverVersion;
 
   void initialize(
       {required WidgetTester tester,
-      required IntegrationTestWidgetsFlutterBinding binding,
-      required PackageInfo appInfo}) async {
+        required IntegrationTestWidgetsFlutterBinding binding,
+        required PackageInfo appInfo,
+        required String serverVersion}) async {
     _tester = tester;
     _binding = binding;
     _appInfo = appInfo;
+    _serverVersion = serverVersion;
   }
 
   String initializeSession(Map<String, dynamic> capabilities) {
