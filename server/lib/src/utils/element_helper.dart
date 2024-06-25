@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:appium_flutter_server/src/driver.dart';
@@ -212,9 +213,44 @@ class ElementHelper {
     } else if (NATIVE_ELEMENT_ATTRIBUTES.clickable.name == attribute) {
       return _isElementClickable(element);
     } else {
-      DiagnosticsNode? property =
-          _getElementPropertyNode(element.by, attribute);
-      return property?.value.toString();
+      List<DiagnosticsNode> nodes = FlutterDriver.instance.tester
+          .widget(element.by)
+          .toDiagnosticsNode()
+          .getProperties();
+      List<DiagnosticsNode> data = [];
+      try {
+        data = FlutterDriver.instance.tester
+            .getSemantics(element.by).toDiagnosticsNode().getChildren().first.getProperties();
+        data.addAll(nodes);
+        FlutterDriver.instance.tester
+            .getSemantics(element.by).getSemanticsData().toDiagnosticsNode().getProperties().forEach((element) {
+          log("Semantics data : ${element.name} -> ${element.value}");
+        });
+      } catch(err) {
+        log(err);
+      }
+      log("Available attributes for the element : ${element.by}");
+      for (DiagnosticsNode node in nodes) {
+        log("${node.name} -> ${node.value}");
+      }
+      log("Attribute in else block");
+      log(data);
+      try {
+        if (attribute == "all") {
+          Map<String, dynamic> values = {};
+          for (DiagnosticsNode node in data) {
+            log("${node.name.toString()} -> ${node.value.toString()}");
+            var value = node.name.toString();
+            values[value] = node.value.toString();
+          }
+          return values;
+        } else {
+          return data.firstWhere((node) => node.name == attribute).value.toString();
+        }
+      } catch(err) {
+        log(err);
+        return null;
+      }
     }
   }
 
