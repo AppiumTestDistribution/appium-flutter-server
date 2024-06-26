@@ -1,6 +1,7 @@
 import 'package:appium_testing_app/components/custom_app_bar.dart';
 import 'package:appium_testing_app/models/feature_model.dart';
 import 'package:appium_testing_app/screens/lazy_loading.dart';
+import 'package:appium_testing_app/screens/loader_screen.dart';
 import 'package:appium_testing_app/screens/native_screen.dart';
 import 'package:appium_testing_app/screens/slider_screen.dart';
 import 'package:appium_testing_app/screens/ui_elements_screen.dart';
@@ -57,6 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
     featureModels.add(FeatureModel(
         title: "Multiple Scrollview",
         subtitle: "Page with horizontal and vertical scroll"));
+    featureModels.add(FeatureModel(
+        title: "Loader Screen", subtitle: "Page with loader and a button"));
   }
 
   @override
@@ -141,6 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
           title: featureModels[index].title,
         );
         break;
+      case 13:
+        page = LoaderScreen(title: featureModels[index].title);
       default:
         page = NativeScreen(title: featureModels[index].title);
         break;
