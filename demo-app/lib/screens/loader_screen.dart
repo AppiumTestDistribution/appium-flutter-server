@@ -44,6 +44,7 @@ class _LoaderScreenState extends State<LoaderScreen> {
               ),
               child: const Text(
                 "Login",
+                key: ValueKey("loader_login_button"),
                 style: TextStyle(color: Colors.white),
               ),
             ),

@@ -72,7 +72,7 @@ class ElementHelper {
   static Future<void> click(FlutterElement element) async {
     WidgetTester tester = _getTester();
     await tester.tap(element.by);
-    await pumpAndTrySettle(timeout: const Duration(milliseconds: 10000));
+    await pumpAndTrySettle();
   }
 
   static Future<void> setText(FlutterElement element, String text) async {
@@ -118,7 +118,7 @@ class ElementHelper {
           await tester.pump(kDoubleTapMinTime);
           await tester.tapAt(Offset(bounds.left + doubleClickModel.offset!.x,
               bounds.top + doubleClickModel.offset!.y));
-          await tester.pumpAndSettle();
+          await pumpAndTrySettle();
         }
       }
     });
@@ -129,7 +129,7 @@ class ElementHelper {
     await tester.tap(element.by);
     await tester.pump(kDoubleTapMinTime);
     await tester.tap(element.by);
-    await tester.pumpAndSettle();
+    await pumpAndTrySettle();
   }
 
   static Future<void> longPress(GestureModel longPressModel) async {
@@ -163,7 +163,7 @@ class ElementHelper {
           log("Click by offset $bounds");
           await tester.longPressAt(
               Offset(longPressModel.offset!.x, longPressModel.offset!.y));
-          await tester.pumpAndSettle();
+          await pumpAndTrySettle();
         }
       }
     });
@@ -445,7 +445,7 @@ class ElementHelper {
             : 'Timed out waiting for condition');
       }
       if (Platform.isAndroid) {
-        await tester.pumpAndSettle();
+        await pumpAndTrySettle(timeout: const Duration(milliseconds: 200));
       }
       await Future.delayed(const Duration(milliseconds: 100));
     } while (!(await predicate()));
@@ -562,7 +562,7 @@ class ElementHelper {
   static Future<void> pumpAndTrySettle({
     Duration duration = const Duration(milliseconds: 100),
     EnginePhase phase = EnginePhase.sendSemanticsUpdate,
-    required Duration timeout,
+    Duration timeout = const Duration(milliseconds: 200),
   }) async {
     try {
       WidgetTester tester = _getTester();
