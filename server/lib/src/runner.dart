@@ -30,7 +30,7 @@ void initializeTest({Widget? app, Function? callback}) async {
     var appInfo = await PackageInfo.fromPlatform();
     // Need a better way to fetch this for automated release, this needs to be updated along with version bump
     // Can stay for now as it is not a breaking change
-    var serverVersion = '0.0.11';
+    var serverVersion = '0.0.12';
     FlutterDriver.instance
         .initialize(tester: tester, binding: binding, appInfo: appInfo, serverVersion: serverVersion);
     //await tester.pumpWidget(app);
