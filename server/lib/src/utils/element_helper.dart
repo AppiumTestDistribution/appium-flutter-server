@@ -7,6 +7,7 @@ import 'package:appium_flutter_server/src/exceptions/flutter_automation_error.da
 import 'package:appium_flutter_server/src/internal/element_lookup_strategy.dart';
 import 'package:appium_flutter_server/src/internal/flutter_element.dart';
 import 'package:appium_flutter_server/src/logger.dart';
+import 'package:appium_flutter_server/src/models/api/drag_drop.dart';
 import 'package:appium_flutter_server/src/models/api/gesture.dart';
 import 'package:appium_flutter_server/src/models/api/find_element.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
@@ -448,6 +449,28 @@ class ElementHelper {
       }
       await Future.delayed(const Duration(milliseconds: 100));
     } while (!(await predicate()));
+  }
+
+  static Future<void> dragAndDrop(DragAndDropModel model) async {
+    return TestAsyncUtils.guard(() async {
+      log('Source');
+      log(model.source);
+      log('Target');
+      log(model.target);
+      WidgetTester tester = _getTester();
+      final String sourceElementId = model.source.id;
+      final String targetElementId = model.target.id;
+      Session session = FlutterDriver.instance.getSessionOrThrow()!;
+      FlutterElement sourceEl = await session.elementsCache.get(sourceElementId);
+      FlutterElement targetEl = await session.elementsCache.get(targetElementId);
+      final Offset sourceElementLocation = tester.getCenter(sourceEl.by);
+      final Offset targetElementLocation = tester.getCenter(targetEl.by);
+      final TestGesture gesture = await tester.startGesture(sourceElementLocation, pointer: 7);
+      await gesture.moveTo(targetElementLocation);
+      await tester.pump();
+      await gesture.up();
+      await tester.pump();
+    });
   }
 
   static Future<Finder> scrollUntilVisible({
