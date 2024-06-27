@@ -146,6 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 13:
         page = LoaderScreen(title: featureModels[index].title);
+        break;
       default:
         page = NativeScreen(title: featureModels[index].title);
         break;

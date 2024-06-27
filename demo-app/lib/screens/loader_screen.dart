@@ -12,6 +12,17 @@ class LoaderScreen extends StatefulWidget {
 class _LoaderScreenState extends State<LoaderScreen> {
 
   bool _showText = false;
+  bool _showLoader = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 4), () {
+      setState(() {
+        _showLoader = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +32,7 @@ class _LoaderScreenState extends State<LoaderScreen> {
         child: Column(
           children: [
             const SizedBox(height: 30,),
-            const CircularProgressIndicator(),
+            _showLoader ? const CircularProgressIndicator() : const SizedBox(),
             ElevatedButton(
               onPressed: () {
                 setState(() {
