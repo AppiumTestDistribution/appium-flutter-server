@@ -72,7 +72,7 @@ class ElementHelper {
   static Future<void> click(FlutterElement element) async {
     WidgetTester tester = _getTester();
     await tester.tap(element.by);
-    await tester.pumpAndSettle();
+    await pumpAndTrySettle(timeout: const Duration(milliseconds: 10000));
   }
 
   static Future<void> setText(FlutterElement element, String text) async {
@@ -453,10 +453,6 @@ class ElementHelper {
 
   static Future<void> dragAndDrop(DragAndDropModel model) async {
     return TestAsyncUtils.guard(() async {
-      log('Source');
-      log(model.source);
-      log('Target');
-      log(model.target);
       WidgetTester tester = _getTester();
       final String sourceElementId = model.source.id;
       final String targetElementId = model.target.id;
@@ -563,4 +559,25 @@ class ElementHelper {
       return const Uuid().v4();
     }
   }
+  static Future<void> pumpAndTrySettle({
+    Duration duration = const Duration(milliseconds: 100),
+    EnginePhase phase = EnginePhase.sendSemanticsUpdate,
+    required Duration timeout,
+  }) async {
+    try {
+      WidgetTester tester = _getTester();
+      await tester.pumpAndSettle(
+        duration,
+        phase,
+        timeout,
+      );
+    } on FlutterError catch (err) {
+      if (err.message == 'pumpAndSettle timed out') {
+        //This method ignores pumpAndSettle timeouts on purpose
+      } else {
+        rethrow;
+      }
+    }
+  }
+
 }
