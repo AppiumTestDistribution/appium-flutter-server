@@ -5,7 +5,10 @@ on:
 
 name: Publish to pub.dev
 jobs:
+  build:
+    uses: ./.github/workflows/main.yml  # use the callable tests job to run tests
   publish:
+    needs: [ build ]
     permissions:
       id-token: write # Required for authentication using OIDC
     defaults:
@@ -26,7 +29,22 @@ jobs:
         run: flutter pub get
       - name: Publish
         run: dart pub publish --force
-
+      - uses: actions/download-artifact@v4
+        with:
+         name: Android build
+      - name: Display structure of downloaded files
+        run: ls -R
+      - uses: actions/download-artifact@v4
+        with:
+          name: ios-build
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Upload Android Build to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            app-debug.apk
+            ios.zip
       - name: Update Flutter Driver with Version
         run: |
          TAG_NAME=$(curl -s "https://api.github.com/repos/AppiumTestDistribution/appium-flutter-server/tags" | grep -m 1 '"name"' | sed -E 's/.*"name": "([^"]+)".*/\1/') 

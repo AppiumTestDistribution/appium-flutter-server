@@ -1,11 +1,4 @@
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
+on: [workflow_call]
 name: Appium Flutter Integration Server
 jobs:
   android:
