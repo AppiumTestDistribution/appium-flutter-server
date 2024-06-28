@@ -11,6 +11,7 @@ import 'package:appium_testing_app/screens/wheel_picker_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'carousel_screen.dart';
+import 'contact_permission_screen.dart';
 import 'double_and_long_tap_screen.dart';
 import 'drag_and_drop_screen.dart';
 import 'forms_screen.dart';
@@ -60,6 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
         subtitle: "Page with horizontal and vertical scroll"));
     featureModels.add(FeatureModel(
         title: "Loader Screen", subtitle: "Page with loader and a button"));
+    featureModels.add(FeatureModel(
+        title: "Contact permission", subtitle: "Asks for contact permission with native popup"));
   }
 
   @override
@@ -146,6 +149,9 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 13:
         page = LoaderScreen(title: featureModels[index].title);
+        break;
+      case 14:
+        page = ContactPermissionScreen(title: featureModels[index].title,);
         break;
       default:
         page = NativeScreen(title: featureModels[index].title);
