@@ -28,10 +28,10 @@ jobs:
         with:
           channel: stable
           flutter-version: 3.22.2
-      # - name: Install dependencies
-      #   run: flutter pub get
-      # - name: Publish
-      #   run: dart pub publish --force
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Publish
+        run: dart pub publish --force
       - uses: actions/download-artifact@v4
         with:
          name: Android build
