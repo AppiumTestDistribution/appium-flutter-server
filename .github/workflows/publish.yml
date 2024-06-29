@@ -11,6 +11,9 @@ jobs:
     needs: [ build ]
     permissions:
       id-token: write # Required for authentication using OIDC
+      contents: write
+      pull-requests: write
+      repository-projects: write
     defaults:
       run:
         working-directory: server
