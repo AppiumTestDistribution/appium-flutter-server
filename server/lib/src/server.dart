@@ -36,6 +36,7 @@ const PORT_RANGE = [9000, 9020];
 class FlutterServer {
   late shelf_plus.RouterPlus _app;
   static final FlutterServer _instance = FlutterServer._();
+  late int port;
 
   FlutterServer._() {
     _app = shelf_plus.Router().plus;
@@ -107,19 +108,14 @@ class FlutterServer {
   void startServer() async {
     final [startPort, endPort] = PORT_RANGE;
     int bindingPort = startPort;
+    bool isServerStarted = false;
+    while (bindingPort <= endPort && !isServerStarted) {
+      isServerStarted = await _runServer(bindingPort++);
+    }
 
-    int? requestedPort = await readPortFromFile();
-
-    if (requestedPort != null) {
-      await _runServer(requestedPort);
-    } else {
-      while (bindingPort <= endPort) {
-        final isServerStarted = await _runServer(bindingPort);
-        if (isServerStarted) {
-          break;
-        }
-        bindingPort++;
-      }
+    if (isServerStarted) {
+      port = bindingPort - 1;
+      await writePortToFile(port);
     }
   }
 
