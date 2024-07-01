@@ -19,7 +19,6 @@ void initializeTest({Widget? app, Function? callback}) async {
   }
 
   testWidgets('appium flutter server', (tester) async {
-    // await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
     if (callback != null) {
       await callback(tester);
     } else {
