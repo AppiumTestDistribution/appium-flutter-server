@@ -9,6 +9,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
+const SERVER_VERSION = '0.0.14';
 
 void initializeTest({Widget? app, Function? callback}) async {
   IntegrationTestWidgetsFlutterBinding binding =
@@ -18,8 +19,6 @@ void initializeTest({Widget? app, Function? callback}) async {
   }
 
   testWidgets('appium flutter server', (tester) async {
-    /* Initialize network tools */
-    // final appDocDirectory = await getApplicationDocumentsDirectory();
     // await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
     if (callback != null) {
       await callback(tester);
@@ -30,14 +29,12 @@ void initializeTest({Widget? app, Function? callback}) async {
     var appInfo = await PackageInfo.fromPlatform();
     // Need a better way to fetch this for automated release, this needs to be updated along with version bump
     // Can stay for now as it is not a breaking change
-    var serverVersion = '0.0.12';
-    FlutterDriver.instance
-        .initialize(tester: tester, binding: binding, appInfo: appInfo, serverVersion: serverVersion);
-    //await tester.pumpWidget(app);
-    // await tester.tap(find.text("Form widgets"));
-    // await tester.pumpAndSettle();
-    // await tester.tap(find.byKey(Key("brushed_check_box")));
-    // await tester.pumpAndSettle();
+    FlutterDriver.instance.initialize(
+        tester: tester,
+        binding: binding,
+        appInfo: appInfo,
+        serverVersion: SERVER_VERSION);
+
     FlutterServer.instance.startServer();
 
     // To block the test from ending

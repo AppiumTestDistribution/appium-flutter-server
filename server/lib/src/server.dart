@@ -21,6 +21,7 @@ import 'package:appium_flutter_server/src/handler/status.dart';
 import 'package:appium_flutter_server/src/handler/wait/wait_for_absent.dart';
 import 'package:appium_flutter_server/src/handler/wait/wait_for_visible.dart';
 import 'package:appium_flutter_server/src/logger.dart';
+import 'package:appium_flutter_server/src/utils/test_utils.dart';
 import 'package:shelf_plus/shelf_plus.dart' as shelf_plus;
 
 import 'package:appium_flutter_server/src/handler/clear.dart';
@@ -78,8 +79,8 @@ class FlutterServer {
         "/session/<sessionId>/appium/gestures/double_click"));
     _registerPost(ScrollTillVisibleHandler(
         "/session/<sessionId>/appium/gestures/scroll_till_visible"));
-    _registerPost(DragAndDrop(
-        "/session/<sessionId>/appium/gestures/drag_drop"));
+    _registerPost(
+        DragAndDrop("/session/<sessionId>/appium/gestures/drag_drop"));
 
     /* Wait handlers */
     _registerPost(
@@ -107,18 +108,32 @@ class FlutterServer {
     final [startPort, endPort] = PORT_RANGE;
     int bindingPort = startPort;
 
-    while (bindingPort <= endPort) {
-      try {
-        await shelf_plus.shelfRun(() => _app.call,
-            defaultBindAddress: "0.0.0.0",
-            defaultBindPort: bindingPort,
-            defaultEnableHotReload: false);
-        log("Appium flutter server is listening on port $bindingPort");
-        break;
-      } catch (e) {
-        log("Unable to start server on port $bindingPort.");
+    int? requestedPort = await readPortFromFile();
+
+    if (requestedPort != null) {
+      await _runServer(requestedPort);
+    } else {
+      while (bindingPort <= endPort) {
+        final isServerStarted = await _runServer(bindingPort);
+        if (isServerStarted) {
+          break;
+        }
+        bindingPort++;
       }
-      bindingPort++;
+    }
+  }
+
+  _runServer(int port) async {
+    try {
+      await shelf_plus.shelfRun(() => _app.call,
+          defaultBindAddress: "0.0.0.0",
+          defaultBindPort: port,
+          defaultEnableHotReload: false);
+      log("Appium flutter server is listening on port $port");
+      return true;
+    } catch (e) {
+      log("Unable to start server on port $port. Error: $e");
+      return false;
     }
   }
 }
