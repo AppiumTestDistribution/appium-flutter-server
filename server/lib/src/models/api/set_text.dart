@@ -1,17 +1,13 @@
-import 'dart:ffi';
-
-import 'package:json_annotation/json_annotation.dart';
-
-part 'generated/set_text.g.dart';
-
-@JsonSerializable()
 class SetTextModal {
   String text;
 
   SetTextModal({required this.text});
 
-  factory SetTextModal.fromJson(Map<String, dynamic> json) =>
-      _$SetTextModalFromJson(json);
+  factory SetTextModal.fromJson(Map<String, dynamic> json) => SetTextModal(
+        text: json['text'] as String,
+      );
 
-  Map<String, dynamic> toJson() => _$SetTextModalToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'text': text,
+      };
 }

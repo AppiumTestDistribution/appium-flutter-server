@@ -1,8 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'generated/find_element.g.dart';
-
-@JsonSerializable()
 class FindElementModel {
   String strategy;
   String selector;
@@ -12,7 +7,15 @@ class FindElementModel {
       {required this.strategy, required this.selector, this.context});
 
   factory FindElementModel.fromJson(Map<String, dynamic> json) =>
-      _$FindElementModelFromJson(json);
+      FindElementModel(
+        strategy: json['strategy'] as String,
+        selector: json['selector'] as String,
+        context: json['context'] as String?,
+      );
 
-  Map<String, dynamic> toJson() => _$FindElementModelToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'strategy': strategy,
+        'selector': selector,
+        'context': context,
+      };
 }

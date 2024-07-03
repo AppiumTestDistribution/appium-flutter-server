@@ -1,8 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'generated/error.g.dart';
-
-@JsonSerializable()
 class ErrorModel {
   String error;
   String message;
@@ -10,8 +5,15 @@ class ErrorModel {
 
   ErrorModel({required this.error, required this.message, this.stackTrace});
 
-  factory ErrorModel.fromJson(Map<String, dynamic> json) =>
-      _$ErrorModelFromJson(json);
+  factory ErrorModel.fromJson(Map<String, dynamic> json) => ErrorModel(
+        error: json['error'] as String,
+        message: json['message'] as String,
+        stackTrace: json['stackTrace'] as String?,
+      );
 
-  Map<String, dynamic> toJson() => _$ErrorModelToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'error': error,
+        'message': message,
+        'stackTrace': stackTrace,
+      };
 }

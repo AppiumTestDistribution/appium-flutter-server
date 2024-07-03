@@ -7,10 +7,8 @@ import 'package:appium_flutter_server/src/models/api/wait.dart';
 import 'package:appium_flutter_server/src/utils/element_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:uuid/uuid.dart';
-
 abstract class BaseWaithHandler extends RequestHandler {
-  static final Duration defaultWaitTimeout = Duration(seconds: 5);
+  static const Duration defaultWaitTimeout = Duration(seconds: 5);
 
   BaseWaithHandler(super.route);
 
@@ -25,7 +23,7 @@ abstract class BaseWaithHandler extends RequestHandler {
     if (model.locator != null) {
       Finder finder = await ElementHelper.locateElement(model.locator!,
           evaluatePresence: false);
-      return FlutterElement(finder, Uuid().v4());
+      return FlutterElement.fromBy(finder);
     }
     throw FlutterAutomationException(
         "Wait method requires a valid element id or locator strategy");
