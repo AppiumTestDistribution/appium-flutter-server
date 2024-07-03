@@ -1,8 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'generated/rect.g.dart';
-
-@JsonSerializable()
 class RectModel {
   double left;
   double top;
@@ -15,8 +10,17 @@ class RectModel {
       required this.right,
       required this.bottom});
 
-  factory RectModel.fromJson(Map<String, dynamic> json) =>
-      _$RectModelFromJson(json);
+  factory RectModel.fromJson(Map<String, dynamic> json) => RectModel(
+        left: (json['left'] as num).toDouble(),
+        top: (json['top'] as num).toDouble(),
+        right: (json['right'] as num).toDouble(),
+        bottom: (json['bottom'] as num).toDouble(),
+      );
 
-  Map<String, dynamic> toJson() => _$RectModelToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'left': left,
+        'top': top,
+        'right': right,
+        'bottom': bottom,
+      };
 }

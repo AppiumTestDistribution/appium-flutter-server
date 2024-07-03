@@ -1,19 +1,10 @@
 import 'package:appium_flutter_server/src/models/api/element.dart';
 import 'package:appium_flutter_server/src/models/api/find_element.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'generated/wait.g.dart';
-
-@JsonSerializable()
 class WaitModel {
   ElementModel? element;
   FindElementModel? locator;
-
-  @JsonKey(
-    toJson: _durationToJson,
-    fromJson: _durationFromJson,
-  )
-  Duration? timeout = Duration(seconds: 5);
+  Duration? timeout = const Duration(seconds: 5);
 
   WaitModel({required this.element, required this.locator, this.timeout});
 
@@ -25,8 +16,21 @@ class WaitModel {
     return Duration(seconds: value ?? 5);
   }
 
-  factory WaitModel.fromJson(Map<String, dynamic> json) =>
-      _$WaitModelFromJson(json);
+  factory WaitModel.fromJson(Map<String, dynamic> json) => WaitModel(
+        element: json['element'] == null
+            ? null
+            : ElementModel.fromJson(json['element'] as Map<String, dynamic>),
+        locator: json['locator'] == null
+            ? null
+            : FindElementModel.fromJson(
+                json['locator'] as Map<String, dynamic>),
+        timeout:
+            WaitModel._durationFromJson((json['timeout'] as num?)?.toInt()),
+      );
 
-  Map<String, dynamic> toJson() => _$WaitModelToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'element': element,
+        'locator': locator,
+        'timeout': WaitModel._durationToJson(timeout),
+      };
 }

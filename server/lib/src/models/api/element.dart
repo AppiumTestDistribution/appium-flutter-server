@@ -1,13 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
+const W3C_ELEMENT_KEY = "element-6066-11e4-a52e-4f735466cecf";
+const JWP_ELEMENT_KEY = "ELEMENT";
 
-part 'generated/element.g.dart';
-
-@JsonSerializable()
 class ElementModel {
-  @JsonKey(name: "ELEMENT")
   String? jwpElementId;
-
-  @JsonKey(name: "element-6066-11e4-a52e-4f735466cecf")
   String? w3cElementId;
 
   ElementModel({
@@ -24,8 +19,13 @@ class ElementModel {
     return jwpElementId == null ? w3cElementId! : jwpElementId!;
   }
 
-  factory ElementModel.fromJson(Map<String, dynamic> json) =>
-      _$ElementModelFromJson(json);
+  factory ElementModel.fromJson(Map<String, dynamic> json) => ElementModel(
+        jwpElementId: json[JWP_ELEMENT_KEY] as String?,
+        w3cElementId: json[W3C_ELEMENT_KEY] as String?,
+      );
 
-  Map<String, dynamic> toJson() => _$ElementModelToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        JWP_ELEMENT_KEY: jwpElementId,
+        W3C_ELEMENT_KEY: w3cElementId,
+      };
 }
