@@ -1,4 +1,3 @@
-import 'package:appium_flutter_server/src/models/api/find_element.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:appium_flutter_server/src/models/api/element.dart';
 

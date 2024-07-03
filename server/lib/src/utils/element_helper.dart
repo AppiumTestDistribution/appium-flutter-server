@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:appium_flutter_server/src/driver.dart';
@@ -11,12 +10,12 @@ import 'package:appium_flutter_server/src/models/api/drag_drop.dart';
 import 'package:appium_flutter_server/src/models/api/gesture.dart';
 import 'package:appium_flutter_server/src/models/api/find_element.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
+import 'package:appium_flutter_server/src/utils/test_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:uuid/uuid.dart';
 
 enum NATIVE_ELEMENT_ATTRIBUTES { enabled, displayed, clickable }
 
@@ -54,7 +53,7 @@ class ElementHelper {
     }
     final Iterable<Element> elements = finder.evaluate();
     if (evaluatePresence) {
-      await waitForElementExist(FlutterElement.fromBy(by: finder),
+      await waitForElementExist(FlutterElement.fromBy(finder),
           timeout: defaultWaitTimeout);
 
       if (elements.isEmpty) {
@@ -82,8 +81,7 @@ class ElementHelper {
     await tester.pump(const Duration(milliseconds: 400));
   }
 
-  static Future<void> gestureDoubleClick(
-      GestureModel doubleClickModel) async {
+  static Future<void> gestureDoubleClick(GestureModel doubleClickModel) async {
     await TestAsyncUtils.guard(() async {
       final String? elementId = doubleClickModel.origin?.id;
       WidgetTester tester = _getTester();
@@ -91,8 +89,7 @@ class ElementHelper {
       FlutterElement? element;
       if (elementId == null && doubleClickModel.locator != null) {
         Finder by = await locateElement(doubleClickModel.locator!);
-        element = FlutterElement(
-            await locateElement(doubleClickModel.locator!), generateUuid(by));
+        element = FlutterElement.fromBy(by);
       } else if (elementId != null) {
         Session session = FlutterDriver.instance.getSessionOrThrow()!;
         element = await session.elementsCache.get(elementId);
@@ -140,17 +137,15 @@ class ElementHelper {
       FlutterElement? element;
       if (elementId == null && longPressModel.locator != null) {
         Finder by = await locateElement(longPressModel.locator!);
-        element = FlutterElement(
-            await locateElement(longPressModel.locator!), generateUuid(by));
+        element = FlutterElement.fromBy(by);
       } else if (elementId != null) {
         Session session = FlutterDriver.instance.getSessionOrThrow()!;
         element = await session.elementsCache.get(elementId);
       }
       if (element == null) {
         if (longPressModel.offset == null) {
-          throw ArgumentError(
-              "LongPress offset coordinates must be provided "
-                  "if element is not set");
+          throw ArgumentError("LongPress offset coordinates must be provided "
+              "if element is not set");
         }
 
         await tester.longPressAt(
@@ -221,13 +216,21 @@ class ElementHelper {
       List<DiagnosticsNode> data = [];
       try {
         data = FlutterDriver.instance.tester
-            .getSemantics(element.by).toDiagnosticsNode().getChildren().first.getProperties();
+            .getSemantics(element.by)
+            .toDiagnosticsNode()
+            .getChildren()
+            .first
+            .getProperties();
         data.addAll(nodes);
         FlutterDriver.instance.tester
-            .getSemantics(element.by).getSemanticsData().toDiagnosticsNode().getProperties().forEach((element) {
+            .getSemantics(element.by)
+            .getSemanticsData()
+            .toDiagnosticsNode()
+            .getProperties()
+            .forEach((element) {
           log("Semantics data : ${element.name} -> ${element.value}");
         });
-      } catch(err) {
+      } catch (err) {
         log(err);
       }
       log("Available attributes for the element : ${element.by}");
@@ -246,9 +249,12 @@ class ElementHelper {
           }
           return values;
         } else {
-          return data.firstWhere((node) => node.name == attribute).value.toString();
+          return data
+              .firstWhere((node) => node.name == attribute)
+              .value
+              .toString();
         }
-      } catch(err) {
+      } catch (err) {
         log(err);
         return null;
       }
@@ -457,11 +463,14 @@ class ElementHelper {
       final String sourceElementId = model.source.id;
       final String targetElementId = model.target.id;
       Session session = FlutterDriver.instance.getSessionOrThrow()!;
-      FlutterElement sourceEl = await session.elementsCache.get(sourceElementId);
-      FlutterElement targetEl = await session.elementsCache.get(targetElementId);
+      FlutterElement sourceEl =
+          await session.elementsCache.get(sourceElementId);
+      FlutterElement targetEl =
+          await session.elementsCache.get(targetElementId);
       final Offset sourceElementLocation = tester.getCenter(sourceEl.by);
       final Offset targetElementLocation = tester.getCenter(targetEl.by);
-      final TestGesture gesture = await tester.startGesture(sourceElementLocation, pointer: 7);
+      final TestGesture gesture =
+          await tester.startGesture(sourceElementLocation, pointer: 7);
       await gesture.moveTo(targetElementLocation);
       await tester.pump();
       await gesture.up();
@@ -486,7 +495,7 @@ class ElementHelper {
         : find.byType(Scrollable);
     Finder elementToFind = await locateElement(finder, evaluatePresence: false);
 
-    await waitForElementExist(FlutterElement.fromBy(by: scrollViewElement),
+    await waitForElementExist(FlutterElement.fromBy(scrollViewElement),
         timeout: defaultWaitTimeout);
     AxisDirection direction;
     if (scrollDirection == null) {
@@ -538,27 +547,6 @@ class ElementHelper {
     });
   }
 
-  static String generateUuid(Finder by) {
-    try {
-      int hashCode = by.evaluate().first.widget.hashCode;
-      String hexString = hashCode.toRadixString(16);
-
-      while (hexString.length < 32) {
-        hexString += hashCode.toRadixString(16);
-      }
-      hexString = hexString.substring(0, 32);
-
-      String uuid = '${hexString.substring(0, 8)}-'
-          '${hexString.substring(8, 12)}-'
-          '${hexString.substring(12, 16)}-'
-          '${hexString.substring(16, 20)}-'
-          '${hexString.substring(20, 32)}';
-
-      return uuid;
-    } catch (e) {
-      return const Uuid().v4();
-    }
-  }
   static Future<void> pumpAndTrySettle({
     Duration duration = const Duration(milliseconds: 100),
     EnginePhase phase = EnginePhase.sendSemanticsUpdate,
@@ -579,5 +567,4 @@ class ElementHelper {
       }
     }
   }
-
 }

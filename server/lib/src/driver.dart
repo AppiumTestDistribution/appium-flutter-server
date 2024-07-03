@@ -1,9 +1,9 @@
 import 'package:appium_flutter_server/src/exceptions/no_driver_exception.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
+import 'package:appium_flutter_server/src/utils/test_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:uuid/uuid.dart';
 
 class FlutterDriver {
   late WidgetTester _tester;
@@ -24,9 +24,9 @@ class FlutterDriver {
 
   void initialize(
       {required WidgetTester tester,
-        required IntegrationTestWidgetsFlutterBinding binding,
-        required PackageInfo appInfo,
-        required String serverVersion}) async {
+      required IntegrationTestWidgetsFlutterBinding binding,
+      required PackageInfo appInfo,
+      required String serverVersion}) async {
     _tester = tester;
     _binding = binding;
     _appInfo = appInfo;
@@ -34,7 +34,7 @@ class FlutterDriver {
   }
 
   String initializeSession(Map<String, dynamic> capabilities) {
-    _session = Session(const Uuid().v4(), capabilities);
+    _session = Session(generateUUID(), capabilities);
     return _session!.sessionId;
   }
 

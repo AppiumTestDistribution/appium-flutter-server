@@ -7,7 +7,6 @@ import 'package:appium_flutter_server/src/logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uuid/uuid.dart';
 
 class FlutterFinderStrategy {
   static Future<FlutterElement> findElement(String elementId) async {
@@ -59,8 +58,7 @@ class FlutterFinderStrategy {
           "Unable to locate element with strategy: ${strategy['finderType']}");
     }
 
-    return FlutterElement(
-        ensureElementPresent ? by.at(0) : by, const Uuid().v4());
+    return FlutterElement.fromBy(ensureElementPresent ? by.at(0) : by);
   }
 
   static Finder? _byValueKey(Map<String, dynamic> strategy) {

@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
