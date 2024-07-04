@@ -21,6 +21,8 @@ dependencies:
   path_provider: any
   synchronized: any
   package_info_plus: any
+  a_bridge:
+    path: /Users/saikrishna/Downloads/git/a_bridge
 
 dev_dependencies:
   build_runner: ^2.4.10

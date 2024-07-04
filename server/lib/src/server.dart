@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:appium_flutter_server/src/handler/click.dart';
 import 'package:appium_flutter_server/src/handler/double_click.dart';
 import 'package:appium_flutter_server/src/handler/delete_session.dart';
@@ -27,6 +29,8 @@ import 'package:appium_flutter_server/src/handler/clear.dart';
 
 import 'handler/gesture/drag_drop.dart';
 import 'handler/long_press.dart';
+import 'package:a_bridge/a_bridge.dart';
+
 
 enum HttpMethod { GET, POST, DELETE, PUT, PATCH }
 
@@ -104,21 +108,36 @@ class FlutterServer {
   }
 
   void startServer() async {
+    if(Platform.isIOS) {
+      ABridge aBridge = ABridge.init();
+      Map<String, dynamic>? arguments = await aBridge.getArgumentPair();
+      log('Command line arguments: $arguments');
+      if (arguments != null && arguments.containsKey('port')) {
+        log('Command line port value for ios: ${arguments['port']}');
+        await triggerServer(int.parse(arguments['port']));
+        return;
+      }
+    }
     final [startPort, endPort] = PORT_RANGE;
     int bindingPort = startPort;
-
-    while (bindingPort <= endPort) {
-      try {
-        await shelf_plus.shelfRun(() => _app.call,
-            defaultBindAddress: "0.0.0.0",
-            defaultBindPort: bindingPort,
-            defaultEnableHotReload: false);
-        log("Appium flutter server is listening on port $bindingPort");
-        break;
-      } catch (e) {
-        log("Unable to start server on port $bindingPort.");
-      }
+    bool serverStarted = false;
+    while (bindingPort <= endPort && !serverStarted) {
+      serverStarted = await triggerServer(bindingPort);
       bindingPort++;
     }
+  }
+
+  Future<bool> triggerServer(int bindingPort) async {
+    try {
+      await shelf_plus.shelfRun(() => _app.call,
+          defaultBindAddress: "0.0.0.0",
+          defaultBindPort: bindingPort,
+          defaultEnableHotReload: false);
+      log("Appium flutter server is listening on port $bindingPort");
+      return true;
+    } catch (e) {
+      log("Unable to start server on port $bindingPort.");
+    }
+    return false;
   }
 }
