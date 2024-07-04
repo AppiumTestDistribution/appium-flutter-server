@@ -109,7 +109,7 @@ class FlutterServer {
 
   void startServer() async {
     if(Platform.isIOS) {
-      ABridge aBridge = ABridge.init();
+      ABridge aBridge = ABridge();
       Map<String, dynamic>? arguments = await aBridge.getArgumentPair();
       log('Command line arguments: $arguments');
       if (arguments != null && arguments.containsKey('port')) {
