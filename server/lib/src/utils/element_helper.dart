@@ -218,6 +218,8 @@ class ElementHelper {
         data = FlutterDriver.instance.tester
             .getSemantics(element.by)
             .toDiagnosticsNode()
+            .getChildren()
+            .first
             .getProperties();
         FlutterDriver.instance.tester
             .getSemantics(element.by)
