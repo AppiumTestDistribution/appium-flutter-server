@@ -21,9 +21,9 @@ class SetTextHandler extends RequestHandler {
         .elementsCache
         .get(getElementId(request));
 
-    String textToEnter = setTextModal.value.map(char => char.toString()).join();
+    String textToEnter = setTextModal.value.map((char) => char.toString()).join();
     log("Input text from request: ${setTextModal.value}");
-    log("String to enter: $textToEnter")
+    log("String to enter: $textToEnter");
 
     await ElementHelper.setText(element, textToEnter);
 
