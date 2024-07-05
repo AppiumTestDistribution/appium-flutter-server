@@ -221,7 +221,6 @@ class ElementHelper {
             .getChildren()
             .first
             .getProperties();
-        data.addAll(nodes);
         FlutterDriver.instance.tester
             .getSemantics(element.by)
             .getSemanticsData()
@@ -233,6 +232,7 @@ class ElementHelper {
       } catch (err) {
         log(err);
       }
+      data.addAll(nodes);
       log("Available attributes for the element : ${element.by}");
       for (DiagnosticsNode node in nodes) {
         log("${node.name} -> ${node.value}");

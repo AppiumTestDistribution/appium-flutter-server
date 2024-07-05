@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:appium_flutter_server/src/handler/click.dart';
 import 'package:appium_flutter_server/src/handler/double_click.dart';
 import 'package:appium_flutter_server/src/handler/delete_session.dart';
@@ -22,11 +24,13 @@ import 'package:appium_flutter_server/src/handler/wait/wait_for_absent.dart';
 import 'package:appium_flutter_server/src/handler/wait/wait_for_visible.dart';
 import 'package:appium_flutter_server/src/logger.dart';
 import 'package:shelf_plus/shelf_plus.dart' as shelf_plus;
+import 'package:device_info_plus/device_info_plus.dart';
 
 import 'package:appium_flutter_server/src/handler/clear.dart';
 
 import 'handler/gesture/drag_drop.dart';
 import 'handler/long_press.dart';
+import 'package:a_bridge/a_bridge.dart';
 
 enum HttpMethod { GET, POST, DELETE, PUT, PATCH }
 
@@ -78,8 +82,8 @@ class FlutterServer {
         "/session/<sessionId>/appium/gestures/double_click"));
     _registerPost(ScrollTillVisibleHandler(
         "/session/<sessionId>/appium/gestures/scroll_till_visible"));
-    _registerPost(DragAndDrop(
-        "/session/<sessionId>/appium/gestures/drag_drop"));
+    _registerPost(
+        DragAndDrop("/session/<sessionId>/appium/gestures/drag_drop"));
 
     /* Wait handlers */
     _registerPost(
@@ -104,21 +108,41 @@ class FlutterServer {
   }
 
   void startServer() async {
+    if (Platform.isIOS) {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      IosDeviceInfo ios = await deviceInfo.iosInfo;
+      log("Ios Device info: $ios");
+      if (!ios.isPhysicalDevice) {
+        ABridge aBridge = ABridge();
+        Map<String, dynamic>? arguments = await aBridge.getArgumentPair();
+        log('Command line arguments: $arguments');
+        if (arguments != null && arguments.containsKey('port')) {
+          log('Command line port value for ios: ${arguments['port']}');
+          await triggerServer(int.parse(arguments['port']));
+          return;
+        }
+      }
+    }
     final [startPort, endPort] = PORT_RANGE;
     int bindingPort = startPort;
-
-    while (bindingPort <= endPort) {
-      try {
-        await shelf_plus.shelfRun(() => _app.call,
-            defaultBindAddress: "0.0.0.0",
-            defaultBindPort: bindingPort,
-            defaultEnableHotReload: false);
-        log("Appium flutter server is listening on port $bindingPort");
-        break;
-      } catch (e) {
-        log("Unable to start server on port $bindingPort.");
-      }
+    bool serverStarted = false;
+    while (bindingPort <= endPort && !serverStarted) {
+      serverStarted = await triggerServer(bindingPort);
       bindingPort++;
     }
+  }
+
+  Future<bool> triggerServer(int bindingPort) async {
+    try {
+      await shelf_plus.shelfRun(() => _app.call,
+          defaultBindAddress: "0.0.0.0",
+          defaultBindPort: bindingPort,
+          defaultEnableHotReload: false);
+      log("Appium flutter server is listening on port $bindingPort");
+      return true;
+    } catch (e) {
+      log("Unable to start server on port $bindingPort.");
+    }
+    return false;
   }
 }
