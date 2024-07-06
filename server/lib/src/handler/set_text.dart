@@ -20,9 +20,12 @@ class SetTextHandler extends RequestHandler {
         .getSessionOrThrow()!
         .elementsCache
         .get(getElementId(request));
-    log('@@@@@@@@');
-    log(setTextModal.text);
-    await ElementHelper.setText(element, setTextModal.text);
+
+    String textToEnter = setTextModal.value.map((char) => char.toString()).join();
+    log("Input text from request: ${setTextModal.value}");
+    log("String to enter: $textToEnter");
+
+    await ElementHelper.setText(element, textToEnter);
 
     return AppiumResponse(getSessionId(request), null);
   }

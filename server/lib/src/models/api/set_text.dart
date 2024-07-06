@@ -1,13 +1,16 @@
 class SetTextModal {
-  String text;
+   dynamic? text;
+   List<dynamic> value;
 
-  SetTextModal({required this.text});
+  SetTextModal({this.text, required this.value});
 
   factory SetTextModal.fromJson(Map<String, dynamic> json) => SetTextModal(
-        text: json['text'] as String,
+        text: json['text'],
+        value: json['text'] as List<dynamic>,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'text': text,
+        'value': value
       };
 }
