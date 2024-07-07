@@ -9,7 +9,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
-const serverVersion = '0.0.16';
+const serverVersion = '0.0.17';
 
 void initializeTest({Widget? app, Function? callback}) async {
   IntegrationTestWidgetsFlutterBinding binding =
@@ -31,8 +31,11 @@ void initializeTest({Widget? app, Function? callback}) async {
     var appInfo = await PackageInfo.fromPlatform();
     // Need a better way to fetch this for automated release, this needs to be updated along with version bump
     // Can stay for now as it is not a breaking change
-    FlutterDriver.instance
-        .initialize(tester: tester, binding: binding, appInfo: appInfo, serverVersion: serverVersion);
+    FlutterDriver.instance.initialize(
+        tester: tester,
+        binding: binding,
+        appInfo: appInfo,
+        serverVersion: serverVersion);
     //await tester.pumpWidget(app);
     // await tester.tap(find.text("Form widgets"));
     // await tester.pumpAndSettle();
