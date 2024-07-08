@@ -9,7 +9,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
-const serverVersion = '0.0.17';
+const serverVersion = '0.0.18';
 
 void initializeTest({Widget? app, Function? callback}) async {
   IntegrationTestWidgetsFlutterBinding binding =

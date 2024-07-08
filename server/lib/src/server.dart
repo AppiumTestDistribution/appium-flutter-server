@@ -116,9 +116,9 @@ class FlutterServer {
         ABridge aBridge = ABridge();
         Map<String, dynamic>? arguments = await aBridge.getArgumentPair();
         log('Command line arguments: $arguments');
-        if (arguments != null && arguments.containsKey('port')) {
-          log('Command line port value for ios: ${arguments['port']}');
-          await triggerServer(int.parse(arguments['port']));
+        if (arguments != null && arguments.containsKey('flutter-server-port')) {
+          log('Command line port value for ios: ${arguments['flutter-server-port']}');
+          await triggerServer(int.parse(arguments['flutter-server-port']));
           return;
         }
       }
