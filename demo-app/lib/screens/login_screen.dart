@@ -79,10 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
               width: double.infinity,
               child: Semantics(
                 label: "login_button",
-                key: const Key("login_button"),
                 explicitChildNodes: true,
                 container: true,
                 child: ElevatedButton(
+                  key: const ValueKey("LoginButton"),
                   onPressed: () {
                     _validateCredentials();
                   },

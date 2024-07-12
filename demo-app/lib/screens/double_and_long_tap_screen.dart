@@ -139,11 +139,8 @@ class _LongPressScreenState extends State<LongPressScreen> {
           ),
           Padding(
             padding: const EdgeInsets.all(18.0),
-            child: Semantics(
-              label: "long_press_button",
-              explicitChildNodes: true,
-              container: true,
               child: InkWell(
+                key: const ValueKey("long_press_button"),
                 onLongPress: () async {
                   await _showLongPressPopup();
                 },
@@ -160,7 +157,6 @@ class _LongPressScreenState extends State<LongPressScreen> {
                   ),
                 ),
               ),
-            ),
           )
         ],
       ),

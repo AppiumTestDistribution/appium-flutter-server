@@ -44,7 +44,8 @@ class _LazyLoadingScreenState extends State<LazyLoadingScreen> {
                 // textField: true,
                 explicitChildNodes: true,
                 container: true,
-                child: const Text("Hello world"),
+                child: const Text("Hello world",
+                  key: ValueKey("message_field")),
               )
             ],
             const SizedBox(
@@ -52,11 +53,8 @@ class _LazyLoadingScreenState extends State<LazyLoadingScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(18.0),
-              child: Semantics(
-                label: "toggle_button",
-                explicitChildNodes: true,
-                container: true,
-                child: InkWell(
+              child: InkWell(
+                key: const ValueKey("toggle_button"),
                   onTap: !isLoading
                       ? () async {
                           toggleMessage();
@@ -74,7 +72,6 @@ class _LazyLoadingScreenState extends State<LazyLoadingScreen> {
                     )),
                   ),
                 ),
-              ),
             ),
             const SizedBox(
               height: 100,

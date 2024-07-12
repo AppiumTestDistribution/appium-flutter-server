@@ -47,6 +47,7 @@ class _DragAndDropScreenState extends State<DragAndDropScreen> {
                     width: 100.0,
                     color: Colors.cyan,
                     child: const Center(
+                      key: ValueKey("drop_zone"),
                       child: Text('Drop here'),
                     ),
                   );
@@ -80,11 +81,8 @@ class _DragAndDropScreenState extends State<DragAndDropScreen> {
                           curve: Curves.fastOutSlowIn,
                           child: GestureDetector(
                             onTap: () {},
-                            child: Semantics(
-                              label: "drag_me",
-                              explicitChildNodes: true,
-                              container: true,
                               child: Draggable<int>(
+                                key: const ValueKey("drag_me"),
                                 onDragStarted: () {},
                                 onDragUpdate: (details) => {
                                   setState(() {
@@ -123,7 +121,6 @@ class _DragAndDropScreenState extends State<DragAndDropScreen> {
                                   ),
                                 ),
                               ),
-                            ),
                           ),
                         ),
                       ],
