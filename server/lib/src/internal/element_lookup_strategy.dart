@@ -8,17 +8,14 @@ enum ElementLookupStrategy {
   BY_TOOLTIP,
   BY_TEXT,
   BY_TEXT_CONTAINING,
+  BY_TYPE,
+  BY_ICON_POINT,
+  BY_ICON_NAME
   // BY_ICON,
   // BY_ELEMENT_PREDICATE,
   // BY_SUBTYPE,
-  BY_TYPE,
   // BY_WIDGET,
   //BY_WIDGET_PREDICATE,
-
-  //Custom Selectors
-  //BY_WIDGET_NAME,
-  BY_ICON_POINT,
-  BY_ICON_NAME
 }
 
 var a = Icons.accessible;
@@ -65,34 +62,33 @@ extension ElementLookupStrategyExtension on ElementLookupStrategy {
   String get name {
     switch (this) {
       case ElementLookupStrategy.BY_KEY:
-        return 'key';
+        return '-flutter key';
       case ElementLookupStrategy.BY_SEMANTICS_LABEL:
-        return 'semantics label';
+        return '-flutter semantics label';
       case ElementLookupStrategy.BY_TOOLTIP:
-        return 'tooltip';
+        return '-flutter tooltip';
       case ElementLookupStrategy.BY_TEXT:
-        return 'text';
+        return '-flutter text';
       case ElementLookupStrategy.BY_TEXT_CONTAINING:
-        return 'text containting';
-
+        return '-flutter text containting';
       case ElementLookupStrategy.BY_TYPE:
-        return 'type';
+        return '-flutter type';
       case ElementLookupStrategy.BY_ICON_POINT:
-        return 'icon point';
+        return '-flutter icon point';
       case ElementLookupStrategy.BY_ICON_NAME:
-        return 'icon name';
+        return '-flutter icon name';
       // case ElementLookupStrategy.BY_ICON:
-      //   return 'icon';
+      //   return '-flutter icon';
       // case ElementLookupStrategy.BY_ELEMENT_PREDICATE:
-      //   return 'element predicate';
+      //   return '-flutter element predicate';
       // case ElementLookupStrategy.BY_SUBTYPE:
-      //   return 'subtype';
+      //   return '-flutter subtype';
       // case ElementLookupStrategy.BY_TYPE:
-      //   return 'type';
+      //   return '-flutter type';
       // case ElementLookupStrategy.BY_WIDGET:
-      //   return 'widget';
+      //   return '-flutter widget';
       // case ElementLookupStrategy.BY_WIDGET_PREDICATE:
-      //   return 'widget predicate';
+      //   return '-flutter widget predicate';
     }
   }
 }

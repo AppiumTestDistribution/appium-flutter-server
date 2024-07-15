@@ -14,6 +14,7 @@ const serverVersion = '0.0.18';
 void initializeTest({Widget? app, Function? callback}) async {
   IntegrationTestWidgetsFlutterBinding binding =
       AppiumTestWidgetsFlutterBinding.ensureInitialized();
+
   if (app == null && callback == null) {
     throw Exception("App and callback cannot be null");
   }

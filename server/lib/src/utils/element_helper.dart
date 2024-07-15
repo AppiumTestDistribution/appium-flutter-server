@@ -10,7 +10,6 @@ import 'package:appium_flutter_server/src/models/api/drag_drop.dart';
 import 'package:appium_flutter_server/src/models/api/gesture.dart';
 import 'package:appium_flutter_server/src/models/api/find_element.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
-import 'package:appium_flutter_server/src/utils/test_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -39,8 +38,6 @@ class ElementHelper {
 
   static Future<List<Finder>> findElements(Finder by,
       {String? contextId, bool evaluatePresence = false}) async {
-    Session? session = FlutterDriver.instance.getSessionOrThrow();
-    WidgetTester tester = FlutterDriver.instance.tester;
     Finder finder = by;
 
     if (contextId != null) {
@@ -51,7 +48,7 @@ class ElementHelper {
 
       finder = find.descendant(of: parent.by, matching: by);
     }
-    final Iterable<Element> elements = finder.evaluate();
+    final FinderResult<Element> elements = finder.hitTestable().evaluate();
     if (evaluatePresence) {
       await waitForElementExist(FlutterElement.fromBy(finder),
           timeout: defaultWaitTimeout);
@@ -76,7 +73,6 @@ class ElementHelper {
 
   static Future<void> setText(FlutterElement element, String text) async {
     WidgetTester tester = _getTester();
-    tester.testTextInput.register();
     await tester.enterText(element.by, text);
     await tester.pump(const Duration(milliseconds: 400));
   }
