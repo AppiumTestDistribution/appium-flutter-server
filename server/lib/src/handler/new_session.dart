@@ -24,6 +24,7 @@ class NewSessionHandler extends RequestHandler
 
     String sessionId =
         FlutterDriver.instance.initializeSession(session.capabilities!);
+    //MockingService
     return AppiumResponse(sessionId, parsedCaps);
   }
 }

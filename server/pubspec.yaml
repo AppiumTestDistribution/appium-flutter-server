@@ -24,11 +24,14 @@ dependencies:
   a_bridge: ^0.0.2
   device_info_plus: any
   image_picker: ^1.1.2
+  path: 1.9.0
+
 
 dev_dependencies:
   build_runner: ^2.4.10
   flutter_lints: ^4.0.0
   mockito: any
+  permission_handler: ^8.1.6
 
 integration_test:
   sdk: flutter
