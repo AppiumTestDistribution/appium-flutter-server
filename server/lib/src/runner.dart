@@ -9,19 +9,19 @@ import 'package:integration_test/integration_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
-const serverVersion = '0.0.18';
+// Need a better way to fetch this for automated release, this needs to be updated along with version bump
+// Can stay for now as it is not a breaking change
+const serverVersion = '0.0.19';
 
 void initializeTest({Widget? app, Function? callback}) async {
   IntegrationTestWidgetsFlutterBinding binding =
       AppiumTestWidgetsFlutterBinding.ensureInitialized();
+
   if (app == null && callback == null) {
     throw Exception("App and callback cannot be null");
   }
 
   testWidgets('appium flutter server', (tester) async {
-    /* Initialize network tools */
-    // final appDocDirectory = await getApplicationDocumentsDirectory();
-    // await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
     if (callback != null) {
       await callback(tester);
     } else {
@@ -29,18 +29,12 @@ void initializeTest({Widget? app, Function? callback}) async {
     }
 
     var appInfo = await PackageInfo.fromPlatform();
-    // Need a better way to fetch this for automated release, this needs to be updated along with version bump
-    // Can stay for now as it is not a breaking change
     FlutterDriver.instance.initialize(
         tester: tester,
         binding: binding,
         appInfo: appInfo,
         serverVersion: serverVersion);
-    //await tester.pumpWidget(app);
-    // await tester.tap(find.text("Form widgets"));
-    // await tester.pumpAndSettle();
-    // await tester.tap(find.byKey(Key("brushed_check_box")));
-    // await tester.pumpAndSettle();
+
     FlutterServer.instance.startServer();
 
     // To block the test from ending

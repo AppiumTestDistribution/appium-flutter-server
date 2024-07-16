@@ -20,26 +20,17 @@ class FindElementstHandler extends RequestHandler {
     FindElementModel model =
         FindElementModel.fromJson(await request.body.asJson);
 
-    final String method = model.strategy;
-    final String selector = model.selector;
     final String? contextId = model.context == "" ? null : model.context;
 
-    if (contextId == null) {
-      log('"method: $method, selector: $selector');
-    } else {
-      log('"method: $method, selector: $selector, contextId: $contextId');
-    }
-
     Session? session = FlutterDriver.instance.getSessionOrThrow();
-    final Finder by = ElementLookupStrategy.values
-        .firstWhere((val) => val.name == method)
-        .toFinder(selector);
+    final Finder by =
+        await ElementHelper.locateElement(model, evaluatePresence: false);
     List<Finder> matchedByList = [];
     try {
       matchedByList =
           await ElementHelper.findElements(by, contextId: contextId);
     } on ElementNotFoundException catch (e) {
-      log("Got an exception while looking for multiple matches using method: $method, selector: $selector");
+      log("Got an exception while looking for multiple matches using method: ${model.strategy}, selector: ${model.selector}");
       log(e);
       return AppiumResponse(session!.sessionId, matchedByList);
     }
