@@ -70,7 +70,7 @@ extension ElementLookupStrategyExtension on ElementLookupStrategy {
       case ElementLookupStrategy.BY_TEXT:
         return '-flutter text';
       case ElementLookupStrategy.BY_TEXT_CONTAINING:
-        return '-flutter text containting';
+        return '-flutter text containing';
       case ElementLookupStrategy.BY_TYPE:
         return '-flutter type';
       case ElementLookupStrategy.BY_ICON_POINT:

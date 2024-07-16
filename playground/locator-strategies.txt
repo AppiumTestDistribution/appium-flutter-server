@@ -9,7 +9,7 @@
 }
 
 {
-  "strategy": "text containting",
+  "strategy": "text containing",
   "selector": "Text on the element contains"
 }
 
