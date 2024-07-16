@@ -264,7 +264,10 @@ class ElementHelper {
 
   static Future<Finder> locateElement(FindElementModel model,
       {bool evaluatePresence = true}) async {
-    final String method = model.strategy;
+    /// Support for backward compatibility
+    final String method = model.strategy.startsWith("-flutter")
+        ? model.strategy
+        : '-flutter ${model.strategy.trim()}';
     final String selector = model.selector;
     final String? contextId = model.context == "" ? null : model.context;
 
