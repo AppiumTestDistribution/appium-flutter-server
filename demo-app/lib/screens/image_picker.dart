@@ -142,7 +142,7 @@ class _MyHomePageState extends State<ImagePickerScreen> {
             );
             final decoder =
             QRCodeDartScanDecoder(formats: [BarcodeFormat.qrCode]);
-            Result? result = await decoder.decodeFile(pickedFile!);
+            Result? result = await decoder.decodeFile(pickedFile!, scanInverted: true);
             _qrCodeValue = result?.text;
             setState(() {
               _setImageFileListFromFile(pickedFile);
