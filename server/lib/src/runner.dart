@@ -4,14 +4,12 @@ import 'package:path/path.dart' as path;
 
 import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/appium_test_bindings.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:appium_flutter_server/src/server.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:image_picker_ios/image_picker_ios.dart';
-import 'package:image_picker_android/image_picker_android.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -19,16 +17,15 @@ import 'package:permission_handler/permission_handler.dart';
 
 
 const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
-const serverVersion = '0.0.18';
+// Need a better way to fetch this for automated release, this needs to be updated along with version bump
+// Can stay for now as it is not a breaking change
+const serverVersion = '0.0.20';
 
 // @GenerateMocks([ImagePickerAndroid])
 
 void initializeTest({Widget? app, Function? callback}) async {
   IntegrationTestWidgetsFlutterBinding binding =
       AppiumTestWidgetsFlutterBinding.ensureInitialized();
-
-
-  binding.ensureSemantics;
 
   if (app == null && callback == null) {
     throw Exception("App and callback cannot be null");
@@ -40,16 +37,6 @@ void initializeTest({Widget? app, Function? callback}) async {
     //await saveDownloadedFile([], "");
     print(ImagePickerPlatform.instance);
     // ImagePicker.instance = MockImagePickerAndroid();
-
-
-
-    /* Initialize network tools */
-    // final appDocDirectory = await getApplicationDocumentsDirectory();
-    // await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
-    // tester.binding.defaultBinaryMessenger
-    //     .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
-    //   return "/sdcard/Pictures/test.png";
-    // });
     if (callback != null) {
       await callback(tester);
     } else {
@@ -57,18 +44,12 @@ void initializeTest({Widget? app, Function? callback}) async {
     }
 
     var appInfo = await PackageInfo.fromPlatform();
-    // Need a better way to fetch this for automated release, this needs to be updated along with version bump
-    // Can stay for now as it is not a breaking change
     FlutterDriver.instance.initialize(
         tester: tester,
         binding: binding,
         appInfo: appInfo,
         serverVersion: serverVersion);
-    //await tester.pumpWidget(app);
-    // await tester.tap(find.text("Form widgets"));
-    // await tester.pumpAndSettle();
-    // await tester.tap(find.byKey(Key("brushed_check_box")));
-    // await tester.pumpAndSettle();
+
     FlutterServer.instance.startServer();
 
     // To block the test from ending

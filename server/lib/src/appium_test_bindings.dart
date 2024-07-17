@@ -23,4 +23,7 @@ class AppiumTestWidgetsFlutterBinding
 
   @override
   TestBindingEventSource get pointerEventSource => TestBindingEventSource.test;
+
+  @override
+  bool get registerTestTextInput => true;
 }

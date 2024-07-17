@@ -8,14 +8,16 @@ class FindElementModel {
 
   factory FindElementModel.fromJson(Map<String, dynamic> json) =>
       FindElementModel(
-        strategy: json['strategy'] as String,
-        selector: json['selector'] as String,
+        strategy: (json['strategy'] ?? json['using']) as String,
+        selector: (json['selector'] ?? json['value']) as String,
         context: json['context'] as String?,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'strategy': strategy,
         'selector': selector,
+        "using": strategy,
+        "value": selector,
         'context': context,
       };
 }
