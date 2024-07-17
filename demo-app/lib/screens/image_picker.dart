@@ -147,7 +147,7 @@ class _MyHomePageState extends State<ImagePickerScreen> {
             setState(() {
               _setImageFileListFromFile(pickedFile);
             });
-          } catch (e) {
+          } catch (e, stacktrace) {
             setState(() {
               _pickImageError = e;
             });
