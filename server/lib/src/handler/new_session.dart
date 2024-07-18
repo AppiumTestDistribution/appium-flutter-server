@@ -2,9 +2,12 @@ import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/exceptions/invalid_argument_exception.dart';
 import 'package:appium_flutter_server/src/handler/request/no_session_command_handler.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
+import 'package:appium_flutter_server/src/logger.dart';
 import 'package:appium_flutter_server/src/models/api/appium_response.dart';
 import 'package:appium_flutter_server/src/models/api/create_session.dart';
+import 'package:appium_flutter_server/src/utils/camera_mocking.dart';
 import 'package:appium_flutter_server/src/utils/w3c_capabilities.dart';
+import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:shelf_plus/shelf_plus.dart';
 
 class NewSessionHandler extends RequestHandler
@@ -24,7 +27,12 @@ class NewSessionHandler extends RequestHandler
 
     String sessionId =
         FlutterDriver.instance.initializeSession(session.capabilities!);
-    //MockingService
+    if (session.capabilities?['flutterEnableMockCamera'] ?? false) {
+      var flutterMockCameraValue = session.capabilities?['flutterEnableMockCamera'];
+      ImagePickerPlatform.instance = MockImagePicker();
+      FlutterDriver.instance.setCameraMocked(true);
+      log('Camera Instance mocked: $flutterMockCameraValue');
+    }
     return AppiumResponse(sessionId, parsedCaps);
   }
 }

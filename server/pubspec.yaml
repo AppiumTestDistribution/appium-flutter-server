@@ -1,6 +1,6 @@
 name: appium_flutter_server
 description: "Appium Flutter server using Integration Test package for testing Flutter apps with Appium"
-version: 0.0.20
+version: 0.0.21
 homepage: "https://github.com/AppiumTestDistribution/appium-flutter-server"
 
 environment:
@@ -25,13 +25,12 @@ dependencies:
   device_info_plus: any
   image_picker: ^1.1.2
   path: 1.9.0
-
+  permission_handler: ^8.1.6
 
 dev_dependencies:
   build_runner: ^2.4.10
   flutter_lints: ^4.0.0
   mockito: any
-  permission_handler: ^8.1.6
 
 integration_test:
   sdk: flutter
