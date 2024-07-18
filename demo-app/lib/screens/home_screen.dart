@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
     featureModels.add(FeatureModel(
         title: "Contact permission", subtitle: "Asks for contact permission with native popup"));
     featureModels.add(FeatureModel(
-        title: "Image Picker", subtitle: "Image Picker"));
+        title: "Image Picker", subtitle: "Mock Camera Image Picker"));
   }
 
   @override

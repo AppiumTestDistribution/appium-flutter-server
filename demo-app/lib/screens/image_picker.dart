@@ -336,9 +336,10 @@ class _MyHomePageState extends State<ImagePickerScreen> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Semantics(
-            label: 'image_picker_example_from_gallery',
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
             child: FloatingActionButton(
+              key: const ValueKey('pick_image'),
               onPressed: () {
                 isVideo = false;
                 _onImageButtonPressed(ImageSource.gallery, context: context);
@@ -401,6 +402,7 @@ class _MyHomePageState extends State<ImagePickerScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: FloatingActionButton(
+                key: const ValueKey('capture_image'),
                 onPressed: () {
                   isVideo = false;
                   _onImageButtonPressed(ImageSource.camera, context: context);
