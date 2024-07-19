@@ -14,23 +14,6 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 class MockImagePicker extends ImagePickerPlatform {
 
-  // Future<PickedFile?> pickImage({
-  //   required ImageSource source,
-  //   double? maxWidth,
-  //   double? maxHeight,
-  //   int? imageQuality,
-  //   CameraDevice preferredCameraDevice = CameraDevice.rear,
-  // }) async {
-  //   return PickedFile("image_path123456");
-  // caps - cameraMock -.true
-  // code - ibjectImage - base64String -> device write, fileName randomw-> Map is set
-  // Active State-> randomFileName
-  // code - ibjectImage - base64String -> device write, fileName randomw-> Map is set
-  // Active State-> randomFileName2
-  // API->activeMockImage(''randomFileName1');
-  // Active State -> RandomFileName2
-  // }
-
   Future<XFile?> getImageFromSource({
     required ImageSource source,
     ImagePickerOptions options = const ImagePickerOptions(),
@@ -48,7 +31,7 @@ String activateInjectedImage(String imageId) {
     FlutterDriver.instance.setActiveMockImage(imageId);
     return FlutterDriver.instance.getActiveMockImage()!;
   } else {
-    throw Exception("Camera is not mocked"); //Make the message better
+    throw Exception("Make sure you have enabled the capability 'flutterEnableMockCamera: true' and inject an image before activating");
   }
 }
 
@@ -90,6 +73,6 @@ Future<String>  saveImageToDevice(String base64String) async {
     FlutterDriver.instance.setActiveMockImage(fileName);
     return fileName;
   } else {
-    throw Exception("Camera is not mocked"); //Make the message better
+    throw Exception("Make sure you have enabled the capability 'flutterEnableMockCamera: true'");
   }
 }
