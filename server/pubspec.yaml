@@ -25,7 +25,7 @@ dependencies:
   device_info_plus: any
   image_picker: ^1.1.2
   path: 1.9.0
-  permission_handler: ^8.1.6
+  permission_handler: any
 
 dev_dependencies:
   build_runner: ^2.4.10
