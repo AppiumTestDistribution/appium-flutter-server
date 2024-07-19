@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:appium_flutter_server/src/handler/activate_inject_image.dart';
 import 'package:appium_flutter_server/src/handler/click.dart';
 import 'package:appium_flutter_server/src/handler/double_click.dart';
 import 'package:appium_flutter_server/src/handler/delete_session.dart';
@@ -29,6 +30,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:appium_flutter_server/src/handler/clear.dart';
 
 import 'handler/gesture/drag_drop.dart';
+import 'handler/inject_image.dart';
 import 'handler/long_press.dart';
 import 'package:a_bridge/a_bridge.dart';
 
@@ -74,6 +76,8 @@ class FlutterServer {
     _registerPost(
         DoubleClickHandler("/session/<sessionId>/element/<id>/double_click"));
     _registerPost(PressBackHandler("/session/<sessionId>/back"));
+    _registerPost(InjectImage("/session/<sessionId>/inject_image"));
+    _registerPost(ActivateInjectImage("/session/<sessionId>/activate_inject_image"));
 
     /* Gesture handler */
     _registerPost(

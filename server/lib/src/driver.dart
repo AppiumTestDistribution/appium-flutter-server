@@ -11,6 +11,9 @@ class FlutterDriver {
   late PackageInfo _appInfo;
   String? _serverVersion;
   Session? _session;
+  bool _isCameraMocked = false;
+  final Map<String, String> _savedFiles = {};
+  String? _activeMockImage;
 
   FlutterDriver._();
 
@@ -21,6 +24,8 @@ class FlutterDriver {
   IntegrationTestWidgetsFlutterBinding get binding => _binding;
   PackageInfo get appInfo => _appInfo;
   String? get serverVersion => _serverVersion;
+  bool get isCameraMocked => _isCameraMocked;
+  String? get activeMockImage => _activeMockImage;
 
   void initialize(
       {required WidgetTester tester,
@@ -52,5 +57,25 @@ class FlutterDriver {
 
   void resetSession() {
     _session = null;
+  }
+
+  void setCameraMocked(bool value) {
+    _isCameraMocked = value;
+  }
+
+  void saveFileInfo(String fileName, String filePath) {
+    _savedFiles[fileName] = filePath;
+  }
+
+  String? getFilePath(String fileName) {
+    return _savedFiles[fileName];
+  }
+
+  void setActiveMockImage(String? value) {
+    _activeMockImage = value;
+  }
+
+  String? getActiveMockImage() {
+    return _savedFiles[_activeMockImage];
   }
 }

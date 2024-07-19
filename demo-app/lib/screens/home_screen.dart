@@ -1,5 +1,6 @@
 import 'package:appium_testing_app/components/custom_app_bar.dart';
 import 'package:appium_testing_app/models/feature_model.dart';
+import 'package:appium_testing_app/screens/image_picker.dart';
 import 'package:appium_testing_app/screens/lazy_loading.dart';
 import 'package:appium_testing_app/screens/loader_screen.dart';
 import 'package:appium_testing_app/screens/native_screen.dart';
@@ -63,6 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
         title: "Loader Screen", subtitle: "Page with loader and a button"));
     featureModels.add(FeatureModel(
         title: "Contact permission", subtitle: "Asks for contact permission with native popup"));
+    featureModels.add(FeatureModel(
+        title: "Image Picker", subtitle: "Mock Camera Image Picker"));
   }
 
   @override
@@ -152,6 +155,9 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 14:
         page = ContactPermissionScreen(title: featureModels[index].title,);
+        break;
+      case 15:
+        page = ImagePickerScreen(title: featureModels[index].title,);
         break;
       default:
         page = NativeScreen(title: featureModels[index].title);
