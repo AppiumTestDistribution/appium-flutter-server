@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/logger.dart';
 import 'package:appium_flutter_server/src/utils/test_utils.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:path_provider/path_provider.dart';
@@ -55,7 +56,15 @@ Future<String>  saveImageToDevice(String base64String) async {
   if (FlutterDriver.instance.isCameraMocked) {
     Directory directory;
     if (Platform.isAndroid) {
-      final permission = await Permission.manageExternalStorage.request();
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      print('Running on ${androidInfo.version.sdkInt}');
+      PermissionStatus permission;
+      if (androidInfo.version.sdkInt < 33) {
+        permission = await Permission.storage.request();
+      } else {
+        permission = await Permission.manageExternalStorage.request();
+      }
       if (permission.isGranted) {
         log('Injected Image will be saved in path ${await getDownloadsDirectory()}');
         directory = (await getDownloadsDirectory())!;
