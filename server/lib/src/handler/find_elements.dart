@@ -1,7 +1,6 @@
 import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/exceptions/element_not_found_exception.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
-import 'package:appium_flutter_server/src/internal/element_lookup_strategy.dart';
 import 'package:appium_flutter_server/src/internal/flutter_element.dart';
 import 'package:appium_flutter_server/src/logger.dart';
 import 'package:appium_flutter_server/src/models/api/appium_response.dart';
