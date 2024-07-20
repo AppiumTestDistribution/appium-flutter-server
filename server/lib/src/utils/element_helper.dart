@@ -10,6 +10,7 @@ import 'package:appium_flutter_server/src/models/api/drag_drop.dart';
 import 'package:appium_flutter_server/src/models/api/gesture.dart';
 import 'package:appium_flutter_server/src/models/api/find_element.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
+import 'package:appium_flutter_server/src/utils/flutter_settings.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -26,7 +27,6 @@ const defaultScrollDelta = 64.0;
 /// Default maximum number of drags during scrolling.
 const defaultScrollMaxIteration = 15;
 
-const Duration defaultWaitTimeout = Duration(seconds: 5);
 
 class ElementHelper {
   static Future<Finder> findElement(Finder by, {String? contextId}) async {
@@ -52,7 +52,7 @@ class ElementHelper {
     final FinderResult<Element> elements = finder.evaluate();
     if (evaluatePresence) {
       await waitForElementExist(FlutterElement.fromBy(finder),
-          timeout: defaultWaitTimeout);
+          timeout: getElementWaitTimeout());
 
       if (elements.isEmpty) {
         throw ElementNotFoundException("Unable to locate element");
@@ -496,7 +496,7 @@ class ElementHelper {
     Finder elementToFind = await locateElement(finder, evaluatePresence: false);
 
     await waitForElementExist(FlutterElement.fromBy(scrollViewElement),
-        timeout: defaultWaitTimeout);
+        timeout: getElementWaitTimeout());
     AxisDirection direction;
     if (scrollDirection == null) {
       if (scrollViewElement.evaluate().first.widget is Scrollable) {
