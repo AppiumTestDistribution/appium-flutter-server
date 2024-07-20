@@ -1,5 +1,6 @@
 import 'package:appium_flutter_server/src/exceptions/no_driver_exception.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
+import 'package:appium_flutter_server/src/utils/flutter_settings.dart';
 import 'package:appium_flutter_server/src/utils/test_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -14,6 +15,7 @@ class FlutterDriver {
   bool _isCameraMocked = false;
   final Map<String, String> _savedFiles = {};
   String? _activeMockImage;
+  FlutterSettings settings = FlutterSettings();
 
   FlutterDriver._();
 
@@ -40,6 +42,7 @@ class FlutterDriver {
 
   String initializeSession(Map<String, dynamic> capabilities) {
     _session = Session(generateUUID(), capabilities);
+    settings.updateSetting(capabilities);
     return _session!.sessionId;
   }
 
@@ -57,6 +60,7 @@ class FlutterDriver {
 
   void resetSession() {
     _session = null;
+    settings.reset();
   }
 
   void setCameraMocked(bool value) {

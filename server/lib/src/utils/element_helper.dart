@@ -52,7 +52,7 @@ class ElementHelper {
     final FinderResult<Element> elements = finder.evaluate();
     if (evaluatePresence) {
       await waitForElementExist(FlutterElement.fromBy(finder),
-          timeout: getElementWaitTimeout());
+          timeout: Duration(milliseconds: FlutterDriver.instance.settings.getSetting('flutterElementWaitTimeout')));
 
       if (elements.isEmpty) {
         throw ElementNotFoundException("Unable to locate element");
@@ -496,7 +496,7 @@ class ElementHelper {
     Finder elementToFind = await locateElement(finder, evaluatePresence: false);
 
     await waitForElementExist(FlutterElement.fromBy(scrollViewElement),
-        timeout: getElementWaitTimeout());
+        timeout: Duration(milliseconds: FlutterDriver.instance.settings.getSetting('flutterElementWaitTimeout')));
     AxisDirection direction;
     if (scrollDirection == null) {
       if (scrollViewElement.evaluate().first.widget is Scrollable) {
