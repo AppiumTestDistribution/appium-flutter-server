@@ -12,8 +12,8 @@ import 'package:appium_flutter_server/src/models/api/find_element.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
 import 'package:appium_flutter_server/src/utils/flutter_settings.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
@@ -26,7 +26,6 @@ const defaultScrollDelta = 64.0;
 
 /// Default maximum number of drags during scrolling.
 const defaultScrollMaxIteration = 15;
-
 
 class ElementHelper {
   static Future<Finder> findElement(Finder by, {String? contextId}) async {
@@ -52,7 +51,9 @@ class ElementHelper {
     final FinderResult<Element> elements = finder.evaluate();
     if (evaluatePresence) {
       await waitForElementExist(FlutterElement.fromBy(finder),
-          timeout: Duration(milliseconds: FlutterDriver.instance.settings.getSetting('flutterElementWaitTimeout')));
+          timeout: Duration(
+              milliseconds: FlutterDriver.instance.settings
+                  .getSetting(FlutterSettings.flutterElementWaitTimeout)));
 
       if (elements.isEmpty) {
         throw ElementNotFoundException("Unable to locate element");
@@ -182,6 +183,8 @@ class ElementHelper {
         buffer.write(widget.text.toPlainText());
       } else if (widget is EditableText) {
         buffer.write(widget.controller.text);
+      } else if (widget is TextField) {
+        buffer.write(widget.controller?.value.text);
       }
 
       if (element is RenderObjectElement) {
@@ -496,7 +499,9 @@ class ElementHelper {
     Finder elementToFind = await locateElement(finder, evaluatePresence: false);
 
     await waitForElementExist(FlutterElement.fromBy(scrollViewElement),
-        timeout: Duration(milliseconds: FlutterDriver.instance.settings.getSetting('flutterElementWaitTimeout')));
+        timeout: Duration(
+            milliseconds: FlutterDriver.instance.settings
+                .getSetting('flutterElementWaitTimeout')));
     AxisDirection direction;
     if (scrollDirection == null) {
       if (scrollViewElement.evaluate().first.widget is Scrollable) {
