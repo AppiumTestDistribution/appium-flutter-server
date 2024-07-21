@@ -15,7 +15,7 @@ packages:
       path: "../server"
       relative: true
     source: path
-    version: "0.0.21"
+    version: "0.0.23"
   archive:
     dependency: transitive
     description:
