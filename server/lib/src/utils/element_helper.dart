@@ -163,8 +163,8 @@ class ElementHelper {
   }
 
   static Future<String> getText(FlutterElement element) async {
-    String getElementTextRecursively(Element element, {Set<Element>? visited}) {
-      visited ??= <Element>{};
+    String getElementTextRecursively(dynamic element, {Set<dynamic>? visited}) {
+      visited ??= <dynamic>{};
 
       if (visited.contains(element)) {
         return '';
@@ -185,6 +185,8 @@ class ElementHelper {
         buffer.write(widget.controller.text);
       } else if (widget is TextField) {
         buffer.write(widget.controller?.value.text);
+      } else if (widget is ButtonStyleButton) {
+        buffer.write(getElementTextRecursively(widget.child, visited: visited));
       }
 
       if (element is RenderObjectElement) {
