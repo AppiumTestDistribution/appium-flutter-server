@@ -21,9 +21,6 @@ enum NATIVE_ELEMENT_ATTRIBUTES { enabled, displayed, clickable }
 
 typedef WaitPredicate = Future<bool> Function();
 
-// /// Default amount to drag by when scrolling.
-// const defaultScrollDelta = 64.0;
-
 class ElementHelper {
   static Future<Finder> findElement(Finder by, {String? contextId}) async {
     List<Finder> elementList =
