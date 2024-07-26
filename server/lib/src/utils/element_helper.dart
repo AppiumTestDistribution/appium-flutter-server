@@ -17,6 +17,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
+import '../driver.dart';
+import 'flutter_settings.dart';
+
 enum NATIVE_ELEMENT_ATTRIBUTES { enabled, displayed, clickable }
 
 typedef WaitPredicate = Future<bool> Function();
@@ -487,9 +490,9 @@ class ElementHelper {
     Duration? dragDuration,
   }) async {
     delta ??= FlutterDriver.instance.settings
-        .getSetting('flutterScrollDelta');;
+        .getSetting(FlutterSettings.flutterScrollDelta);
     maxScrolls ??= FlutterDriver.instance.settings
-        .getSetting('flutterScrollMaxIteration');
+        .getSetting(FlutterSettings.flutterScrollMaxIteration);
     WidgetTester tester = _getTester();
     Finder scrollViewElement = scrollView != null
         ? await locateElement(scrollView)
