@@ -24,9 +24,6 @@ typedef WaitPredicate = Future<bool> Function();
 /// Default amount to drag by when scrolling.
 const defaultScrollDelta = 64.0;
 
-/// Default maximum number of drags during scrolling.
-const defaultScrollMaxIteration = 15;
-
 class ElementHelper {
   static Future<Finder> findElement(Finder by, {String? contextId}) async {
     List<Finder> elementList =
@@ -493,7 +490,8 @@ class ElementHelper {
     Duration? dragDuration,
   }) async {
     delta ??= defaultScrollDelta;
-    maxScrolls ??= defaultScrollMaxIteration;
+    maxScrolls ??= FlutterDriver.instance.settings
+        .getSetting('flutterScrollMaxIteration');
     WidgetTester tester = _getTester();
     Finder scrollViewElement = scrollView != null
         ? await locateElement(scrollView)

@@ -1,13 +1,14 @@
 class FlutterSettings {
   Map<String, dynamic> _settings = {};
   static const String flutterElementWaitTimeout = "flutterElementWaitTimeout";
+  static const String flutterScrollMaxIteration = "flutterScrollMaxIteration";
 
   FlutterSettings() {
     _setDefaultSetting();
   }
 
   _setDefaultSetting() {
-    _settings = {flutterElementWaitTimeout: 5000};
+    _settings = {flutterElementWaitTimeout: 5000,flutterScrollMaxIteration: 15};
   }
 
   updateSetting(Map<String, dynamic> capabilities) {
