@@ -17,9 +17,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import '../driver.dart';
-import 'flutter_settings.dart';
-
 enum NATIVE_ELEMENT_ATTRIBUTES { enabled, displayed, clickable }
 
 typedef WaitPredicate = Future<bool> Function();
