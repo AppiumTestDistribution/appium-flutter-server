@@ -9,7 +9,11 @@ class FlutterSettings {
   }
 
   _setDefaultSetting() {
-    _settings = {flutterElementWaitTimeout: 5000,flutterScrollMaxIteration: 15,flutterScrollDelta:64};
+    _settings = {
+      flutterElementWaitTimeout: 5000,
+      flutterScrollMaxIteration: 15,
+      flutterScrollDelta: 64.0
+    };
   }
 
   updateSetting(Map<String, dynamic> capabilities) {

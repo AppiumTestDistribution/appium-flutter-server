@@ -10,7 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
 // Need a better way to fetch this for automated release, this needs to be updated along with version bump
 // Can stay for now as it is not a breaking change
-const serverVersion = '0.0.25';
+const serverVersion = '0.0.26';
 
 void initializeTest({Widget? app, Function? callback}) async {
   IntegrationTestWidgetsFlutterBinding binding =
