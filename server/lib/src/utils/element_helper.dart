@@ -537,8 +537,7 @@ class ElementHelper {
           moveStep,
           dragDuration!,
         );
-        await tester.pumpAndSettle(const Duration(milliseconds: 100),
-            EnginePhase.sendSemanticsUpdate, settleBetweenScrollsTimeout!);
+        await pumpAndTrySettle(timeout: settleBetweenScrollsTimeout!);
         iterationsLeft -= 1;
       }
 
