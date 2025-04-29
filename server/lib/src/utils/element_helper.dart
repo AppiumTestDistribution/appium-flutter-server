@@ -569,4 +569,88 @@ class ElementHelper {
       }
     }
   }
+
+  static Map<String, dynamic> _serializeElement(Element element, {Set<Element>? visited}) {
+    visited ??= <Element>{};
+    if (visited.contains(element)) {
+      return {};
+    }
+    visited.add(element);
+
+    final widget = element.widget;
+    final renderObject = element.renderObject;
+    final rect = renderObject?.paintBounds;
+
+    final children = <Map<String, dynamic>>[];
+    element.visitChildren((child) {
+      final childJson = _serializeElement(child, visited: visited);
+      if (childJson.isNotEmpty) {
+        children.add(childJson);
+      }
+    });
+
+    String? text;
+    if (widget is Text) {
+      text = widget.data ?? widget.textSpan?.toPlainText();
+    } else if (widget is RichText) {
+      text = widget.text.toPlainText();
+    } else if (widget is EditableText) {
+      text = widget.controller.text;
+    } else if (widget is TextField) {
+      text = widget.controller?.text;
+    }
+
+    return {
+      'type': widget.runtimeType.toString(),
+      if (text != null && text.isNotEmpty) 'text': text,
+      if (rect != null) ...{
+        'rect': {
+          'x': rect.left,
+          'y': rect.top,
+          'width': rect.width,
+          'height': rect.height,
+        }
+      },
+      'children': children,
+    };
+  }
+
+  static Future<List<Map<String, dynamic>>> getRenderTreeByType({
+    required String widgetType,
+    String? text,
+    String? key,
+  }) async {
+    final tester = _getTester();
+    final rootElement = tester.binding.rootElement;
+
+    if (rootElement == null) {
+      throw FlutterError('No root element found');
+    }
+
+    final matchedElements = <Element>[];
+
+    void search(Element element) {
+      final widget = element.widget;
+      final typeMatches = widget.runtimeType.toString() == widgetType;
+      final keyMatches = key == null || widget.key?.toString().contains(key) == true;
+      final textMatches = text == null || (
+          widget is Text && widget.data?.contains(text) == true
+      );
+
+      if (typeMatches && keyMatches && textMatches) {
+        matchedElements.add(element);
+      }
+
+      element.visitChildren(search);
+    }
+
+    search(rootElement);
+
+    if (matchedElements.isEmpty) {
+      throw FlutterError('No widgets found with specified filters');
+    }
+
+    return matchedElements.map((e) => _serializeElement(e)).toList();
+  }
+
 }
