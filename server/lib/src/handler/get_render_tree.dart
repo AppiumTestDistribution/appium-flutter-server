@@ -17,15 +17,6 @@ class GetRenderTreeByTypeHandler extends RequestHandler {
     final text = queryParams['text'];
     final key = queryParams['key'];
 
-    if (widgetType == null || widgetType.isEmpty) {
-      return AppiumResponse.withError(
-        getSessionId(request),
-        'Missing required parameter: widgetType',
-        null,
-        HttpStatus.badRequest,
-      );
-    }
-
     try {
       final elements = await ElementHelper.getRenderTreeByType(
         widgetType: widgetType,
