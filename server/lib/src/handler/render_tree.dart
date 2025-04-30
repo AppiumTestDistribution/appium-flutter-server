@@ -6,25 +6,25 @@ import 'package:appium_flutter_server/src/utils/element_helper.dart';
 
 import 'package:shelf_plus/shelf_plus.dart';
 
-class GetRenderTreeByTypeHandler extends RequestHandler {
-  GetRenderTreeByTypeHandler(super.route);
+class RenderTreeHandler extends RequestHandler {
+  RenderTreeHandler(super.route);
 
   @override
   Future<AppiumResponse> handle(Request request) async {
-    final queryParams = request.url.queryParameters;
+    final Map<String, dynamic>? bodyParams = await request.body.asJson;
 
-    final widgetType = queryParams['widgetType'];
-    final text = queryParams['text'];
-    final key = queryParams['key'];
+    final String? widgetType = bodyParams?['widgetType'] as String?;
+    final String? text = bodyParams?['text'] as String?;
+    final String? key = bodyParams?['key'] as String?;
 
     try {
-      final elements = await ElementHelper.getRenderTreeByType(
+      final widgetTree = await ElementHelper.getRenderTreeByType(
         widgetType: widgetType,
         text: text,
         key: key,
       );
 
-      return AppiumResponse(getSessionId(request), elements);
+      return AppiumResponse(getSessionId(request), widgetTree);
     } catch (e) {
       return AppiumResponse.withError(
         getSessionId(request),

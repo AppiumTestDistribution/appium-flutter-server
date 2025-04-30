@@ -11,6 +11,7 @@ import 'package:appium_flutter_server/src/models/api/gesture.dart';
 import 'package:appium_flutter_server/src/models/api/find_element.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
 import 'package:appium_flutter_server/src/utils/flutter_settings.dart';
+import 'package:appium_flutter_server/src/utils/ui_serialization/element_serializer.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -570,101 +571,12 @@ class ElementHelper {
     }
   }
 
-  static Map<String, dynamic> _serializeElement(
+  static Future<Map<String, dynamic>> _serializeElement(
     Element element, {
     Set<Element>? visited,
     int depth = 0,
-  }) {
-    visited ??= <Element>{};
-    if (visited.contains(element)) {
-      return {};
-    }
-    visited.add(element);
-
-    final widget = element.widget;
-    final renderObject = element.renderObject;
-    final rect = renderObject?.paintBounds;
-
-    final children = <Map<String, dynamic>>[];
-    element.visitChildren((child) {
-      final childJson =
-          _serializeElement(child, visited: visited, depth: depth + 1);
-      if (childJson.isNotEmpty) {
-        children.add(childJson);
-      }
-    });
-
-    String? text;
-    double? fontSize;
-    String? fontWeight;
-    String? fontStyle;
-    String? backgroundColor;
-
-    bool? enabled;
-    bool? focused;
-    bool? visible;
-
-    String? semanticsLabel;
-    String? tooltip;
-
-    if (widget is Text) {
-      text = widget.data ?? widget.textSpan?.toPlainText();
-      fontSize = widget.style?.fontSize;
-      fontWeight = widget.style?.fontWeight?.toString();
-      fontStyle = widget.style?.fontStyle?.toString();
-    } else if (widget is RichText) {
-      text = widget.text.toPlainText();
-    } else if (widget is EditableText) {
-      text = widget.controller.text;
-      focused = widget.focusNode.hasFocus;
-    } else if (widget is TextField) {
-      text = widget.controller?.text;
-      enabled = widget.enabled ?? true;
-      focused = widget.focusNode?.hasFocus ?? false;
-    } else if (widget is Semantics) {
-      semanticsLabel = widget.properties.label;
-    } else if (widget is Tooltip) {
-      tooltip = widget.message;
-    }
-
-    if (widget is Visibility) {
-      visible = widget.visible;
-    }
-
-    if (widget is Container && widget.decoration is BoxDecoration) {
-      final color = (widget.decoration as BoxDecoration).color;
-      if (color != null) {
-        backgroundColor = color.toString();
-      }
-    }
-
-    return {
-      'type': widget.runtimeType.toString(),
-      'elementType': element.runtimeType.toString(),
-      'description': widget.toStringShort(),
-      'depth': depth,
-      if (widget.key != null) 'key': widget.key.toString(),
-      if (text != null && text.isNotEmpty) 'text': text,
-      if (fontSize != null) 'fontSize': fontSize,
-      if (fontWeight != null) 'fontWeight': fontWeight,
-      if (fontStyle != null) 'fontStyle': fontStyle,
-      if (backgroundColor != null) 'backgroundColor': backgroundColor,
-      if (enabled != null) 'enabled': enabled,
-      if (focused != null) 'focused': focused,
-      if (visible != null) 'visible': visible,
-      if (semanticsLabel != null) 'semanticsLabel': semanticsLabel,
-      if (tooltip != null) 'tooltip': tooltip,
-      if (rect != null) ...{
-        'rect': {
-          'x': rect.left,
-          'y': rect.top,
-          'width': rect.width,
-          'height': rect.height,
-        }
-      },
-      'children': children,
-    };
-  }
+  }) =>
+      ElementSerializer.serialize(element, visited: visited, depth: depth);
 
   static Future<List<Map<String, dynamic>>> getRenderTreeByType({
     String? widgetType,
@@ -675,21 +587,33 @@ class ElementHelper {
     final rootElement = tester.binding.rootElement;
 
     if ((widgetType == null || widgetType.isEmpty) && rootElement != null) {
-      return [_serializeElement(rootElement)];
+      return [await _serializeElement(rootElement)];
     }
     if (rootElement == null) {
-      throw FlutterError('No root element found');
+      return [];
     }
 
     final matchedElements = <Element>[];
 
-    void search(Element element) {
+    Future<void> search(Element element) async {
       final widget = element.widget;
       final typeMatches = widget.runtimeType.toString() == widgetType;
       final keyMatches =
           key == null || widget.key?.toString().contains(key) == true;
-      final textMatches = text == null ||
-          (widget is Text && widget.data?.contains(text) == true);
+      bool textMatches = text == null;
+      if (text != null &&
+          (widget is Text ||
+              widget is RichText ||
+              widget is EditableText ||
+              widget is TextField)) {
+        try {
+          final flutterElement = FlutterElement.fromBy(find.byWidget(widget));
+          final elementText = await ElementHelper.getText(flutterElement);
+          textMatches = elementText == text;
+        } catch (_) {
+          textMatches = false;
+        }
+      }
 
       if (typeMatches && keyMatches && textMatches) {
         matchedElements.add(element);
@@ -698,11 +622,15 @@ class ElementHelper {
       element.visitChildren(search);
     }
 
-    search(rootElement);
-
+    await search(rootElement);
     if (matchedElements.isEmpty) {
-      throw FlutterError('No widgets found with specified filters');
+      return [];
     }
-    return matchedElements.map((e) => _serializeElement(e)).toList();
+    final results = <Map<String, dynamic>>[];
+
+    for (final element in matchedElements) {
+      results.add(await _serializeElement(element));
+    }
+    return results;
   }
 }
