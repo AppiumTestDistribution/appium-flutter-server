@@ -11,6 +11,7 @@ import 'package:appium_flutter_server/src/models/api/gesture.dart';
 import 'package:appium_flutter_server/src/models/api/find_element.dart';
 import 'package:appium_flutter_server/src/models/session.dart';
 import 'package:appium_flutter_server/src/utils/flutter_settings.dart';
+import 'package:appium_flutter_server/src/utils/ui_serialization/element_serializer.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -568,5 +569,68 @@ class ElementHelper {
         rethrow;
       }
     }
+  }
+
+  static Future<Map<String, dynamic>> _serializeElement(
+    Element element, {
+    Set<Element>? visited,
+    int depth = 0,
+  }) =>
+      ElementSerializer.serialize(element, visited: visited, depth: depth);
+
+  static Future<List<Map<String, dynamic>>> getRenderTreeByType({
+    String? widgetType,
+    String? text,
+    String? key,
+  }) async {
+    final tester = _getTester();
+    final rootElement = tester.binding.rootElement;
+
+    if ((widgetType == null || widgetType.isEmpty) && rootElement != null) {
+      return [await _serializeElement(rootElement)];
+    }
+    if (rootElement == null) {
+      return [];
+    }
+
+    final matchedElements = <Element>[];
+
+    Future<void> search(Element element) async {
+      final widget = element.widget;
+      final typeMatches = widget.runtimeType.toString() == widgetType;
+      final keyMatches =
+          key == null || widget.key?.toString().contains(key) == true;
+      bool textMatches = text == null;
+      if (text != null &&
+          (widget is Text ||
+              widget is RichText ||
+              widget is EditableText ||
+              widget is TextField)) {
+        try {
+          final flutterElement = FlutterElement.fromBy(find.byWidget(widget));
+          final elementText = await ElementHelper.getText(flutterElement);
+          textMatches = elementText == text;
+        } catch (_) {
+          textMatches = false;
+        }
+      }
+
+      if (typeMatches && keyMatches && textMatches) {
+        matchedElements.add(element);
+      }
+
+      element.visitChildren(search);
+    }
+
+    await search(rootElement);
+    if (matchedElements.isEmpty) {
+      return [];
+    }
+    final results = <Map<String, dynamic>>[];
+
+    for (final element in matchedElements) {
+      results.add(await _serializeElement(element));
+    }
+    return results;
   }
 }

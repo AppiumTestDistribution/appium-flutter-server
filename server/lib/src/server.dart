@@ -12,6 +12,7 @@ import 'package:appium_flutter_server/src/handler/gesture/scroll_till_visible.da
 import 'package:appium_flutter_server/src/handler/get_attribute.dart';
 import 'package:appium_flutter_server/src/handler/get_name.dart';
 import 'package:appium_flutter_server/src/handler/get_rect.dart';
+import 'package:appium_flutter_server/src/handler/render_tree.dart';
 import 'package:appium_flutter_server/src/handler/get_size.dart';
 import 'package:appium_flutter_server/src/handler/get_text.dart';
 import 'package:appium_flutter_server/src/handler/new_session.dart';
@@ -72,13 +73,15 @@ class FlutterServer {
     _registerPost(NewSessionHandler("/session"));
     _registerPost(FindElementHandler("/session/<sessionId>/element"));
     _registerPost(FindElementstHandler("/session/<sessionId>/elements"));
+    _registerPost(
+        RenderTreeHandler("/session/<sessionId>/element/render_tree"));
     _registerPost(ClickHandler("/session/<sessionId>/element/<id>/click"));
     _registerPost(
         DoubleClickHandler("/session/<sessionId>/element/<id>/double_click"));
     _registerPost(PressBackHandler("/session/<sessionId>/back"));
     _registerPost(InjectImage("/session/<sessionId>/inject_image"));
-    _registerPost(ActivateInjectImage("/session/<sessionId>/activate_inject_image"));
-
+    _registerPost(
+        ActivateInjectImage("/session/<sessionId>/activate_inject_image"));
     /* Gesture handler */
     _registerPost(
         LongPressHandler("/session/<sessionId>/appium/gestures/long_press"));
