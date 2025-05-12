@@ -4,7 +4,7 @@ version: 0.0.27
 homepage: "https://github.com/AppiumTestDistribution/appium-flutter-server"
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.1.1 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -31,12 +31,6 @@ dev_dependencies:
   build_runner: ^2.4.10
   flutter_lints: ^4.0.0
   mockito: any
-
-dependency_overrides:
-  shelf_plus:
-    git:
-      url: https://github.com/makeplane/shelf_plus.git
-      ref: chore/update-supported-version
 
 integration_test:
   sdk: flutter
