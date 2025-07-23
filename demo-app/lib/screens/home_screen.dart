@@ -9,6 +9,7 @@ import 'package:appium_testing_app/screens/ui_elements_screen.dart';
 import 'package:appium_testing_app/screens/vertical_swiping_screen.dart';
 import 'package:appium_testing_app/screens/web_view_screen.dart';
 import 'package:appium_testing_app/screens/wheel_picker_screen.dart';
+import 'package:appium_testing_app/screens/nested_scroll.dart';
 import 'package:flutter/material.dart';
 
 import 'carousel_screen.dart';
@@ -66,6 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
         title: "Contact permission", subtitle: "Asks for contact permission with native popup"));
     featureModels.add(FeatureModel(
         title: "Image Picker", subtitle: "Mock Camera Image Picker"));
+    featureModels.add(FeatureModel(
+        title: "Nested Scroll", subtitle: "Nested elements - For scroll"));
   }
 
   @override
@@ -158,6 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 15:
         page = ImagePickerScreen(title: featureModels[index].title,);
+        break;
+      case 16:
+        page = NestedScrollLayoutScreen(title: featureModels[index].title);
         break;
       default:
         page = NativeScreen(title: featureModels[index].title);
