@@ -12,9 +12,9 @@ const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
 // Can stay for now as it is not a breaking change
 const serverVersion = '0.0.28';
 
-void initializeTest({Widget? app, Function? callback}) async {
+Future<void> initializeTest({Widget? app, Function? callback}) async {
   IntegrationTestWidgetsFlutterBinding binding =
-      AppiumTestWidgetsFlutterBinding.ensureInitialized();
+  AppiumTestWidgetsFlutterBinding.ensureInitialized();
 
   if (app == null && callback == null) {
     throw Exception("App and callback cannot be null");
@@ -39,4 +39,5 @@ void initializeTest({Widget? app, Function? callback}) async {
     // To block the test from ending
     await Completer<void>().future;
   }, timeout: const Timeout(Duration(seconds: MAX_TEST_DURATION_SECS)));
+  return;
 }
