@@ -11,8 +11,8 @@ import 'package:appium_flutter_server/src/utils/element_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shelf_plus/shelf_plus.dart';
 
-class FindElementstHandler extends RequestHandler {
-  FindElementstHandler(super.route);
+class FindElementsHandler extends RequestHandler {
+  FindElementsHandler(super.route);
 
   @override
   Future<AppiumResponse> handle(Request request) async {

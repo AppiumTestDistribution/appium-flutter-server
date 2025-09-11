@@ -72,7 +72,7 @@ class FlutterServer {
     _registerPost(ClearHandler("/session/<sessionId>/element/<id>/clear"));
     _registerPost(NewSessionHandler("/session"));
     _registerPost(FindElementHandler("/session/<sessionId>/element"));
-    _registerPost(FindElementstHandler("/session/<sessionId>/elements"));
+    _registerPost(FindElementsHandler("/session/<sessionId>/elements"));
     _registerPost(
         RenderTreeHandler("/session/<sessionId>/element/render_tree"));
     _registerPost(ClickHandler("/session/<sessionId>/element/<id>/click"));

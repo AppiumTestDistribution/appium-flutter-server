@@ -101,7 +101,7 @@ class ElementHelper {
         if (doubleClickModel.offset == null) {
           await doubleClick(element);
         } else {
-          Rect bounds = getElementBounds(element!.by);
+          Rect bounds = getElementBounds(element.by);
           log("Click by offset $bounds");
           await tester.tapAt(Offset(bounds.left + doubleClickModel.offset!.x,
               bounds.top + doubleClickModel.offset!.y));
@@ -147,7 +147,7 @@ class ElementHelper {
         if (longPressModel.offset == null) {
           await tester.longPress(element.by);
         } else {
-          Rect bounds = getElementBounds(element!.by);
+          Rect bounds = getElementBounds(element.by);
           log("Click by offset $bounds");
           await tester.longPressAt(
               Offset(longPressModel.offset!.x, longPressModel.offset!.y));
@@ -268,18 +268,19 @@ class ElementHelper {
     final String method = model.strategy.startsWith("-flutter")
         ? model.strategy
         : '-flutter ${model.strategy.trim()}';
-    final String selector = model.selector;
     final String? contextId = model.context == "" ? null : model.context;
 
     if (contextId == null) {
-      log('"method: $method, selector: $selector');
+      log('"method: $method, selector: ${model.selector}');
     } else {
-      log('"method: $method, selector: $selector, contextId: $contextId');
+      log('"method: $method, selector: ${model.selector}, contextId: $contextId');
     }
 
-    final Finder by = ElementLookupStrategy.values
-        .firstWhere((val) => val.name == method)
-        .toFinder(selector);
+    // Get the strategy and create the finder
+    final strategy =
+        ElementLookupStrategy.values.firstWhere((val) => val.name == method);
+    final Finder by = await strategy.toFinder(model);
+
     if (evaluatePresence) {
       return await findElement(by, contextId: contextId);
     } else {
