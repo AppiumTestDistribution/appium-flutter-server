@@ -1,5 +1,13 @@
 PODS:
+  - a_bridge (0.0.1):
+    - Flutter
+  - camera_avfoundation (0.0.1):
+    - Flutter
+  - device_info_plus (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
+  - image_picker_ios (0.0.1):
+    - Flutter
   - integration_test (0.0.1):
     - Flutter
   - package_info_plus (0.4.5):
@@ -7,35 +15,70 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - permission_handler_apple (9.3.0):
+    - Flutter
+  - url_launcher_ios (0.0.1):
+    - Flutter
+  - video_player_avfoundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
 DEPENDENCIES:
+  - a_bridge (from `.symlinks/plugins/a_bridge/ios`)
+  - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 EXTERNAL SOURCES:
+  a_bridge:
+    :path: ".symlinks/plugins/a_bridge/ios"
+  camera_avfoundation:
+    :path: ".symlinks/plugins/camera_avfoundation/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
   integration_test:
     :path: ".symlinks/plugins/integration_test/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+  video_player_avfoundation:
+    :path: ".symlinks/plugins/video_player_avfoundation/darwin"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
+  a_bridge: f7ad97079e92a71f40963361c683c33101194b96
+  camera_avfoundation: 04b44aeb14070126c6529e5ab82cc7c9fca107cf
+  device_info_plus: 71ffc6ab7634ade6267c7a93088ed7e4f74e5896
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  integration_test: ce0a3ffa1de96d1a89ca0ac26fca7ea18a749ef4
-  package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  webview_flutter_wkwebview: be0f0d33777f1bfd0c9fdcb594786704dbf65f36
+  image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
+  integration_test: d5929033778cc4991a187e4e1a85396fa4f59b3a
+  package_info_plus: 580e9a5f1b6ca5594e7c9ed5f92d1dfb2a66b5e1
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
+  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  video_player_avfoundation: 2cef49524dd1f16c5300b9cd6efd9611ce03639b
+  webview_flutter_wkwebview: 45a041c7831641076618876de3ba75c712860c6b
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

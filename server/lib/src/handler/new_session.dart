@@ -27,11 +27,14 @@ class NewSessionHandler extends RequestHandler
 
     String sessionId =
         FlutterDriver.instance.initializeSession(session.capabilities!);
-    if (session.capabilities?['flutterEnableMockCamera'] ?? false) {
-      var flutterMockCameraValue = session.capabilities?['flutterEnableMockCamera'];
+    var flutterMockCameraValue = session.capabilities?['flutterEnableMockCamera'] ?? 
+                                 session.capabilities?['appium:flutterEnableMockCamera'];
+    if (flutterMockCameraValue ?? false) {
       ImagePickerPlatform.instance = MockImagePicker();
       FlutterDriver.instance.setCameraMocked(true);
       log('Camera Instance mocked: $flutterMockCameraValue');
+    } else {
+      log('Camera mocking not enabled. Session capabilities: ${session.capabilities}');
     }
     return AppiumResponse(sessionId, parsedCaps);
   }
