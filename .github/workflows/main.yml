@@ -89,17 +89,17 @@ jobs:
       - run: |
           ls
           cd server/demo-app
-          flutter build macos --release integration_test/appium.dart
+          flutter build macos --debug integration_test/appium.dart
       - name: "List files"
         continue-on-error: true
         run: |
-          ls -l ${{ github.workspace }}/server/demo-app/build/macos/Build/Products/Release/
+          ls -l ${{ github.workspace }}/server/demo-app/build/macos/Build/Products/Debug/
       - name: "Zip files"
         run: |
-          cd ${{ github.workspace }}/server/demo-app/build/macos/Build/Products/Release/
+          cd ${{ github.workspace }}/server/demo-app/build/macos/Build/Products/Debug/
           zip -r macos.zip appium_testing_app.app
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: macos-build
-          path: ${{ github.workspace }}/server/demo-app/build/macos/Build/Products/Release/macos.zip
+          path: ${{ github.workspace }}/server/demo-app/build/macos/Build/Products/Debug/macos.zip
