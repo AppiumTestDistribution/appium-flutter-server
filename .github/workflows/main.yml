@@ -69,3 +69,37 @@ jobs:
         with:
           name: ios-build
           path: ${{ github.workspace }}/server/demo-app/build/ios/iphonesimulator/ios.zip
+  macOS:
+    runs-on: macos-latest
+    steps:
+      - name: Check out my other private repo
+        uses: actions/checkout@master
+        with:
+          path: 'server'
+          repository: AppiumTestDistribution/appium-flutter-server
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.22.1
+          channel: 'stable'
+      - run: |
+          ls
+          cd server/demo-app
+          flutter build macos --release integration_test/appium.dart
+      - name: "List files"
+        continue-on-error: true
+        run: |
+          ls -l ${{ github.workspace }}/server/demo-app/build/macos/Build/Products/Release/
+      - name: "Zip files"
+        run: |
+          cd ${{ github.workspace }}/server/demo-app/build/macos/Build/Products/Release/
+          zip -r macos.zip appium_testing_app.app
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: ${{ github.workspace }}/server/demo-app/build/macos/Build/Products/Release/macos.zip

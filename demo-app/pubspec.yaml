@@ -6,7 +6,7 @@ publish_to: "none"
 scripts:
   android: "cd android && ./gradlew app:assembleDebug -Ptarget=`pwd`/../integration_test/appium.dart && (adb uninstall com.example.appium_testing_app | exit 0) && adb install -r `pwd`/../build/app/outputs/apk/debug/app-debug.apk"
   simulator: "flutter build ios integration_test/appium.dart  --simulator && xcrun simctl install booted ./build/ios/iphonesimulator/Runner.app && xcrun simctl spawn booted log stream | grep flutter"
-
+  macos: "flutter build macos --release integration_test/appium.dart"
 version: 1.0.0+1
 
 environment:
