@@ -442,22 +442,20 @@ class ElementHelper {
     String? errorMessage,
     Duration timeout = const Duration(seconds: 20),
   }) async {
-    return TestAsyncUtils.guard(() async {
-      WidgetTester tester = FlutterDriver.instance.tester;
-      final end = tester.binding.clock.now().add(timeout);
+    WidgetTester tester = FlutterDriver.instance.tester;
+    final end = tester.binding.clock.now().add(timeout);
 
-      do {
-        if (tester.binding.clock.now().isAfter(end)) {
-          throw Exception(errorMessage != null
-              ? '$errorMessage with ${timeout.inSeconds} seconds'
-              : 'Timed out waiting for condition');
-        }
-        if (Platform.isAndroid) {
-          await pumpAndTrySettle(timeout: const Duration(milliseconds: 200));
-        }
-        await Future.delayed(const Duration(milliseconds: 100));
-      } while (!(await predicate()));
-    });
+    do {
+      if (tester.binding.clock.now().isAfter(end)) {
+        throw Exception(errorMessage != null
+            ? '$errorMessage with ${timeout.inSeconds} seconds'
+            : 'Timed out waiting for condition');
+      }
+      if (Platform.isAndroid) {
+        await pumpAndTrySettle(timeout: const Duration(milliseconds: 200));
+      }
+      await Future.delayed(const Duration(milliseconds: 100));
+    } while (!(await predicate()));
   }
 
   static Future<void> dragAndDrop(DragAndDropModel model) async {
@@ -558,20 +556,22 @@ class ElementHelper {
     EnginePhase phase = EnginePhase.sendSemanticsUpdate,
     Duration timeout = const Duration(milliseconds: 200),
   }) async {
-    try {
-      WidgetTester tester = _getTester();
-      await tester.pumpAndSettle(
-        duration,
-        phase,
-        timeout,
-      );
-    } on FlutterError catch (err) {
-      if (err.message == 'pumpAndSettle timed out') {
-        //This method ignores pumpAndSettle timeouts on purpose
-      } else {
-        rethrow;
+    return TestAsyncUtils.guard(() async {
+      try {
+        WidgetTester tester = _getTester();
+        await tester.pumpAndSettle(
+          duration,
+          phase,
+          timeout,
+        );
+      } on FlutterError catch (err) {
+        if (err.message == 'pumpAndSettle timed out') {
+          //This method ignores pumpAndSettle timeouts on purpose
+        } else {
+          rethrow;
+        }
       }
-    }
+    });
   }
 
   static Future<Map<String, dynamic>> _serializeElement(
