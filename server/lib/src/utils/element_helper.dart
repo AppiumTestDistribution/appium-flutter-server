@@ -556,20 +556,22 @@ class ElementHelper {
     EnginePhase phase = EnginePhase.sendSemanticsUpdate,
     Duration timeout = const Duration(milliseconds: 200),
   }) async {
-    try {
-      WidgetTester tester = _getTester();
-      await tester.pumpAndSettle(
-        duration,
-        phase,
-        timeout,
-      );
-    } on FlutterError catch (err) {
-      if (err.message == 'pumpAndSettle timed out') {
-        //This method ignores pumpAndSettle timeouts on purpose
-      } else {
-        rethrow;
+    return TestAsyncUtils.guard(() async {
+      try {
+        WidgetTester tester = _getTester();
+        await tester.pumpAndSettle(
+          duration,
+          phase,
+          timeout,
+        );
+      } on FlutterError catch (err) {
+        if (err.message == 'pumpAndSettle timed out') {
+          //This method ignores pumpAndSettle timeouts on purpose
+        } else {
+          rethrow;
+        }
       }
-    }
+    });
   }
 
   static Future<Map<String, dynamic>> _serializeElement(
