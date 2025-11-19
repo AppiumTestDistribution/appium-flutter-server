@@ -181,12 +181,9 @@ class ElementHelper {
         buffer.write(widget.controller.text);
       } else if (widget is TextField) {
         buffer.write(widget.controller?.value.text);
-
-      }
-      else if (widget is TextFormField) {
+      }else if (widget is TextFormField) {
       buffer.write(widget.controller?.text ?? '');
-    }
-       else if (widget is ButtonStyleButton) {
+      }else if (widget is ButtonStyleButton) {
         buffer.write(getElementTextRecursively(widget.child, visited: visited));
       }
 
