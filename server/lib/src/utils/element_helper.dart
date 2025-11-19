@@ -168,6 +168,7 @@ class ElementHelper {
       final StringBuffer buffer = StringBuffer();
 
       final widget = element.widget;
+      log("the widget is $widget");
       if (widget is Text) {
         if (widget.data != null) {
           buffer.write(widget.data);
@@ -180,7 +181,12 @@ class ElementHelper {
         buffer.write(widget.controller.text);
       } else if (widget is TextField) {
         buffer.write(widget.controller?.value.text);
-      } else if (widget is ButtonStyleButton) {
+
+      }
+      else if (widget is TextFormField) {
+      buffer.write(widget.controller?.text ?? '');
+    }
+       else if (widget is ButtonStyleButton) {
         buffer.write(getElementTextRecursively(widget.child, visited: visited));
       }
 
