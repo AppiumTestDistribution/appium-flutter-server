@@ -26,8 +26,25 @@ class ElementHelper {
   static Future<Finder> findElement(Finder by, {String? contextId}) async {
     List<Finder> elementList =
         await findElements(by, contextId: contextId, evaluatePresence: true);
-    log("Element found ${elementList.first}");
+    final Finder? hitTestableElement =
+        getFirstHitTestableElementIfPresent(elementList);
+    if (hitTestableElement != null) {
+      log("The hitTestable element found $hitTestableElement");
+      return hitTestableElement;
+    }
+    log("The non-hitTestable element found ${elementList.first}");
     return elementList.first;
+  }
+
+  static Finder? getFirstHitTestableElementIfPresent(List<Finder> elementList) {
+    for (Finder element in elementList) {
+      try {
+        if (element.hitTestable().tryEvaluate()) {
+          return element;
+        }
+      } catch (_) {}
+    }
+    return null;
   }
 
   static Future<List<Finder>> findElements(Finder by,
@@ -42,7 +59,6 @@ class ElementHelper {
 
       finder = find.descendant(of: parent.by, matching: by);
     }
-    finder = finder.hitTestable();
     final FinderResult<Element> elements = finder.evaluate();
     if (evaluatePresence) {
       await waitForElementExist(FlutterElement.fromBy(finder),
@@ -57,9 +73,35 @@ class ElementHelper {
 
     List<Finder> elementList = [];
     for (int i = 0; i < elements.length; i++) {
-      elementList.add(finder.at(i));
+      if (isVisibleOnAppScreen(elements.elementAt(i))) {
+        elementList.add(finder.at(i));
+      }
     }
     return elementList;
+  }
+
+  static bool isVisibleOnAppScreen(Element finderElement) {
+    if (finderElement.renderObject is! RenderBox) {
+      return true;
+    }
+    final WidgetTester tester = _getTester();
+    final widgetRect =
+        tester.getRect(find.byElementPredicate((e) => e == finderElement));
+
+    final allWidgets = tester.allWidgets.toList();
+
+    for (final widget in allWidgets) {
+      final elements = find.byWidget(widget).evaluate();
+      for (final element in elements) {
+        if (element.renderObject is RenderBox) {
+          final rootRect = tester.getRect(
+            find.byElementPredicate((e) => e == element),
+          );
+          return widgetRect.overlaps(rootRect);
+        }
+      }
+    }
+    return false;
   }
 
   static Future<void> click(FlutterElement element) async {
