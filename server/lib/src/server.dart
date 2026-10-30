@@ -25,6 +25,7 @@ import 'package:appium_flutter_server/src/handler/status.dart';
 import 'package:appium_flutter_server/src/handler/wait/wait_for_absent.dart';
 import 'package:appium_flutter_server/src/handler/wait/wait_for_visible.dart';
 import 'package:appium_flutter_server/src/logger.dart';
+import 'package:appium_flutter_server/src/ts_recorder/recorder_routes.dart';
 import 'package:shelf_plus/shelf_plus.dart' as shelf_plus;
 import 'package:device_info_plus/device_info_plus.dart';
 
@@ -100,6 +101,8 @@ class FlutterServer {
 
     //DELETE ROUTES
     _registerDelete(DeleteSessionHandler("/session/<sessionId>"));
+
+    RecorderRoutes.register(_registerGet);
   }
 
   void _registerGet(RequestHandler handler) {
