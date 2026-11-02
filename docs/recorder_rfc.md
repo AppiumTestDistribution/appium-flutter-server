@@ -26,10 +26,10 @@
 
 Adding two endpoint to the server
 
-| Endpoint | Answers the question |
-|---|---|
-| `GET /ts/recorder/about` | "Does this app have the recorder, and which version?" |
-| `GET /ts/recorder/page_source` | "What is on the screen, and where?". |
+| Endpoint | Session | Answers the question |
+|---|---|---|
+| `GET /ts/recorder/about` | Not needed | "Does this app have the recorder, and which version?" |
+| `GET /session/:sessionId/ts/recorder/page_source` | Needed | "What is on the screen, and where?". |
 
 
 
@@ -57,7 +57,7 @@ Adding two endpoint to the server
 
 | Existing piece | File | How it is used |
 |---|---|---|
-| `RequestHandler`, `NoSessionCommandHandler` | `handler/request/*.dart` | Base for the two new handlers. Routing, logging and the error envelope come free. |
+| `RequestHandler`, `NoSessionCommandHandler` | `handler/request/*.dart` | Base for the two new handlers. Routing, logging, the error envelope and the session check come free. |
 | `AppiumResponse` | `models/api/appium_response.dart` | Same `{sessionId, value}` response shape |
 | `FlutterDriver.instance.tester` | `driver.dart` | Access to the live widget tree and the view |
 | `ElementHelper.pumpAndTrySettle()` | `utils/element_helper.dart` | Waits for the UI to settle |
@@ -131,11 +131,11 @@ Why this choice:
 ```
 server/lib/src/ts_recorder/
 
-  recorder_routes.dart           > The “front door”: tells the server the two new URLs exist
-  about_handler.dart             > Answers “do you have the recorder?”
-  page_source_handler.dart       > Answers “what’s on screen?”
+  about/
+    about_handler.dart          > Answers “do you have the recorder?”
 
   page_source/
+    page_source_handler.dart    > Answers “what’s on screen?”
     tree_walker.dart            > Goes through every widget once and builds the list
     node.dart                   > The shape of one item in the list
     node_reader.dart            > Reads each widget’s key, text, icon and so on
@@ -147,17 +147,18 @@ server/test/ts_recorder/
   tree_walker_test.dart
   visibility_test.dart
   node_reader_test.dart
-  snapshot_handler_test.dart
+  page_source_handler_test.dart
+  page_source_test_utils.dart   > Shared helper for the tests
 ```
 
 ### 7.2 Modification to current files
 
 | File | Change |
 |---|---|
-| `lib/src/server.dart` | Add 1 import. Add `RecorderRoutes.register(_registerGet);` as the last line of `_registerRoutes()`. |
+| `lib/src/server.dart` | Add 2 imports. Add 2 `_registerGet(...)` lines at the end of `_registerRoutes()`. Both are inside `TESTSIGMA CHANGES` markers. |
 | `pubspec.yaml` | `version: 0.0.34-ts.1` |
 | `lib/src/runner.dart` | `const serverVersion = '0.0.34-ts.1';` |
-| `CHANGELOG.md`, `README.md` | Document the recorder routes |
+| `CHANGELOG.md`, `docs/ts_recorder.md` | Document the recorder routes |
 
 ### 7.3 Page Source Logical Flow - 
 
@@ -288,9 +289,17 @@ Arcus uses this to place boxes correctly over the photo.
 and `viewInsets.bottom` is the keyboard height, both in logical px.
 
 
-### 7.7 `GET /ts/recorder/page_source`
+### 7.7 `GET /session/:sessionId/ts/recorder/page_source`
 
-`GET /ts/recorder/page_source?maxNodes=600`
+`GET /session/:sessionId/ts/recorder/page_source?maxNodes=600`
+
+**Session.** The route is under `/session/:sessionId`, the same as every other route that reads the app.
+`RequestHandler` checks the session id before the handler runs, so we reuse the existing check.
+- Only the driver that owns the app can read its screen. A wrong or old session id gets `invalid session id`.
+- During recording a session always exists. bt-runner opens the Appium session first, and the Flutter driver sends `POST /session`.
+- bt-runner reads the session id from `GET /ts/recorder/about` (`sessionId` field).
+
+The walk itself does not use the session or the element cache.
 
 1. `ElementHelper.pumpAndTrySettle()`, then record `settled` (whether a frame is still scheduled).
 2. Reads the tree.
@@ -346,9 +355,10 @@ sequenceDiagram
   participant B as bt-runner
   participant S as In-app server
 
-  B->>S: GET /ts/recorder/about            (once)
+  B->>S: POST /session                     (once, by the Appium Flutter driver)
+  B->>S: GET /ts/recorder/about            (once, gives the sessionId)
   C->>B: page_source
-  B->>S: GET /ts/recorder/page_source
+  B->>S: GET /session/:id/ts/recorder/page_source
   S-->>B: nodes + screen cordinates
   B-->>C: MobileElementDTO tree
   U->>C: clicks
@@ -370,8 +380,8 @@ The execution of actual step happens with help of bt-unner.
 | Phase | Work | Done when |
 |---|---|---|
 | **0. Repo** | Create the Testsigma repo from upstream `main`. Add the `-ts` version scheme and CI (`flutter analyze`, `flutter test`). Tag `v0.0.34-ts.0` with no code change. | A customer app builds against the git dependency |
-| **1. Skeleton** | `recorder_routes.dart`, the one-line hook, `/ts/recorder/about`. Confirm `appium:flutterSystemPort`. | `GET ts/recorder/about` answers on a device through the forwarded port |
-| **2.ts page_source endpoint** | `tree_walker`, `visibility`, `node_reader`, `screen`, `ts/recorder/page_source` | Widget tests for rects, grouping, visibility and flags pass |
+| **1. Skeleton** | The hook lines in `server.dart`, `/ts/recorder/about`. Confirm `appium:flutterSystemPort`. | `GET ts/recorder/about` answers on a device through the forwarded port |
+| **2.ts page_source endpoint** | `tree_walker`, `visibility`, `node_reader`, `screen`, `/session/:id/ts/recorder/page_source` | Widget tests for rects, grouping, visibility and flags pass |
 
 ---
 

@@ -1,3 +1,4 @@
+// ----- TESTSIGMA CHANGES START -----
 import 'package:appium_flutter_server/src/driver.dart';
 import 'package:appium_flutter_server/src/handler/request/no_session_command_handler.dart';
 import 'package:appium_flutter_server/src/handler/request/request_handler.dart';
@@ -24,3 +25,4 @@ class AboutHandler extends RequestHandler implements NoSessionCommandHandler {
     });
   }
 }
+// ----- TESTSIGMA CHANGES END -----

@@ -10,7 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 const MAX_TEST_DURATION_SECS = 24 * 60 * 60;
 // Need a better way to fetch this for automated release, this needs to be updated along with version bump
 // Can stay for now as it is not a breaking change
-const serverVersion = '0.0.34';
+const serverVersion = '0.0.34-ts.1'; // ----- TESTSIGMA CHANGES -----
 
 Future<void> initializeTest({Widget? app, Function? callback}) async {
   IntegrationTestWidgetsFlutterBinding binding =
@@ -38,6 +38,6 @@ Future<void> initializeTest({Widget? app, Function? callback}) async {
 
     // To block the test from ending
     await Completer<void>().future;
-  }, timeout: const Timeout(Duration(seconds: MAX_TEST_DURATION_SECS)));
+  }, timeout: Timeout.none); // ----- TESTSIGMA CHANGES -----
   return;
 }
